@@ -1,748 +1,665 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Phone, 
-  MapPin, 
-  MessageCircle, 
-  Menu, 
-  X, 
-  Award, 
-  HeartPulse, 
-  Stethoscope, 
-  Microscope,
-  Send, 
-  CheckCircle2,
-  Instagram, 
-  Facebook, 
-  Linkedin, 
-  ShieldCheck, 
-  Sparkles, 
-  Globe, 
-  Quote, 
-  Zap, 
-  Fingerprint, 
-  ArrowRight, 
-  Star, 
-  Lock, 
-  Clock, 
-  Activity,
-  Image as ImageIcon
+  Volume2, VolumeX, Phone, MapPin, Clock, 
+  Instagram, Facebook, Twitter, MessageCircle, 
+  Star, Quote, ChevronRight
 } from 'lucide-react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 
-// --- Global Configuration ---
+// --- Custom Hooks ---
+const useIntersectionObserver = (options) => {
+  const [isIntersecting, setIsIntersecting] = useState(false);
+  const targetRef = useRef(null);
 
-const CLINIC_INFO = {
-  name: "CAMELLIA",
-  fullName: "Camellia Medical Center / مركز الكاميليا الطبي",
-  arabicName: "مركز الكاميليا الطبي",
-  subBrand: "KALBA ATELIER",
-  address: "Sharjah - Kalba, UAE",
-  phone: "+971 55 106 1400",
-  whatsapp: "+971 55 106 1400", // Update this line with your new WhatsApp number
-  email: "registry@camelliamedical.ae",
-  workingHours: "Sat - Thu: 09:00 AM - 09:00 PM"
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsIntersecting(true);
+        observer.unobserve(entry.target);
+      }
+    }, options);
+
+    if (targetRef.current) observer.observe(targetRef.current);
+    return () => { if (targetRef.current) observer.unobserve(targetRef.current); };
+  }, [options]);
+
+  return [targetRef, isIntersecting];
 };
 
-const IMAGES = {
-  hero: "https://image2url.com/r2/default/images/1775069808968-618b2e26-587a-40cd-a3a5-aa771994e40c.jpg",
-  about: "https://image2url.com/r2/default/images/1775069511420-9a842cbe-f895-4d8d-a2ea-4035610e4ef7.jpg",
-  service1: "https://image2url.com/r2/default/images/1775069673139-a7c830f5-9374-49d3-ab45-95369149740b.jpg",
-  service2: "https://image2url.com/r2/default/images/1775069967168-8118aafb-9e5a-4d98-9e14-1d8078f71253.jpg",
-  service3: "https://image2url.com/r2/default/images/1775069634349-7f628750-d699-4d23-9e89-cce329e900a2.jpg",
-  doctor1: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=800",
-  doctor2: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=800",
-  reception: "https://image2url.com/r2/default/images/1775069932331-02eaab84-d6b2-4111-82a6-95f6cf02c04b.jpg",
-  gallery1: "https://image2url.com/r2/default/images/1775069849227-f68c6702-d1b1-4478-82f1-14b9c241b4a6.jpg"
+// --- Custom Cursor ---
+const CustomCursor = () => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+
+  useEffect(() => {
+    const updatePosition = (e) => setPosition({ x: e.clientX, y: e.clientY });
+    const handleMouseOver = (e) => {
+      if (e.target.closest('button') || e.target.closest('a') || e.target.closest('input') || e.target.closest('textarea')) {
+        setIsHovering(true);
+      } else {
+        setIsHovering(false);
+      }
+    };
+
+    window.addEventListener('mousemove', updatePosition);
+    window.addEventListener('mouseover', handleMouseOver);
+
+    return () => {
+      window.removeEventListener('mousemove', updatePosition);
+      window.removeEventListener('mouseover', handleMouseOver);
+    };
+  }, []);
+
+  return (
+    <div 
+      className="fixed pointer-events-none z-[9999] mix-blend-difference transition-all duration-300 ease-out hidden md:block"
+      style={{
+        left: position.x,
+        top: position.y,
+        width: isHovering ? '60px' : '12px',
+        height: isHovering ? '60px' : '12px',
+        transform: 'translate(-50%, -50%)',
+        border: isHovering ? '1px solid #D4AF37' : 'none',
+        backgroundColor: isHovering ? 'transparent' : '#fff',
+        borderRadius: '50%',
+      }}
+    />
+  );
 };
 
-// --- Sub-Components (Mobile First Optimized) ---
-
-const LuxuryReveal = ({ children, delay = 0 }) => (
-  <div className="overflow-hidden">
-    <motion.div
-      initial={{ y: "100%", opacity: 0 }}
-      whileInView={{ y: 0, opacity: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
+// --- Components ---
+const FadeIn = ({ children, delay = 0, className = '' }) => {
+  const [ref, isVisible] = useIntersectionObserver({ threshold: 0.1 });
+  return (
+    <div
+      ref={ref}
+      className={`transition-all duration-[1500ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'
+      } ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
     >
       {children}
-    </motion.div>
+    </div>
+  );
+};
+
+// 40px Rounded Luxury Card with Gold Shadow
+const LuxuryCard = ({ children, className = '', hoverEffect = true }) => (
+  <div className={`bg-gradient-to-br from-[#000000] via-[#0A0A0A] to-[#D4AF37]/20 border border-[#D4AF37]/40 rounded-[40px] p-10 md:p-14 shadow-[0_0_25px_rgba(212,175,55,0.2)]
+    ${hoverEffect ? 'hover:border-[#D4AF37] hover:shadow-[0_0_50px_rgba(212,175,55,0.5)] transition-all duration-700' : ''} 
+    ${className}`}>
+    {children}
   </div>
 );
 
-const SectionHeader = ({ number, title, subtitle, light = false }) => (
-  <div className="mb-8 md:mb-20">
-    <div className="flex items-center gap-3 md:gap-6 mb-4 md:mb-6 overflow-hidden">
-      <span className="text-[10px] font-bold tracking-[0.4em] md:tracking-[0.5em] text-[#C5A059]">{number}</span>
-      <motion.div 
-        initial={{ scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1 }}
-        className={`h-[1px] w-8 md:w-24 origin-left ${light ? 'bg-white/20' : 'bg-[#0A192F]/10'}`} 
-      />
-      <span className={`text-[7px] md:text-[9px] uppercase tracking-[0.4em] md:tracking-[0.6em] font-bold ${light ? 'text-white/40' : 'text-gray-400'}`}>{subtitle}</span>
-    </div>
-    <h2 className={`text-4xl md:text-7xl lg:text-8xl font-serif font-light leading-[1.1] tracking-tighter ${light ? 'text-white' : 'text-[#0A192F]'}`}>
-      {title}
-    </h2>
-  </div>
+const GoldText = ({ children, className = '' }) => (
+  <span className={`text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#FFF3B0] to-[#AA7C11] ${className}`}>
+    {children}
+  </span>
 );
-
-const ServiceCard = ({ title, desc, img, index, icon }) => (
-  <motion.div 
-    initial={{ opacity: 0, y: 30 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, margin: "-50px" }}
-    transition={{ delay: index * 0.1 }}
-    className="group relative h-[320px] md:h-[450px] lg:h-[550px] overflow-hidden cursor-pointer rounded-[24px] md:rounded-[40px] shadow-[2px_2px_2px_gray] bg-black"
-  >
-    <img src={img} className="w-full h-full object-cover opacity-70 md:opacity-60 grayscale-[10%] md:grayscale-[30%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[2s]" alt={title} />
-    <div className="absolute inset-0 bg-gradient-to-t from-[#0A192F] via-[#0A192F]/40 to-transparent opacity-90 md:opacity-80" />
-    <div className="absolute top-4 right-4 md:top-6 md:right-6 text-white/50 group-hover:text-[#C5A059] transition-colors duration-500">
-      {icon}
-    </div>
-    <div className="absolute bottom-0 left-0 p-5 md:p-8 lg:p-10 w-full transform md:group-hover:-translate-y-4 transition-transform duration-500">
-      <p className="text-[7px] md:text-[9px] font-bold tracking-[0.3em] md:tracking-[0.4em] text-[#C5A059] mb-2 uppercase">Atelier Focus</p>
-      <h3 className="text-2xl md:text-3xl font-serif text-white mb-2 md:mb-4 leading-tight">{title}</h3>
-      <p className="text-white/70 text-[9px] md:text-xs tracking-widest uppercase mb-3 md:mb-6 line-clamp-2 leading-relaxed">{desc}</p>
-      <div className="flex justify-between items-center overflow-hidden h-6">
-        <ArrowRight className="text-white transform md:-translate-x-12 md:group-hover:translate-x-0 transition-all duration-500" size={18} />
-      </div>
-    </div>
-  </motion.div>
-);
-
-// --- Main Application ---
 
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [registryStatus, setRegistryStatus] = useState('idle');
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [bookingStatus, setBookingStatus] = useState(null);
+  const audioRef = useRef(null);
 
-  const { scrollYProgress } = useScroll();
-  const heroY = useTransform(scrollYProgress, [0, 0.5], [0, 60]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
-
+  // Navbar Scroll
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleRegistrySubmit = (e) => {
+  const toggleMusic = () => {
+    if (isMusicPlaying) audioRef.current?.pause();
+    else audioRef.current?.play().catch(e => console.log("Audio play blocked", e));
+    setIsMusicPlaying(!isMusicPlaying);
+  };
+
+  // --- WHATSAPP BOOKING LOGIC ---
+  const handleBookingSubmit = (e) => {
     e.preventDefault();
+    setBookingStatus('submitting');
+
     const formData = new FormData(e.target);
-    const name = formData.get('fullName');
-    const contact = formData.get('contactPoint');
-    const service = formData.get('specialization');
+    const name = formData.get('name');
+    const phone = formData.get('phone');
+    const date = formData.get('date');
+    const requests = formData.get('requests') || 'None';
 
-    // Create WhatsApp message format
-    const message = `*New Appointment Request - ${CLINIC_INFO.name}*\n\n` +
-                    `👤 Name: ${name}\n` +
-                    `📱 Contact: ${contact}\n` +
-                    `🏥 Service: ${service}\n\n` +
-                    `Sent from ${CLINIC_INFO.name} Digital Atelier`;
+    const message = `✨ *New VIP Reservation Request* ✨\n\n*Name:* ${name}\n*Contact:* ${phone}\n*Date:* ${date}\n*Special Requests:* ${requests}\n\nPlease confirm my luxury VIP experience.`;
+    const whatsappUrl = `https://wa.me/971566101759?text=${encodeURIComponent(message)}`;
 
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${CLINIC_INFO.whatsapp.replace(/\D/g, '')}?text=${encodedMessage}`;
-
-    setRegistryStatus('submitting');
-    
-    // Simulate slight delay before redirecting to WhatsApp
     setTimeout(() => {
+      setBookingStatus('success');
       window.open(whatsappUrl, '_blank');
-      setRegistryStatus('success');
+      setTimeout(() => setBookingStatus(null), 5000);
+      e.target.reset();
     }, 1500);
   };
 
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <div className="bg-[#FAF9F6] text-[#0A192F] font-sans selection:bg-[#C5A059] selection:text-white relative overflow-x-hidden w-full">
+    <div className="min-h-screen bg-[#000000] text-[#E5E5E5] font-sans selection:bg-[#D4AF37] selection:text-[#000000] overflow-x-hidden cursor-none">
+      <CustomCursor />
       
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Amiri&display=swap');
-        .font-serif { font-family: 'Playfair Display', serif; }
+      <style dangerouslySetInnerHTML={{__html: `
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap');
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-cinzel { font-family: 'Cinzel', serif; }
         .font-sans { font-family: 'Montserrat', sans-serif; }
-        .font-arabic { font-family: 'Amiri', serif; }
-        
-        .gold-leaf {
-          background: linear-gradient(135deg, #C5A059 0%, #F1E2C2 50%, #C5A059 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+        .film-grain {
+          position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+          pointer-events: none; z-index: 9998; opacity: 0.04;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         }
-
-        .grain-texture {
-          position: fixed;
-          top: 0; left: 0; width: 100%; height: 100%;
-          background: url('https://www.transparenttextures.com/patterns/felt.png');
-          opacity: 0.03;
-          pointer-events: none;
-          z-index: 9999;
-        }
-
-        .premium-input {
-          background: transparent;
-          border-bottom: 1px solid rgba(10, 25, 47, 0.15);
-          padding: 0.75rem 0;
-          width: 100%;
-          font-size: 0.875rem;
-          font-weight: 400;
-          transition: all 0.3s ease;
-          border-radius: 0;
-        }
-        
-        @media (min-width: 768px) {
-          .premium-input { font-size: 1rem; padding: 1rem 0; }
-        }
-
-        .premium-input:focus {
-          border-bottom: 1px solid #C5A059;
-          outline: none;
-        }
-        
-        /* Mobile fast-scroll snap for reviews/gallery */
+        @keyframes slowPan { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+        .animate-slow-pan { animation: slowPan 30s linear infinite alternate; }
+        html { scroll-behavior: smooth; }
+        /* Hide scrollbar for gallery */
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      `}</style>
+      `}} />
 
-      <div className="grain-texture" />
+      <div className="film-grain" />
 
-      {/* --- Responsive Navigation (Mobile Optimized Header) --- */}
-      <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${isScrolled ? 'bg-white/95 backdrop-blur-xl py-3 shadow-[2px_2px_2px_gray] border-b border-[#C5A059]/10' : 'bg-transparent py-4 md:py-8'}`}>
-        <div className="container mx-auto px-5 md:px-10 flex justify-between items-center">
-          <div className="flex flex-col group cursor-pointer z-[111]">
-            <span className={`text-lg md:text-2xl font-serif tracking-tighter transition-colors ${isScrolled || isMenuOpen ? 'text-[#0A192F]' : 'text-white'}`}>
-              {CLINIC_INFO.name}
-            </span>
-            <span className={`text-[5px] md:text-[6px] tracking-[0.8em] font-bold uppercase mt-1 ${isScrolled || isMenuOpen ? 'text-[#C5A059]' : 'text-white/70'}`}>
-              {CLINIC_INFO.subBrand}
-            </span>
+      <audio ref={audioRef} loop src="https://cdn.pixabay.com/download/audio/2022/11/22/audio_febc508520.mp3?filename=smooth-waters-115977.mp3" />
+
+      {/* Quick Action Buttons */}
+      <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-4">
+        <a 
+          href="https://wa.me/971566101759" target="_blank" rel="noopener noreferrer"
+          className="bg-[#25D366] text-white p-4 rounded-full shadow-[0_0_20px_rgba(37,211,102,0.3)] hover:scale-110 transition-transform duration-500 flex items-center justify-center group relative"
+        >
+          <MessageCircle size={28} />
+          <span className="absolute right-full mr-6 bg-[#000] text-white border border-[#D4AF37]/30 text-xs tracking-widest py-3 px-5 uppercase opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap pointer-events-none rounded-full">
+            Book via WhatsApp
+          </span>
+        </a>
+      </div>
+      <div className="fixed bottom-8 left-8 z-50">
+        <button onClick={toggleMusic} className="bg-[#0A0A0A] border border-[#D4AF37]/30 text-white p-4 rounded-full hover:bg-[#D4AF37]/10 transition-colors duration-500 flex items-center justify-center">
+          {isMusicPlaying ? <Volume2 size={20} className="text-[#D4AF37]" /> : <VolumeX size={20} />}
+        </button>
+      </div>
+
+      {/* --- NAVIGATION --- */}
+      <nav className={`fixed w-full z-40 transition-all duration-1000 ${isScrolled ? 'bg-[#000000]/95 backdrop-blur-3xl py-6 border-b border-[#D4AF37]/20' : 'bg-transparent py-10'}`}>
+        <div className="max-w-[1400px] mx-auto px-8 lg:px-16 flex justify-between items-center">
+          <div className="flex items-center gap-4 cursor-pointer group" onClick={() => scrollTo('home')}>
+            <div className="w-12 h-12 border border-[#D4AF37]/50 rounded-full flex items-center justify-center group-hover:border-[#D4AF37] transition-all duration-500 bg-[#0A0A0A]">
+              <span className="font-cinzel text-[#D4AF37] text-2xl">AM</span>
+            </div>
+            <h1 className="font-cinzel text-xl tracking-[0.3em] text-white uppercase hidden sm:block">
+              Al Mashhoor
+            </h1>
           </div>
-
-          <div className="hidden lg:flex items-center gap-10">
-            {['Expertise', 'Gallery', 'Reviews', 'The Board', 'Appointment'].map((item) => (
-              <a 
-                key={item}
-                href={`#${item.toLowerCase().replace(' ', '')}`} 
-                className={`text-[9px] uppercase tracking-[0.4em] font-bold transition-all hover:text-[#C5A059] relative group ${isScrolled ? 'text-[#0A192F]' : 'text-white'}`}
-              >
+          
+          {/* Added 'Entertainment' to Navigation */}
+          <div className="hidden lg:flex items-center gap-12 text-[10px] tracking-[0.3em] uppercase text-gray-400">
+            {['About', 'Opulence', 'Entertainment', 'Gallery', 'Reviews'].map((item) => (
+              <button key={item} onClick={() => scrollTo(item.toLowerCase())} className="hover:text-[#D4AF37] transition-colors duration-500 relative group">
                 {item}
-                <span className="absolute -bottom-2 left-0 w-0 h-[1px] bg-[#C5A059] transition-all group-hover:w-full" />
-              </a>
+                <span className="absolute -bottom-2 left-1/2 w-0 h-[1px] bg-[#D4AF37] group-hover:w-full group-hover:left-0 transition-all duration-500"></span>
+              </button>
             ))}
           </div>
 
-          <div className="flex items-center gap-3 md:gap-8">
-            <a 
-              href="#appointment"
-              className={`px-4 py-2 md:px-8 md:py-3 text-[8px] md:text-[9px] font-bold uppercase tracking-[0.2em] md:tracking-[0.4em] transition-all border rounded-full ${isScrolled ? 'bg-[#0A192F] text-white border-[#0A192F]' : 'bg-white/10 text-white border-white/20 hover:bg-white hover:text-[#0A192F]'}`}
-            >
-              Book<span className="hidden sm:inline"> Now</span>
-            </a>
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={`p-1 md:p-2 z-[111] transition-colors ${isScrolled || isMenuOpen ? 'text-[#0A192F]' : 'text-white'}`}>
-              {isMenuOpen ? <X size={24}/> : <Menu size={24}/>}
-            </button>
-          </div>
+          <button onClick={() => scrollTo('reservations')} className="text-[#000] bg-[#D4AF37] px-8 py-3 rounded-full text-[10px] tracking-[0.2em] uppercase font-bold hover:bg-white transition-all duration-500 shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+            Reserve Table
+          </button>
         </div>
       </nav>
 
-      {/* --- Mobile Fullscreen Menu --- */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: '-100%' }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: '-100%' }}
-            transition={{ type: "tween", duration: 0.4 }}
-            className="fixed inset-0 z-[105] bg-[#FAF9F6] text-[#0A192F] pt-24 pb-8 px-6 flex flex-col justify-between"
-          >
-            <div className="flex flex-col gap-6 text-center mt-10">
-              {['Expertise', 'Gallery', 'Reviews', 'The Board', 'Appointment'].map((item) => (
-                <a 
-                  key={item} 
-                  href={`#${item.toLowerCase().replace(' ', '')}`} 
-                  onClick={() => setIsMenuOpen(false)} 
-                  className="text-4xl sm:text-5xl font-serif text-[#0A192F] hover:text-[#C5A059] transition-colors"
-                >
-                  {item}
-                </a>
-              ))}
-            </div>
-            <div className="space-y-3 border-t border-[#0A192F]/10 pt-6 text-center">
-              <p className="text-[9px] uppercase tracking-widest text-[#C5A059] font-bold">Concierge Line</p>
-              <p className="text-xl sm:text-2xl font-serif">{CLINIC_INFO.phone}</p>
-              <p className="text-[9px] uppercase tracking-widest px-4 text-gray-500">{CLINIC_INFO.address}</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* --- 1. HERO SECTION --- */}
+      <section id="home" className="relative h-screen w-full overflow-hidden flex items-center justify-center">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-[#000]/60 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#000]/80 via-transparent to-[#000] z-10" />
+          {/* Background Image Update ki gayi hai */}
+          <img 
+            src="https://image2url.com/r2/default/images/1774552066415-8ad3ff14-41d2-406c-a427-94ef1b26f19f.jpg" 
+            alt="Ultra Luxury Bar" 
+            className="w-full h-full object-cover animate-slow-pan opacity-80"
+          />
+        </div>
 
-      {/* --- Hero Section (Mobile Viewport Optimized svh) --- */}
-      <section className="relative h-[100svh] min-h-[600px] flex items-center justify-center overflow-hidden bg-black text-center w-full">
-        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="absolute inset-0">
-          <img src={IMAGES.hero} alt="Luxury Interior" className="w-full h-full object-cover opacity-60 grayscale-[10%] scale-105" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0A192F]/80 via-[#0A192F]/40 to-[#FAF9F6]" />
-        </motion.div>
-
-        <div className="container mx-auto px-5 relative z-10 text-center mt-10">
-          <LuxuryReveal delay={0.1}>
-            <span className="inline-block text-[#C5A059] text-[8px] md:text-[10px] tracking-[0.6em] md:tracking-[1.2em] uppercase font-bold mb-4 md:mb-6">
-              KALBA FLAGSHIP ATELIER
-            </span>
-          </LuxuryReveal>
-          
-          <LuxuryReveal delay={0.3}>
-            <h1 className="text-5xl sm:text-7xl md:text-[100px] lg:text-[120px] font-serif text-white font-light tracking-tighter leading-[1] mb-2 uppercase">
-              {CLINIC_INFO.name}
+        <div className="relative z-20 text-center px-4 w-full flex flex-col items-center mt-10">
+          <FadeIn delay={200}>
+            <div className="flex items-center gap-6 mb-8">
+              <span className="w-16 h-[1px] bg-gradient-to-r from-transparent to-[#D4AF37]"></span>
+              <p className="font-sans uppercase tracking-[0.6em] text-[#D4AF37] text-[10px] md:text-xs drop-shadow-md flex items-center gap-4">
+                <Star size={10} className="text-[#D4AF37]" /> Dubai's Elite Dining <Star size={10} className="text-[#D4AF37]" />
+              </p>
+              <span className="w-16 h-[1px] bg-gradient-to-l from-transparent to-[#D4AF37]"></span>
+            </div>
+          </FadeIn>
+          <FadeIn delay={400}>
+            {/* Sirf Bar ka naam, ultra luxury font style */}
+            <h1 className="font-playfair text-6xl md:text-[120px] lg:text-[140px] font-extralight text-white mb-6 leading-[0.8] tracking-tight drop-shadow-2xl">
+              Al Mashhoor <br/>
+              <span className="italic"><GoldText>Biryani</GoldText></span>
             </h1>
-            <h2 className="text-2xl sm:text-4xl md:text-[60px] font-serif gold-leaf font-light italic mb-6 md:mb-10 leading-none">
-              Medical Center
-            </h2>
-          </LuxuryReveal>
+          </FadeIn>
+          <FadeIn delay={600}>
+            {/* Paragraph about the bar, clean and minimal */}
+            <p className="font-sans text-gray-300 text-xs md:text-sm max-w-xl mx-auto mb-14 font-light tracking-[0.2em] uppercase leading-loose">
+              Immerse yourself in Dubai's most exclusive dining destination.
+            </p>
+          </FadeIn>
+          <FadeIn delay={800} className="flex flex-col sm:flex-row items-center justify-center gap-6 md:gap-8 w-full px-8">
+            {/* Primary Button - Reserve Table */}
+            <button onClick={() => scrollTo('reservations')} className="relative overflow-hidden group bg-gradient-to-r from-[#D4AF37] via-[#FFF3B0] to-[#D4AF37] bg-[length:200%_auto] hover:bg-[position:right_center] text-[#000] rounded-[40px] px-12 md:px-14 py-5 uppercase tracking-[0.4em] text-[10px] font-bold transition-all duration-700 shadow-[0_0_25px_rgba(212,175,55,0.4)] hover:shadow-[0_0_50px_rgba(212,175,55,0.7)] w-full sm:w-auto">
+              Reserve Table
+            </button>
 
-          <LuxuryReveal delay={0.5}>
-             <p className="text-xl sm:text-2xl md:text-[34px] font-arabic text-[#E2D1B3] tracking-wide mb-8 md:mb-12 opacity-90 leading-relaxed uppercase">
-               {CLINIC_INFO.arabicName}
-             </p>
-          </LuxuryReveal>
-
-          <LuxuryReveal delay={0.7}>
-            <div className="flex flex-col items-center gap-6 md:gap-10 pt-6 md:pt-12 border-t border-white/10 w-full max-w-2xl mx-auto">
-              <p className="text-[#E2D1B3]/70 text-[9px] md:text-[12px] tracking-[0.2em] md:tracking-[0.4em] font-light leading-relaxed uppercase text-center px-4">
-                Bespoke Aesthetic & Medical Excellence. <br className="hidden sm:block" />
-                A biological sanctuary in Sharjah.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 w-full px-4 sm:px-0 sm:justify-center">
-                 <a href="#appointment" className="w-full sm:w-auto px-8 py-4 bg-[#C5A059] text-white text-[9px] md:text-[10px] font-bold uppercase tracking-[0.3em] shadow-[2px_2px_2px_gray] rounded-full text-center active:scale-95 transition-transform">
-                   Book Appointment
-                 </a>
-                 <a href={`https://wa.me/${CLINIC_INFO.whatsapp.replace(/\D/g, '')}`} target="_blank" rel="noreferrer" className="w-full sm:w-auto px-8 py-4 border border-white/20 backdrop-blur-md text-white text-[9px] md:text-[10px] font-bold uppercase tracking-[0.3em] flex items-center justify-center gap-3 rounded-full shadow-[2px_2px_2px_gray] active:scale-95 transition-transform">
-                   <MessageCircle size={16} className="text-[#25D366]" />
-                   WhatsApp
-                 </a>
-              </div>
-            </div>
-          </LuxuryReveal>
+            {/* Secondary Button - Discover More */}
+            <button onClick={() => scrollTo('about')} className="relative overflow-hidden group border border-white/30 text-white rounded-[40px] px-12 md:px-14 py-5 uppercase tracking-[0.4em] text-[10px] font-bold transition-all duration-700 hover:border-[#D4AF37] hover:text-[#D4AF37] hover:bg-[#D4AF37]/10 w-full sm:w-auto backdrop-blur-sm">
+              Discover More
+            </button>
+          </FadeIn>
+        </div>
+        
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-4 animate-bounce">
+          <span className="text-[8px] font-sans text-[#D4AF37] uppercase tracking-widest opacity-70">Scroll</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-[#D4AF37] to-transparent"></div>
         </div>
       </section>
 
-      {/* --- Section 01: Heritage (Mobile First Flow) --- */}
-      <section id="about" className="py-16 md:py-40 bg-white relative overflow-hidden">
-        <div className="container mx-auto px-5 md:px-10">
-          <div className="flex flex-col lg:grid lg:grid-cols-12 gap-10 md:gap-20 items-center">
+      {/* --- 2. ABOUT SECTION --- */}
+      <section id="about" className="py-32 md:py-48 relative bg-[#000000]">
+        <div className="max-w-[1400px] mx-auto px-8 lg:px-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-center">
+            <FadeIn>
+              <div className="relative group p-4">
+                <div className="absolute inset-0 border border-[#D4AF37]/40 rounded-[40px] transform translate-x-6 translate-y-6 transition-transform duration-700 group-hover:translate-x-2 group-hover:translate-y-2 shadow-[0_0_30px_rgba(212,175,55,0.15)]"></div>
+                {/* Bar/Mixology Image Update */}
+                <img 
+                  src="https://image2url.com/r2/default/images/1774552141688-e5d7f9b6-80e1-4ea4-88ad-b68a5ca824f4.jpg" 
+                  alt="Luxury Bartender" 
+                  className="relative z-10 w-full aspect-[4/5] object-cover rounded-[40px] grayscale-[20%] group-hover:grayscale-0 transition-all duration-[2000ms]"
+                />
+              </div>
+            </FadeIn>
             
-            <div className="col-span-12 lg:col-span-5 order-2 lg:order-1 text-center lg:text-left w-full">
-              <SectionHeader number="01" title="The Legacy" subtitle="Bespoke Care" />
-              <p className="text-gray-500 text-sm md:text-lg font-light leading-relaxed mb-8 md:mb-12 max-w-lg mx-auto lg:mx-0">
-                Located in Sharjah - Kalba, {CLINIC_INFO.fullName} is where clinical precision meets unparalleled luxury across Dermatology, Dentistry, Laser Therapy, and traditional Cupping.
-              </p>
-              <div className="grid grid-cols-2 gap-3 md:gap-6 w-full">
-                 {[
-                   { t: "Dental Tech", i: <Zap size={18}/> },
-                   { t: "Dermatology", i: <Sparkles size={18}/> },
-                   { t: "Board Experts", i: <Award size={18}/> },
-                   { t: "Holistic Care", i: <Activity size={18}/> }
-                 ].map((item, i) => (
-                   <div key={i} className="flex flex-col gap-2 md:gap-4 p-4 md:p-6 bg-[#FAF9F6] rounded-[20px] md:rounded-[30px] shadow-[2px_2px_2px_gray] border border-gray-50 items-center lg:items-start">
-                      <div className="text-[#C5A059]">{item.i}</div>
-                      <span className="text-[7px] md:text-[8px] font-bold uppercase tracking-[0.1em] text-gray-700">{item.t}</span>
-                   </div>
-                 ))}
+            <FadeIn delay={200} className="lg:pr-12">
+              <h3 className="font-sans text-[#D4AF37] tracking-[0.3em] uppercase text-[10px] mb-8">Our Heritage</h3>
+              <h2 className="font-playfair text-5xl md:text-7xl text-white mb-10 leading-tight font-light">
+                Redefining the <br/> <GoldText className="italic">Art of Dining.</GoldText>
+              </h2>
+              <div className="font-sans text-gray-400 space-y-8 font-light text-sm md:text-base tracking-wide leading-relaxed">
+                <p>
+                  Nestled in the heart of Dubai, Al Mashhoor Biryani Branch1 is a sanctuary for the world's most discerning palates. We blend regal traditions with avant-garde culinary techniques to curate a dining experience that transcends the ordinary.
+                </p>
+                <p>
+                  From our exclusive 24K gold-leaf signatures to our world-class mixology, every detail is meticulously crafted. Here, dining is not merely a meal; it is a grand theatrical performance of taste and elegance.
+                </p>
               </div>
-            </div>
-
-            <div className="col-span-12 lg:col-span-7 order-1 lg:order-2 w-full">
-               <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, margin: "-50px" }}>
-                 <div className="rounded-[24px] md:rounded-[40px] overflow-hidden shadow-[2px_2px_2px_gray] aspect-square md:aspect-auto md:h-[600px]">
-                    <img src={IMAGES.about} className="w-full h-full object-cover grayscale-[10%] hover:grayscale-0 transition-all duration-1000" alt="Excellence" />
-                 </div>
-               </motion.div>
-            </div>
-
+            </FadeIn>
           </div>
         </div>
       </section>
 
-      {/* --- Section 02: Expertise --- */}
-      <section id="expertise" className="py-16 md:py-40 bg-[#0A192F] text-white">
-        <div className="container mx-auto px-5 md:px-10">
-          <SectionHeader number="02" title="Our Expertise" subtitle="Excellence Centres" light />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-             <ServiceCard title="Dental Care" desc="Premium clinical care & aesthetic smile design." img={IMAGES.service1} index={0} icon={<Zap size={24}/>} />
-             <ServiceCard title="Dermatology" desc="Advanced skincare & molecular rejuvenation." img={IMAGES.service2} index={1} icon={<Activity size={24}/>} />
-             <ServiceCard title="Laser" desc="Precision laser treatments & aesthetic refinement." img={IMAGES.service3} index={2} icon={<Sparkles size={24}/>} />
-             <ServiceCard title="Cupping" desc="Traditional holistic therapy for vitality." img={IMAGES.about} index={3} icon={<HeartPulse size={24}/>} />
+      {/* --- 3. A TASTE OF OPULENCE (MENU) --- */}
+      <section id="opulence" className="py-32 md:py-48 bg-[#050505] relative border-y border-[#D4AF37]/10">
+        <div className="max-w-[1400px] mx-auto px-8 lg:px-16">
+          <div className="text-center max-w-3xl mx-auto mb-24">
+            <FadeIn>
+              <h3 className="font-sans text-[#D4AF37] tracking-[0.3em] uppercase text-[10px] mb-6">Signature Collection</h3>
+              <h2 className="font-playfair text-5xl md:text-7xl text-white mb-8 font-light">A Taste of <GoldText className="italic">Opulence</GoldText></h2>
+              <p className="font-sans text-gray-400 font-light tracking-wide text-sm md:text-base">
+                Indulge in our masterfully curated culinary masterpieces, crafted with the world's rarest spices, aged basmati, and royal recipes passed down through generations.
+              </p>
+            </FadeIn>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {/* Menu Items changed to Ultra-Luxury Biryani Theme */}
+            {[
+              { title: "The Royal Gold Biryani", desc: "Our signature masterpiece. Prime cuts of tender mutton slow-cooked with aged saffron, adorned with exquisite 24K edible gold leaves.", price: "AED 350" },
+              { title: "Nawabi Raan-e-Khas", desc: "A whole leg of lamb marinated for 48 hours in a secret blend of royal spices, slow-roasted and served on a bed of fragrant zaffrani rice.", price: "AED 850" },
+              { title: "Imperial Truffle Wagyu", desc: "A modern ultra-luxury infusion. Premium Grade-A Wagyu beef paired with royal Awadhi spices and finished with fresh black truffle.", price: "AED 650" }
+            ].map((item, idx) => (
+              <FadeIn key={idx} delay={idx * 200}>
+                <LuxuryCard className="h-full flex flex-col">
+                  <h4 className="font-playfair text-3xl text-white mb-6 font-light">{item.title}</h4>
+                  <p className="font-sans text-gray-400 font-light text-sm tracking-wide leading-relaxed mb-12 flex-grow">
+                    {item.desc}
+                  </p>
+                  <div className="flex justify-between items-center border-t border-white/10 pt-8">
+                    <span className="font-sans text-[10px] text-[#D4AF37] uppercase tracking-[0.2em]">Signature</span>
+                    <span className="font-cinzel text-white text-xl tracking-wider">{item.price}</span>
+                  </div>
+                </LuxuryCard>
+              </FadeIn>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* --- Section 03: The Gallery (Mobile Optimized Grid) --- */}
-      <section id="gallery" className="py-16 md:py-40 bg-[#FAF9F6] relative overflow-hidden">
-        <div className="container mx-auto px-5 md:px-10">
-          <SectionHeader number="03" title="The Gallery" subtitle="Visual Excellence - معرض الصور" />
-          
-          {/* Mobile: Horizontal Scroll Snap, Desktop: Grid */}
-          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-8 md:grid md:grid-cols-4 md:gap-6 md:overflow-visible hide-scrollbar">
-             
-             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="snap-center shrink-0 w-[85vw] md:w-auto md:col-span-2 md:row-span-2 h-[400px] md:h-[624px] rounded-[24px] md:rounded-[40px] overflow-hidden group shadow-[2px_2px_2px_gray] relative">
-                <img src={IMAGES.hero} alt="Gallery 1" className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000" />
-                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-all" />
-             </motion.div>
-             
-             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="snap-center shrink-0 w-[70vw] md:w-auto h-[400px] md:h-[300px] rounded-[24px] md:rounded-[30px] overflow-hidden group shadow-[2px_2px_2px_gray] relative">
-                <img src={IMAGES.service1} alt="Gallery 2" className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000" />
-             </motion.div>
-             
-             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="snap-center shrink-0 w-[70vw] md:w-auto h-[400px] md:h-[300px] rounded-[24px] md:rounded-[30px] overflow-hidden group shadow-[2px_2px_2px_gray] relative">
-                <img src={IMAGES.service2} alt="Gallery 3" className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000" />
-             </motion.div>
-             
-             <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="snap-center shrink-0 w-[85vw] md:w-auto md:col-span-2 h-[400px] md:h-[300px] rounded-[24px] md:rounded-[30px] overflow-hidden group shadow-[2px_2px_2px_gray] relative">
-                <img src={IMAGES.reception} alt="Gallery 4" className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-1000 object-center" />
-             </motion.div>
+      {/* --- NEW SECTION: ENTERTAINMENT & VIP BOTTLE SERVICE --- */}
+      <section id="entertainment" className="py-32 md:py-48 bg-[#0A0A0A] relative border-y border-[#D4AF37]/10 overflow-hidden">
+        {/* Abstract Gold Glow Background */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#D4AF37]/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-          </div>
-          
-          {/* Mobile scroll indicator */}
-          <div className="flex md:hidden justify-center items-center gap-2 mt-2 text-[#C5A059] opacity-50">
-            <span className="text-[8px] uppercase tracking-widest font-bold">Swipe</span>
-            <ArrowRight size={12} />
-          </div>
-        </div>
-      </section>
-
-      {/* --- Section 04: Client Reviews --- */}
-      <section id="reviews" className="py-16 md:py-40 bg-white">
-        <div className="container mx-auto px-5 md:px-10">
-          <SectionHeader number="04" title="Client Voices" subtitle="Testimonials - آراء العملاء" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
-             {[
-               { name: "Fatima S.", text: "The cupping therapy completely relieved my back pain. A luxurious clinic in Kalba.", textAr: "علاج الحجامة خفف آلام ظهري تماماً. عيادة فاخرة حقاً في كلباء." },
-               { name: "Khalid R.", text: "Dr. Saad Alidein is a master. My skin treatments showed immediate results.", textAr: "الدكتور سعد الدين خبير حقيقي. علاجات بشرتي أظهرت نتائج فورية." },
-               { name: "Aisha M.", text: "Exceptional service! The dental team is incredibly professional and caring.", textAr: "خدمة استثنائية! فريق طب الأسنان محترف ومهتم للغاية." }
-             ].map((review, i) => (
-               <motion.div 
-                 key={i}
-                 initial={{ opacity: 0, y: 30 }}
-                 whileInView={{ opacity: 1, y: 0 }}
-                 viewport={{ once: true }}
-                 transition={{ delay: i * 0.1 }}
-                 className="bg-[#FAF9F6] p-6 md:p-10 rounded-[24px] md:rounded-[30px] shadow-[2px_2px_2px_gray] border border-gray-50 flex flex-col justify-between"
-               >
-                 <div>
-                   <Quote className="text-[#C5A059] opacity-20 mb-4 w-8 h-8 md:w-10 md:h-10" />
-                   <p className="text-gray-600 font-light leading-relaxed mb-4 text-sm italic">"{review.text}"</p>
-                   <p className="text-gray-500 font-arabic leading-relaxed mb-6 text-sm">"{review.textAr}"</p>
-                 </div>
-                 <div className="pt-4 border-t border-gray-100">
-                   <div className="flex gap-1 mb-2">
-                     {[...Array(5)].map((_, starIndex) => (
-                       <Star key={starIndex} size={12} className="text-[#C5A059] fill-[#C5A059]" />
-                     ))}
-                   </div>
-                   <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#0A192F]">{review.name}</h4>
-                   <p className="text-[7px] text-gray-400 uppercase tracking-[0.2em] mt-1">Verified Patient - مريض موثق</p>
-                 </div>
-               </motion.div>
-             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* --- Section 05: The Board --- */}
-      <section id="theboard" className="py-16 md:py-40 bg-[#FAF9F6] text-center md:text-left">
-        <div className="container mx-auto px-5 md:px-10">
-          <div className="text-center mb-10 md:mb-24">
-             <SectionHeader number="05" title="Medical Board" subtitle="Authority" />
-             <p className="text-gray-500 text-sm md:text-lg font-light leading-relaxed max-w-2xl mx-auto">
-               Our medical specialists are leaders dedicated to your transformation and vitality.
-             </p>
-          </div>
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
-              {/* Main Doctor */}
-              <div className="p-6 md:p-10 bg-white rounded-[24px] md:rounded-[30px] shadow-[2px_2px_2px_gray] border border-gray-50 text-center group">
-                 <div className="rounded-xl md:rounded-2xl overflow-hidden mb-6 aspect-square md:aspect-auto md:h-72">
-                    <img src={IMAGES.doctor1} className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-500" alt="Dr. Saad Alidein" />
-                 </div>
-                 <p className="text-[7px] md:text-[9px] font-bold uppercase tracking-widest text-[#C5A059] mb-2">Medical Director - المدير الطبي</p>
-                 <h4 className="text-lg md:text-2xl font-serif text-[#0A192F]">Dr. Saad Alidein</h4>
+        <div className="max-w-[1400px] mx-auto px-8 lg:px-16 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+            <FadeIn className="order-2 lg:order-1">
+              <h3 className="font-sans text-[#D4AF37] tracking-[0.3em] uppercase text-[10px] mb-6">Sonic Landscape</h3>
+              <h2 className="font-playfair text-5xl md:text-7xl text-white mb-10 leading-tight font-light">
+                The Rhythm of <br/> <GoldText className="italic">Al Mashhoor</GoldText>
+              </h2>
+              <div className="font-sans text-gray-400 space-y-8 font-light text-sm md:text-base tracking-wide leading-relaxed mb-12">
+                <p>
+                  Elevate your senses with our state-of-the-art acoustic architecture. Our resident international DJs curate a bespoke sonic journey every night, transitioning seamlessly from deep lounge house to high-energy anthems.
+                </p>
+                <p>
+                  Experience the pinnacle of exclusivity with our <strong className="text-[#D4AF37] font-normal">VIP Bottle Service</strong>. Enjoy priority entry, a dedicated luxury host, spectacular sparkler presentations, and private security for your elite entourage.
+                </p>
               </div>
               
-              <div className="p-6 md:p-10 bg-white rounded-[24px] md:rounded-[30px] shadow-[2px_2px_2px_gray] border border-gray-50 text-center group">
-                 <div className="rounded-xl md:rounded-2xl overflow-hidden mb-6 aspect-square md:aspect-auto md:h-72">
-                    <img src={IMAGES.doctor2} className="w-full h-full object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-500" alt="Specialist Panel" />
-                 </div>
-                 <p className="text-[7px] md:text-[9px] font-bold uppercase tracking-widest text-[#C5A059] mb-2">Clinical Team</p>
-                 <h4 className="text-lg md:text-2xl font-serif text-[#0A192F]">Expert Panel</h4>
-              </div>
-
-              <div className="p-8 md:p-12 bg-[#0A192F] rounded-[24px] md:rounded-[30px] shadow-[2px_2px_2px_gray] flex flex-col justify-center items-center text-center text-white h-full min-h-[300px]">
-                 <Star className="text-[#C5A059] mb-4 md:mb-8" size={32} />
-                 <h5 className="text-base md:text-xl font-serif mb-4 md:mb-6 uppercase tracking-widest">Governance</h5>
-                 <p className="text-[9px] md:text-[10px] text-gray-400 uppercase tracking-widest leading-loose italic max-w-[200px]">
-                   "Preserving biological heritage with elite standards in Kalba."
-                 </p>
-              </div>
-           </div>
-        </div>
-      </section>
-
-      {/* --- Section 06: Contact & Location --- */}
-      <section id="contact" className="py-16 md:py-40 bg-white">
-        <div className="container mx-auto px-5 md:px-10">
-          <SectionHeader number="06" title="Find Us" subtitle="Kalba Headquarters" />
-          
-          <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 md:gap-12 items-stretch">
-            {/* Contact Details Card */}
-            <div className="lg:col-span-5 w-full">
-              <div className="p-6 md:p-12 bg-[#FAF9F6] rounded-[24px] md:rounded-[40px] shadow-[2px_2px_2px_gray] border border-gray-50 flex flex-col justify-center h-full space-y-8 md:space-y-12">
-                
-                  <div className="flex gap-4 md:gap-6 items-start">
-                    <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white flex items-center justify-center text-[#C5A059] shadow-[2px_2px_2px_gray] shrink-0">
-                      <MapPin size={20} className="md:w-6 md:h-6" />
-                    </div>
-                    <div>
-                      <p className="text-[8px] md:text-[10px] font-bold uppercase tracking-[0.3em] text-[#0A192F] mb-1 md:mb-2">Address - العنوان</p>
-                      <p className="text-xs md:text-sm font-light leading-relaxed text-gray-500 uppercase tracking-widest">{CLINIC_INFO.address}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-4 md:gap-6 items-start">
-                    <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white flex items-center justify-center text-[#C5A059] shadow-[2px_2px_2px_gray] shrink-0">
-                      <Phone size={20} className="md:w-6 md:h-6" />
-                    </div>
-                    <div>
-                      <p className="text-[8px] md:text-[10px] font-bold uppercase tracking-[0.3em] text-[#0A192F] mb-1 md:mb-2">Concierge - اتصل بنا</p>
-                      <p className="text-lg md:text-2xl font-serif text-[#0A192F]">{CLINIC_INFO.phone}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4 md:gap-6 items-start">
-                    <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white flex items-center justify-center text-[#C5A059] shadow-[2px_2px_2px_gray] shrink-0">
-                      <Clock size={20} className="md:w-6 md:h-6" />
-                    </div>
-                    <div>
-                      <p className="text-[8px] md:text-[10px] font-bold uppercase tracking-[0.3em] text-[#0A192F] mb-1 md:mb-2">Hours - ساعات العمل</p>
-                      <p className="text-xs md:text-sm font-light text-gray-500 uppercase tracking-widest">{CLINIC_INFO.workingHours}</p>
-                    </div>
-                  </div>
-
-              </div>
-            </div>
-
-            {/* Map Simulation Card */}
-            <div className="lg:col-span-7 w-full h-[300px] md:h-auto min-h-[300px]">
-              <div className="h-full w-full bg-gray-100 rounded-[24px] md:rounded-[40px] shadow-[2px_2px_2px_gray] overflow-hidden relative grayscale-[20%] group hover:grayscale-0 transition-all duration-1000">
-                <img src={IMAGES.reception} className="w-full h-full object-cover" alt="Clinic Interior" />
-                <div className="absolute inset-0 bg-[#0A192F]/40 md:bg-black/20" />
-                <div className="absolute inset-0 flex items-center justify-center p-4">
-                   <div className="bg-white/95 backdrop-blur-md p-6 md:p-8 rounded-[20px] shadow-[2px_2px_2px_gray] text-center max-w-sm w-full">
-                      <MapPin className="text-[#C5A059] mx-auto mb-3 md:mb-4" size={28} />
-                      <h4 className="text-base md:text-lg font-serif text-[#0A192F] mb-2">{CLINIC_INFO.name} CENTER</h4>
-                      <p className="text-[8px] md:text-[10px] uppercase tracking-widest text-gray-500 mb-4 md:mb-6">{CLINIC_INFO.address}</p>
-                      <a 
-                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(CLINIC_INFO.fullName + ' ' + CLINIC_INFO.address)}`} 
-                        target="_blank" 
-                        rel="noreferrer"
-                        className="w-full block md:inline-block md:w-auto px-6 py-3 bg-[#0A192F] text-white text-[8px] md:text-[9px] font-bold uppercase tracking-widest rounded-full active:bg-[#C5A059] md:hover:bg-[#C5A059] transition-all"
-                      >
-                        Get Directions
-                      </a>
-                   </div>
+              <div className="flex flex-col sm:flex-row gap-12 border-t border-white/10 pt-10">
+                <div>
+                  <h4 className="font-cinzel text-3xl text-white mb-2">Resident DJs</h4>
+                  <p className="font-sans text-[10px] text-[#D4AF37] uppercase tracking-[0.2em]">International Roster</p>
+                </div>
+                <div>
+                  <h4 className="font-cinzel text-3xl text-white mb-2">Bottle Service</h4>
+                  <p className="font-sans text-[10px] text-[#D4AF37] uppercase tracking-[0.2em]">Elite VIP Hosting</p>
                 </div>
               </div>
-            </div>
+            </FadeIn>
+
+            <FadeIn delay={200} className="order-1 lg:order-2">
+              <div className="relative group">
+                <div className="absolute inset-0 border border-[#D4AF37]/40 rounded-[40px] transform translate-x-6 -translate-y-6 transition-transform duration-700 group-hover:translate-x-2 group-hover:-translate-y-2 shadow-[0_0_30px_rgba(212,175,55,0.15)]"></div>
+                {/* Premium DJ / Nightclub Image */}
+                <img 
+                  src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=2070&auto=format&fit=crop" 
+                  alt="DJ and VIP Party" 
+                  className="relative z-10 w-full aspect-[4/5] object-cover rounded-[40px] grayscale-[20%] group-hover:grayscale-0 transition-all duration-[2000ms]"
+                />
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
 
-      {/* --- Section 07: Book Appointment --- */}
-      <section id="appointment" className="py-16 md:py-40 bg-[#FAF9F6] relative">
-         <div className="container mx-auto px-5 md:px-10">
-            <div className="flex flex-col lg:flex-row gap-10 lg:gap-24">
-               
-               <div className="lg:w-2/5 flex flex-col justify-center text-center lg:text-left w-full">
-                  <SectionHeader number="07" title="Book Appointment" subtitle="Digital Atelier" />
-                  <p className="text-gray-500 font-light text-base md:text-xl leading-relaxed mb-4 md:mb-6">
-                    Your journey to wellness begins here. Submit your request to connect with our WhatsApp concierge.
-                  </p>
-                  <p className="text-gray-500 font-arabic text-lg md:text-xl mb-8 md:mb-12">
-                    رحلتك نحو العافية المطلقة تبدأ من هنا. سيتم تحويل طلبك لخدمة الكونسيرج عبر الواتساب.
-                  </p>
-                  
-                  <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-                     <div className="flex gap-4 p-5 bg-white rounded-[20px] shadow-[2px_2px_2px_gray] border border-gray-50">
-                        <Lock size={18} className="text-[#C5A059] shrink-0" />
-                        <div className="text-left">
-                           <p className="text-[8px] uppercase font-bold text-[#0A192F]">Secure Channel - قناة آمنة</p>
-                           <p className="text-[9px] text-gray-400 leading-tight mt-1">Direct to clinic reception.</p>
-                        </div>
-                     </div>
-                     <div className="flex gap-4 p-5 bg-white rounded-[20px] shadow-[2px_2px_2px_gray] border border-gray-50">
-                        <Clock size={18} className="text-[#C5A059] shrink-0" />
-                        <div className="text-left">
-                           <p className="text-[8px] uppercase font-bold text-[#0A192F]">Fast Response - استجابة سريعة</p>
-                           <p className="text-[9px] text-gray-400 leading-tight mt-1">Instant WhatsApp connection.</p>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-
-               <div className="lg:w-3/5 w-full">
-                  <div className="bg-white p-6 md:p-12 lg:p-16 rounded-[24px] md:rounded-[40px] shadow-[2px_2px_2px_gray] border border-gray-50">
-                     <AnimatePresence mode="wait">
-                        {registryStatus === 'success' ? (
-                           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-8 md:py-10">
-                              <CheckCircle2 size={50} className="text-[#C5A059] mx-auto mb-4" />
-                              <h3 className="text-xl md:text-2xl font-serif mb-3 text-[#0A192F]">Message Generated</h3>
-                              <p className="text-gray-500 text-xs md:text-sm mb-6">Please complete the send process in WhatsApp.</p>
-                              <button onClick={() => setRegistryStatus('idle')} className="text-[#C5A059] text-[9px] md:text-[10px] font-bold uppercase tracking-widest border-b border-[#C5A059] pb-1">New Request - طلب جديد</button>
-                           </motion.div>
-                        ) : (
-                           <form onSubmit={handleRegistrySubmit} className="space-y-6 md:space-y-10">
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
-                                 <div className="relative">
-                                    <label className="text-[7px] md:text-[8px] uppercase tracking-widest text-gray-400 mb-1 block">Full Identity - الاسم الكامل</label>
-                                    <input name="fullName" required type="text" className="premium-input" placeholder="e.g. John Doe" />
-                                 </div>
-                                 <div className="relative">
-                                    <label className="text-[7px] md:text-[8px] uppercase tracking-widest text-gray-400 mb-1 block">Contact Point - رقم التواصل</label>
-                                    <input name="contactPoint" required type="tel" className="premium-input" placeholder="Phone Number" />
-                                 </div>
-                              </div>
-                              <div className="relative">
-                                 <label className="text-[7px] md:text-[8px] uppercase tracking-widest text-gray-400 mb-1 block">Service - الخدمة المطلوبة</label>
-                                 <select name="specialization" className="premium-input appearance-none bg-transparent">
-                                    <option>Dental Care - طب الأسنان</option>
-                                    <option>Dermatology - الجلدية</option>
-                                    <option>Laser Treatments - الليزر</option>
-                                    <option>Cupping Therapy - الحجامة</option>
-                                 </select>
-                              </div>
-                              <button type="submit" className="w-full py-4 md:py-6 bg-[#0A192F] text-[#E2D1B3] rounded-full uppercase tracking-[0.2em] md:tracking-[0.3em] font-bold text-[9px] md:text-[10px] active:scale-95 transition-transform shadow-[2px_2px_2px_gray] text-center flex items-center justify-center gap-2 mt-4">
-                                 {registryStatus === 'submitting' ? 'Opening WhatsApp...' : 'Confirm via WhatsApp - تأكيد عبر واتساب'}
-                                 <MessageCircle size={16} />
-                              </button>
-                           </form>
-                        )}
-                     </AnimatePresence>
-                  </div>
-               </div>
-
-            </div>
-         </div>
+      {/* --- 4. GALLERY --- */}
+      <section id="gallery" className="py-32 md:py-48 bg-[#000000]">
+        <div className="max-w-[1400px] mx-auto px-8 lg:px-16">
+          <FadeIn className="text-center mb-24">
+            <h3 className="font-sans text-[#D4AF37] tracking-[0.3em] uppercase text-[10px] mb-6">Visual Symphony</h3>
+            <h2 className="font-playfair text-5xl md:text-7xl text-white font-light">The <GoldText className="italic">Gallery</GoldText></h2>
+          </FadeIn>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Gallery Images updated with new URLs and Gold Shadows */}
+            <FadeIn delay={100} className="lg:col-span-2">
+              <img src="https://image2url.com/r2/default/images/1774552179759-70d3afbd-9b1a-4c67-8064-d9471f038803.jpg" alt="Luxury Bar Counter" className="w-full h-[400px] object-cover rounded-[40px] border border-[#D4AF37]/40 shadow-[0_0_25px_rgba(212,175,55,0.2)] hover:shadow-[0_0_50px_rgba(212,175,55,0.5)] hover:border-[#D4AF37] transition-all duration-500" />
+            </FadeIn>
+            <FadeIn delay={200}>
+              <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2000&auto=format&fit=crop" alt="Signature Cocktail" className="w-full h-[400px] object-cover rounded-[40px] border border-[#D4AF37]/40 shadow-[0_0_25px_rgba(212,175,55,0.2)] hover:shadow-[0_0_50px_rgba(212,175,55,0.5)] hover:border-[#D4AF37] transition-all duration-500" />
+            </FadeIn>
+            <FadeIn delay={300}>
+              <img src="https://image2url.com/r2/default/images/1774552212687-4e708d65-6db8-400b-b089-43e773cd2ff2.jpg" alt="Pouring Drink" className="w-full h-[400px] object-cover rounded-[40px] border border-[#D4AF37]/40 shadow-[0_0_25px_rgba(212,175,55,0.2)] hover:shadow-[0_0_50px_rgba(212,175,55,0.5)] hover:border-[#D4AF37] transition-all duration-500" />
+            </FadeIn>
+            <FadeIn delay={400} className="lg:col-span-2">
+              <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=2000&auto=format&fit=crop" alt="VIP Lounge" className="w-full h-[400px] object-cover rounded-[40px] border border-[#D4AF37]/40 shadow-[0_0_25px_rgba(212,175,55,0.2)] hover:shadow-[0_0_50px_rgba(212,175,55,0.5)] hover:border-[#D4AF37] transition-all duration-500" />
+            </FadeIn>
+          </div>
+        </div>
       </section>
 
-      {/* --- Footer --- */}
-      <footer className="bg-white py-12 md:py-32 border-t border-gray-100">
-         <div className="container mx-auto px-5 md:px-10 text-center md:text-left">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-16 mb-16 md:mb-20">
-               
-               <div className="space-y-4 md:space-y-6">
-                  <div className="flex flex-col">
-                     <span className="text-2xl md:text-3xl font-serif text-[#0A192F]">{CLINIC_INFO.name}</span>
-                     <span className="text-[7px] md:text-[9px] tracking-widest font-bold text-[#C5A059] uppercase mt-1">The Kalba Atelier</span>
+      {/* --- 5. CUSTOMER REVIEWS --- */}
+      <section id="reviews" className="py-32 md:py-48 bg-[#050505] border-y border-[#D4AF37]/10">
+        <div className="max-w-[1400px] mx-auto px-8 lg:px-16">
+          <FadeIn className="text-center mb-24">
+            <h3 className="font-sans text-[#D4AF37] tracking-[0.3em] uppercase text-[10px] mb-6">Testimonials</h3>
+            <h2 className="font-playfair text-5xl md:text-7xl text-white font-light">Voices of <GoldText className="italic">Excellence</GoldText></h2>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {[
+              { name: "Alexander Pierce", role: "Elite Member", text: "An absolute triumph in fine dining. The attention to detail, from the gold-leaf to the flawless service, makes Al Mashhoor peerless in Dubai." },
+              { name: "Sophia Laurent", role: "Food Critic", text: "The Beluga Caviar experience was nothing short of cinematic. It is rare to find a place that matches its breathtaking ambiance with such culinary perfection." },
+              { name: "Sheikh H.A.", role: "VIP Guest", text: "Unquestionably the most luxurious lounge in the city. The private reservation process was seamless, and the evening was an absolute masterpiece." }
+            ].map((review, idx) => (
+              <FadeIn key={idx} delay={idx * 200}>
+                <LuxuryCard className="h-full flex flex-col relative">
+                  <Quote className="absolute top-10 right-10 text-[#D4AF37]/20" size={60} />
+                  <div className="flex gap-1 text-[#D4AF37] mb-8">
+                    {[1,2,3,4,5].map(star => <Star key={star} size={16} fill="#D4AF37" />)}
                   </div>
-                  <p className="text-gray-400 text-[10px] md:text-xs leading-loose uppercase tracking-widest">The pinnacle of health and aesthetics in Sharjah.</p>
-               </div>
-               
-               <div>
-                  <h4 className="text-[9px] uppercase tracking-widest font-bold text-[#C5A059] mb-4 md:mb-8 text-center md:text-left">Location</h4>
-                  <ul className="space-y-3">
-                     <li className="flex flex-col md:flex-row gap-2 md:gap-3 items-center md:items-start">
-                        <MapPin size={14} className="text-[#C5A059] shrink-0" />
-                        <span className="text-[9px] md:text-[10px] text-gray-500 font-bold uppercase tracking-widest leading-loose text-center md:text-left">{CLINIC_INFO.address}</span>
-                     </li>
-                     <li className="flex flex-col md:flex-row gap-2 md:gap-3 items-center">
-                        <Phone size={14} className="text-[#C5A059] shrink-0" />
-                        <span className="text-[9px] md:text-[10px] text-gray-500 font-bold uppercase tracking-widest">{CLINIC_INFO.phone}</span>
-                     </li>
-                  </ul>
-               </div>
-
-               <div>
-                  <h4 className="text-[9px] uppercase tracking-widest font-bold text-[#C5A059] mb-4 md:mb-8 text-center md:text-left">Atelier</h4>
-                  <ul className="space-y-3 text-[9px] md:text-[10px] text-gray-500 font-bold uppercase tracking-widest text-center md:text-left">
-                     <li><a href="#appointment" className="hover:text-[#0A192F] transition-colors">Book Appointment</a></li>
-                     <li><a href={`https://wa.me/${CLINIC_INFO.whatsapp.replace(/\D/g, '')}`} className="hover:text-[#0A192F] transition-colors">WhatsApp Concierge</a></li>
-                     <li><a href="#expertise" className="hover:text-[#0A192F] transition-colors">Services Portal</a></li>
-                  </ul>
-               </div>
-
-               <div className="space-y-8">
-                  <h4 className="text-[9px] uppercase tracking-widest font-bold text-[#C5A059] mb-4 md:mb-8 text-center md:text-left">Connect</h4>
-                  <div className="flex gap-4 justify-center md:justify-start">
-                     <a href="https://www.instagram.com/camellia.medical?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noreferrer" className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#FAF9F6] flex items-center justify-center shadow-[2px_2px_2px_gray] hover:bg-[#E4405F] hover:text-white transition-all"><Instagram size={14} className="md:w-[18px] md:h-[18px]" /></a>
-                     <a href="#" className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#FAF9F6] flex items-center justify-center shadow-[2px_2px_2px_gray] hover:bg-[#1877F2] hover:text-white transition-all"><Facebook size={14} className="md:w-[18px] md:h-[18px]" /></a>
-                     <a href="#" className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#FAF9F6] flex items-center justify-center shadow-[2px_2px_2px_gray] hover:bg-[#0077B5] hover:text-white transition-all"><Linkedin size={14} className="md:w-[18px] md:h-[18px]" /></a>
+                  <p className="font-playfair text-xl text-gray-300 italic mb-10 flex-grow leading-relaxed">
+                    "{review.text}"
+                  </p>
+                  <div>
+                    <h5 className="font-cinzel text-white text-lg tracking-wider">{review.name}</h5>
+                    <span className="font-sans text-[10px] text-[#D4AF37] uppercase tracking-[0.2em]">{review.role}</span>
                   </div>
-               </div>
+                </LuxuryCard>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
 
+      {/* --- 6. BOOK A TABLE (WHATSAPP FORM) --- */}
+      <section id="reservations" className="py-32 md:py-48 relative overflow-hidden bg-[#000000]">
+        <div className="absolute inset-0 z-0 opacity-30">
+          <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?q=80&w=2070&auto=format&fit=crop" className="w-full h-full object-cover" alt="Background" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#000] via-[#000]/90 to-transparent" />
+        </div>
+
+        <div className="max-w-[1400px] mx-auto px-8 lg:px-16 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-center">
+            <FadeIn>
+              <h3 className="font-sans text-[#D4AF37] tracking-[0.3em] uppercase text-[10px] mb-6">Secure Your Experience</h3>
+              <h2 className="font-playfair text-5xl md:text-7xl text-white mb-10 font-light leading-tight">
+                Reserve Your <br/> <GoldText className="italic">Table</GoldText>
+              </h2>
+              <p className="font-sans text-gray-400 font-light text-sm md:text-base tracking-wide leading-relaxed mb-10 max-w-lg">
+                For a flawless and personalized experience, all reservations are handled directly by our VIP Concierge via WhatsApp. Fill out your details, and allow us to orchestrate your perfect evening.
+              </p>
+              
+              {/* NEW SECTION: House Rules / Door Policy for Exclusivity */}
+              <div className="mb-14 bg-white/[0.02] border border-white/10 rounded-[20px] p-8 backdrop-blur-sm max-w-lg">
+                <h4 className="font-cinzel text-[#D4AF37] text-lg mb-6 tracking-widest uppercase">House Policies</h4>
+                <ul className="space-y-4 font-sans text-gray-300 font-light text-sm tracking-wide">
+                  <li className="flex items-start gap-4">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] mt-1.5 shrink-0"></span> 
+                    <span><strong className="text-white">Dress Code:</strong> Strictly Smart Elegant. No sportswear, shorts, or open shoes for gentlemen.</span>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] mt-1.5 shrink-0"></span> 
+                    <span><strong className="text-white">Age Limit:</strong> 21+ Only. Original physical ID or Passport required at the door.</span>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] mt-1.5 shrink-0"></span> 
+                    <span><strong className="text-white">Entry:</strong> Management reserves the right of admission to maintain the elite atmosphere.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="space-y-10">
+                <div className="flex items-center gap-6">
+                  <div className="w-14 h-14 rounded-full border border-[#D4AF37] flex items-center justify-center text-[#D4AF37]"><Phone size={20} /></div>
+                  <div>
+                    <h5 className="font-sans text-white uppercase tracking-[0.2em] text-[10px] mb-1">VIP Concierge</h5>
+                    <p className="font-cinzel text-[#D4AF37] text-lg tracking-widest">+971 56 610 1759</p>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={200}>
+              <LuxuryCard hoverEffect={false} className="bg-[#0A0A0A]/90 backdrop-blur-xl border-[#D4AF37]/40 shadow-2xl relative overflow-hidden">
+                {bookingStatus === 'success' && (
+                  <div className="absolute inset-0 bg-[#0A0A0A] z-20 flex flex-col items-center justify-center p-10 text-center animate-fade-in rounded-[40px]">
+                    <div className="w-20 h-20 rounded-full border border-[#D4AF37] flex items-center justify-center mb-8 text-[#D4AF37]">
+                      <Star size={32} />
+                    </div>
+                    <h3 className="font-playfair text-4xl text-white mb-4 font-light">Request Sent</h3>
+                    <p className="font-sans text-gray-400 font-light tracking-wide leading-relaxed">
+                      Your luxurious evening awaits. Our concierge will contact you on WhatsApp shortly to confirm your table.
+                    </p>
+                  </div>
+                )}
+
+                <form onSubmit={handleBookingSubmit} className="space-y-8 relative z-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-2 group">
+                      <label className="font-sans text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] ml-6">Full Name</label>
+                      <input name="name" required type="text" className="w-full bg-[#111111]/80 border border-white/10 rounded-[30px] px-6 py-4 text-white font-sans text-sm focus:outline-none focus:border-[#D4AF37] focus:bg-[#000] focus:shadow-[0_0_20px_rgba(212,175,55,0.15)] transition-all duration-500 placeholder-white/20" placeholder="e.g. James Bond" />
+                    </div>
+                    <div className="space-y-2 group">
+                      <label className="font-sans text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] ml-6">WhatsApp Number</label>
+                      <input name="phone" required type="tel" className="w-full bg-[#111111]/80 border border-white/10 rounded-[30px] px-6 py-4 text-white font-sans text-sm focus:outline-none focus:border-[#D4AF37] focus:bg-[#000] focus:shadow-[0_0_20px_rgba(212,175,55,0.15)] transition-all duration-500 placeholder-white/20" placeholder="+971 50..." />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2 group">
+                    <label className="font-sans text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] ml-6">Date</label>
+                    <input name="date" required type="date" className="w-full bg-[#111111]/80 border border-white/10 rounded-[30px] px-6 py-4 text-white font-sans text-sm focus:outline-none focus:border-[#D4AF37] focus:bg-[#000] focus:shadow-[0_0_20px_rgba(212,175,55,0.15)] transition-all duration-500 [color-scheme:dark]" />
+                  </div>
+
+                  <div className="space-y-2 group">
+                    <label className="font-sans text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] ml-6">Special Requests</label>
+                    <textarea name="requests" rows="3" className="w-full bg-[#111111]/80 border border-white/10 rounded-[30px] px-6 py-4 text-white font-sans text-sm focus:outline-none focus:border-[#D4AF37] focus:bg-[#000] focus:shadow-[0_0_20px_rgba(212,175,55,0.15)] transition-all duration-500 resize-none placeholder-white/20" placeholder="Allergies, celebrations, specific table preferences..."></textarea>
+                  </div>
+
+                  <button 
+                    disabled={bookingStatus === 'submitting'}
+                    type="submit" 
+                    className="w-full bg-gradient-to-r from-[#D4AF37] via-[#FFF3B0] to-[#D4AF37] bg-[length:200%_auto] hover:bg-[position:right_center] text-[#000] rounded-[40px] px-8 py-5 uppercase tracking-[0.3em] text-[10px] font-bold shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:shadow-[0_0_40px_rgba(212,175,55,0.6)] transition-all duration-700 disabled:opacity-50 mt-8 flex justify-center items-center gap-4"
+                  >
+                    {bookingStatus === 'submitting' ? 'Connecting to Concierge...' : 'Send VIP Request'}
+                  </button>
+                </form>
+              </LuxuryCard>
+            </FadeIn>
+          </div>
+        </div>
+      </section>
+
+      {/* --- LOCATION MAP --- */}
+      <section id="location" className="py-32 md:py-48 bg-[#050505] border-t border-[#D4AF37]/10">
+        <div className="max-w-[1400px] mx-auto px-8 lg:px-16">
+          <FadeIn className="text-center mb-16">
+            <h3 className="font-sans text-[#D4AF37] tracking-[0.3em] uppercase text-[10px] mb-6">Visit Us</h3>
+            <h2 className="font-playfair text-5xl md:text-7xl text-white font-light">Our <GoldText className="italic">Location</GoldText></h2>
+          </FadeIn>
+          <FadeIn delay={200}>
+            {/* Added Gold Shadow to Map */}
+            <div className="w-full h-[400px] md:h-[500px] rounded-[40px] overflow-hidden border border-[#D4AF37]/40 shadow-[0_0_30px_rgba(212,175,55,0.25)] hover:shadow-[0_0_50px_rgba(212,175,55,0.5)] transition-shadow duration-700">
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.178653926922!2d55.270782815006!3d25.197197083896135!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f43348a67e24b%3A0xff45e502e1ceb7e2!2sBurj%20Khalifa!5e0!3m2!1sen!2sae!4v1683620392341!5m2!1sen!2sae" 
+                width="100%" 
+                height="100%" 
+                style={{ border: 0, filter: 'grayscale(0.6) contrast(1.1)' }} 
+                allowFullScreen="" 
+                loading="lazy" 
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Rasputin Location Map"
+              ></iframe>
             </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* --- 7. FOOTER --- */}
+      <footer className="bg-[#000000] pt-32 pb-16 border-t border-[#D4AF37]/20 relative">
+        <div className="max-w-[1400px] mx-auto px-8 lg:px-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
             
-            <div className="pt-8 md:pt-10 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4 text-[7px] md:text-[8px] uppercase tracking-widest text-gray-400 font-bold text-center">
-               <p>© 2024 {CLINIC_INFO.fullName} • Sharjah, UAE</p>
-               <div className="flex gap-6">
-                  <a href="#" className="hover:text-[#0A192F]">Confidentiality</a>
-                  <a href="#" className="hover:text-[#0A192F]">Governance</a>
-               </div>
+            <div className="lg:col-span-2">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-14 h-14 border border-[#D4AF37] rounded-full flex items-center justify-center">
+                  <span className="font-cinzel text-[#D4AF37] text-2xl">AM</span>
+                </div>
+                <h1 className="font-cinzel text-3xl tracking-[0.3em] text-white uppercase">
+                  Al Mashhoor
+                </h1>
+              </div>
+              <p className="font-sans text-gray-400 font-light text-sm tracking-wide max-w-sm mb-10 leading-relaxed">
+                Dubai's most exclusive destination for fine dining, luxury aesthetics, and world-class service.
+              </p>
+              
+              {/* Original Brand Colors for Social Media */}
+              <div className="flex gap-6 items-center">
+                {/* Instagram Filled Original */}
+                <a href="#" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:scale-110 transition-transform duration-500 overflow-hidden relative group bg-white/5 hover:border-transparent">
+                  <svg viewBox="0 0 512 512" width="22" height="22" className="z-10">
+                    <defs>
+                      <linearGradient id="ig-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#f09433" />
+                        <stop offset="25%" stopColor="#e6683c" />
+                        <stop offset="50%" stopColor="#dc2743" />
+                        <stop offset="75%" stopColor="#cc2366" />
+                        <stop offset="100%" stopColor="#bc1888" />
+                      </linearGradient>
+                    </defs>
+                    <path fill="url(#ig-grad)" d="M256,49.471c67.266,0,75.233.257,101.8,1.469,24.562,1.121,37.9,5.224,46.778,8.674a78.052,78.052,0,0,1,28.966,18.845,78.052,78.052,0,0,1,18.845,28.966c3.45,8.877,7.554,22.216,8.674,46.778,1.212,26.565,1.469,34.532,1.469,101.8s-0.257,75.233-1.469,101.8c-1.121,24.562-5.225,37.9-8.674,46.778a83.427,83.427,0,0,1-47.811,47.811c-8.877,3.45-22.216,7.554-46.778,8.674-26.56,1.212-34.527,1.469-101.8,1.469s-75.237-.257-101.8-1.469c-24.562-1.121-37.9-5.225-46.778-8.674a78.051,78.051,0,0,1-28.966-18.845,78.053,78.053,0,0,1-18.845-28.966c-3.45-8.877-7.554-22.216-8.674-46.778-1.212-26.564-1.469-34.531-1.469-101.8s0.257-75.233,1.469-101.8c1.12-24.562,5.224-37.9,8.674-46.778A78.052,78.052,0,0,1,78.458,78.458a78.053,78.053,0,0,1,28.966-18.845c8.877-3.45,22.216-7.554,46.778-8.674,26.565-1.212,34.532-1.469,101.8-1.469m0-45.391c-68.418,0-77,.29-103.866,1.516-26.815,1.224-45.127,5.482-61.151,11.71a123.488,123.488,0,0,0-44.62,29.053A123.488,123.488,0,0,0,17.31,90.982C11.082,107.006,6.824,125.318,5.6,152.134,4.37,179,4.08,187.582,4.08,256S4.37,333,5.6,359.866c1.224,26.815,5.482,45.127,11.71,61.151a123.489,123.489,0,0,0,29.053,44.62,123.486,123.486,0,0,0,44.62,29.053c16.025,6.228,34.337,10.486,61.151,11.71,26.87,1.226,35.449,1.516,103.866,1.516s77-.29,103.866-1.516c26.815-1.224,45.127-5.482,61.151-11.71a128.817,128.817,0,0,0,73.673-73.673c6.228-16.025,10.486-34.337,11.71-61.151,1.226-26.87,1.516-35.449,1.516-103.866s-0.29-77-1.516-103.866c-1.224-26.815-5.482-45.127-11.71-61.151a123.486,123.486,0,0,0-29.053-44.62A123.487,123.487,0,0,0,421.018,17.31C404.994,11.082,386.682,6.824,359.866,5.6,333,4.37,324.418,4.08,256,4.08Z"/>
+                    <path fill="url(#ig-grad)" d="M256,123.536A132.464,132.464,0,1,0,388.464,256,132.464,132.464,0,0,0,256,123.536Zm0,219.537A87.072,87.072,0,1,1,343.072,256,87.072,87.072,0,0,1,256,343.073Z"/>
+                    <circle fill="url(#ig-grad)" cx="390.476" cy="121.524" r="30.23"/>
+                  </svg>
+                </a>
+                
+                {/* Facebook Filled Original */}
+                <a href="#" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:scale-110 transition-transform duration-500 overflow-hidden group bg-white/5 hover:border-transparent">
+                  <svg viewBox="0 0 512 512" width="22" height="22">
+                    <path fill="#1877F2" d="M512,257.555c0,-141.385 -114.615,-256 -256,-256c-141.385,0 -256,114.615 -256,256c0,127.777 93.616,233.685 216,252.89l0,-178.89l-65,0l0,-74l65,0l0,-56.4c0,-64.16 38.219,-99.6 96.695,-99.6c28.009,0 57.305,5 57.305,5l0,63l-32.281,0c-31.801,0 -41.719,19.733 -41.719,39.976l0,48.024l71,0l-11.35,74l-59.65,0l0,178.89c122.385,-19.205 216,-125.113 216,-252.89Z"/>
+                    <path fill="#FFFFFF" d="M352.65,331.555l11.35,-74l-71,0l0,-48.024c0,-20.243 9.918,-39.976 41.719,-39.976l32.281,0l0,-63s-29.296,-5 -57.305,-5c-58.476,0 -96.695,35.44 -96.695,99.6l0,56.4l-65,0l0,74l65,0l0,178.89c12.553,1.968 25.404,3.006 38.45,3.006c13.045,0 25.897,-1.038 38.45,-3.006l0,-178.89l59.65,0Z"/>
+                  </svg>
+                </a>
+                
+                {/* X (Twitter) Filled Original */}
+                <a href="#" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:scale-110 transition-transform duration-500 overflow-hidden group bg-white hover:border-transparent">
+                  <svg viewBox="0 0 24 24" width="18" height="18">
+                    <path fill="#000000" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </a>
+              </div>
             </div>
-         </div>
+
+            <div>
+              <h4 className="font-sans text-[#D4AF37] uppercase tracking-[0.2em] text-[10px] mb-8">Contact Us</h4>
+              <ul className="space-y-6 font-sans text-gray-400 font-light text-sm tracking-wide">
+                <li className="flex items-center gap-3"><MapPin size={16} className="text-[#D4AF37]" /> 17b Dubai - UAE</li>
+                <li className="flex items-center gap-3"><Phone size={16} className="text-[#D4AF37]" /> +971 56 610 1759</li>
+                <li className="flex items-center gap-3"><Clock size={16} className="text-[#D4AF37]" /> Daily: 10:00 PM - 04:00 AM</li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="font-sans text-[#D4AF37] uppercase tracking-[0.2em] text-[10px] mb-8">Discover</h4>
+              <ul className="space-y-6 font-sans text-gray-400 font-light text-sm tracking-wide">
+                <li><button onClick={() => scrollTo('about')} className="hover:text-white transition-colors">Our Heritage</button></li>
+                <li><button onClick={() => scrollTo('opulence')} className="hover:text-white transition-colors">Taste of Opulence</button></li>
+                <li><button onClick={() => scrollTo('gallery')} className="hover:text-white transition-colors">Visual Gallery</button></li>
+                <li><button onClick={() => scrollTo('reviews')} className="hover:text-white transition-colors">VIP Testimonials</button></li>
+              </ul>
+            </div>
+
+          </div>
+
+          <div className="border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p className="font-sans text-gray-500 text-[10px] tracking-[0.2em] uppercase">
+              &copy; {new Date().getFullYear()} Al Mashhoor Biryani Branch1. All Rights Reserved.
+            </p>
+            <div className="flex gap-8 font-sans text-gray-500 text-[10px] tracking-[0.2em] uppercase">
+              <a href="#" className="hover:text-[#D4AF37] transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-[#D4AF37] transition-colors">Terms of Service</a>
+            </div>
+          </div>
+        </div>
       </footer>
-
-      {/* --- Floating Utilities (Mobile Optimized) --- */}
-      
-      {/* WhatsApp FAB */}
-      <a 
-        href={`https://wa.me/${CLINIC_INFO.whatsapp.replace(/\D/g, '')}`} 
-        target="_blank" rel="noreferrer"
-        className="fixed bottom-5 left-5 md:bottom-8 md:left-8 z-[90] bg-white p-2 md:p-3 rounded-full shadow-[2px_2px_2px_gray] flex items-center gap-2 group hover:bg-[#25D366] transition-all duration-500 active:scale-95"
-      >
-        <div className="p-2 md:p-3 bg-[#25D366] rounded-full text-white shadow-md md:group-hover:scale-110 transition-transform"><MessageCircle size={18} className="md:w-5 md:h-5"/></div>
-        <span className="hidden lg:inline text-[10px] font-bold uppercase tracking-[0.3em] pr-4 group-hover:text-white">Concierge</span>
-      </a>
-
-      {/* Assistant Toggle */}
-      <div className="fixed bottom-5 right-5 md:bottom-8 md:right-8 z-[90]">
-        <AnimatePresence>
-          {isChatOpen && (
-            <motion.div 
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              className="mb-4 w-[calc(100vw-40px)] sm:w-[380px] bg-white shadow-[2px_2px_2px_gray] border border-[#C5A059]/20 rounded-[24px] overflow-hidden origin-bottom-right absolute bottom-full right-0"
-            >
-               <div className="bg-[#0A192F] p-5 md:p-6 text-white flex justify-between items-center">
-                  <div className="flex items-center gap-3">
-                     <div className="w-10 h-10 border border-[#C5A059] rounded-full flex items-center justify-center italic font-serif text-[#C5A059] text-xl">C</div>
-                     <div>
-                        <h6 className="text-[9px] font-bold uppercase tracking-widest">Assistant</h6>
-                        <p className="text-[7px] text-[#C5A059] uppercase animate-pulse">Online</p>
-                     </div>
-                  </div>
-                  <button onClick={() => setIsChatOpen(false)} className="opacity-50 hover:opacity-100 p-1"><X size={20}/></button>
-               </div>
-               <div className="p-6 h-[250px] md:h-[300px] bg-[#FAF9F6] overflow-y-auto text-xs font-light leading-loose italic text-gray-500 text-center flex items-center justify-center">
-                  "Welcome to Camellia Medical Center. How may I assist your health or aesthetic journey today?"
-               </div>
-               <div className="p-4 md:p-5 bg-white border-t border-gray-50 flex gap-3 items-center">
-                  <input className="flex-1 text-[10px] font-light uppercase tracking-widest focus:outline-none" placeholder="Type inquiry..." />
-                  <button className="text-[#C5A059] active:scale-90 transition-transform p-1"><Send size={18}/></button>
-               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-        
-        <button 
-          onClick={() => setIsChatOpen(!isChatOpen)}
-          className="bg-[#0A192F] text-[#C5A059] p-3 md:p-4 lg:px-8 lg:py-5 rounded-full flex items-center gap-3 shadow-[2px_2px_2px_gray] hover:bg-[#C5A059] hover:text-white transition-all duration-500 active:scale-95"
-        >
-          <span className="hidden lg:inline text-[10px] font-bold uppercase tracking-[0.3em]">Assistant</span>
-          <Fingerprint size={24} className="md:w-7 md:h-7"/>
-        </button>
-      </div>
 
     </div>
   );
