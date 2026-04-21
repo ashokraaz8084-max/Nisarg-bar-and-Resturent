@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 
 // --- Constants & Data ---
-const CONTACT_NUMBER = "+971 50 788 0712";
+const CONTACT_NUMBER = "+971 55 304 3154";
 const LOGO_URL = "https://image2url.com/r2/default/images/1773727635763-d625528c-9a89-4443-87e5-937225cb123a.jpeg";
 
 const SERVICES = [
@@ -29,8 +29,8 @@ const SERVICES = [
 ];
 
 const REVIEWS = [
-  { name: "Sarah Al-Maktoum", text: "The most private and sophisticated salon experience in Sharjah. The attention to detail is unmatched.", rating: 5 },
-  { name: "Elena Rodriguez", text: "SaimaAslam is not just a salon, it's an art atelier. My hair has never looked this vibrant and healthy.", rating: 5 },
+  { name: "Sarah Al-Maktoum", text: "The most private and sophisticated salon experience in Abu Dhabi. The attention to detail is unmatched.", rating: 5 },
+  { name: "Elena Rodriguez", text: "Fair World is not just a salon, it's an art atelier. My hair has never looked this vibrant and healthy.", rating: 5 },
   { name: "Amira Al-Fayed", text: "An absolute revelation. The bespoke treatments and serene atmosphere make it my ultimate escape in the city.", rating: 5 }
 ];
 
@@ -83,7 +83,7 @@ export default function App() {
     await new Promise(resolve => setTimeout(resolve, 1000));
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData);
-    const message = `✨ SAIMAASLAM BOOKING REQUEST ✨\n\nName: ${data.name}\nPhone: ${data.phone}\nService: ${selectedService}\nDate: ${data.date}\n\nClient has requested a session at Al Dhaid.`;
+    const message = `✨ FAIR WORLD INVITATION ✨\n\nName: ${data.name}\nPhone: ${data.phone}\nService: ${selectedService}\nDate: ${data.date}\n\nClient has requested a private session.`;
     window.open(`https://wa.me/${CONTACT_NUMBER.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`, '_blank');
     setIsSubmitting(false);
   };
@@ -115,8 +115,8 @@ export default function App() {
           <div className="flex items-center gap-4 cursor-pointer group" onClick={() => scrollToSection('home')}>
              <img src={LOGO_URL} alt="Logo" className="h-12 w-auto grayscale brightness-200 group-hover:scale-105 transition-transform duration-700" />
              <div className="flex flex-col">
-                <span className="font-cinzel text-xl text-white tracking-[0.1em] font-bold leading-none">SAIMAASLAM</span>
-                <span className="text-[6px] text-[#c5a059] tracking-[0.8em] uppercase font-black mt-1">Beauty Salon</span>
+                <span className="font-cinzel text-xl text-white tracking-[0.4em] font-bold leading-none">FAIR WORLD</span>
+                <span className="text-[6px] text-[#c5a059] tracking-[0.8em] uppercase font-black mt-1">Professional Beauty</span>
              </div>
           </div>
           <div className="hidden lg:flex space-x-12 items-center text-[9px] tracking-[0.4em] uppercase font-black">
@@ -175,10 +175,17 @@ export default function App() {
                animate={{ opacity: 1, y: 0 }}
                transition={{ duration: 1.2, delay: 0.5 }}
             >
-                <h1 className="text-[14vw] md:text-[8rem] font-cinzel text-white leading-none tracking-[-0.05em] uppercase font-bold relative inline-block">
-                  SAIMAASLAM
+                <h1 className="text-[12vw] md:text-[8rem] font-cinzel text-white leading-none tracking-[-0.05em] uppercase font-bold relative inline-block">
+                  FAIR WORLD
+                  <motion.span 
+                    animate={{ opacity: [0.4, 1, 0.4] }}
+                    transition={{ duration: 4, repeat: Infinity }}
+                    className="absolute -top-4 -right-12 text-[10px] tracking-[0.5em] text-[#c5a059] hidden md:block"
+                  >
+                    SALON
+                  </motion.span>
                 </h1>
-                <h2 className="text-4xl md:text-7xl font-cinzel text-[#c5a059] italic font-light tracking-[0.2em] -mt-4 md:-mt-8 opacity-90 drop-shadow-[0_0_20px_rgba(197,160,89,0.3)]">Beauty Salon</h2>
+                <h2 className="text-4xl md:text-5xl font-cinzel text-[#c5a059] italic font-light tracking-[0.2em] mt-4 opacity-90 drop-shadow-[0_0_20px_rgba(197,160,89,0.3)]">Professional</h2>
             </motion.div>
           </div>
 
@@ -189,7 +196,7 @@ export default function App() {
             className="flex flex-col items-center"
           >
             <p className="text-white/40 font-serif italic text-lg md:text-2xl max-w-xl leading-relaxed mb-16 tracking-wide">
-              Crafting timeless elegance for Sharjah's most distinguished elite.
+              Crafting timeless elegance for Abu Dhabi's most distinguished elite.
             </p>
 
             {/* ULTRA LUXURY BUTTONS SECTION */}
@@ -229,7 +236,7 @@ export default function App() {
 
         {/* Vertical Coordinates - Luxury Detail */}
         <div className="absolute left-10 bottom-10 z-20 hidden lg:block">
-           <span className="text-white/20 text-[8px] tracking-[0.5em] font-bold vertical-text uppercase">25.2858° N, 55.8824° E</span>
+           <span className="text-white/20 text-[8px] tracking-[0.5em] font-bold vertical-text uppercase">25.2329° N, 55.2425° E</span>
         </div>
 
         {/* Luxury Scroll Guide */}
@@ -249,7 +256,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center">
           <div>
             <SectionHeader subtitle="The Heritage" title="Defining Elegance" titleAr="تعريف الأناقة" />
-            <p className="text-gray-400 text-lg leading-relaxed mb-8">SaimaAslam beauty salon is not just a salon; it's a private estate where beauty meets artistry. We cater to the most discerning individuals in Sharjah, offering bespoke treatments that reflect your inner radiance.</p>
+            <p className="text-gray-400 text-lg leading-relaxed mb-8">Fair World Professional Ladies Beauty Salon is not just a salon; it's a private estate where beauty meets artistry. We cater to the most discerning individuals in Abu Dhabi, offering bespoke treatments that reflect your inner radiance.</p>
             <div className="grid grid-cols-2 gap-8">
               <div className="border-l-2 border-[#c5a059] pl-6 py-2">
                 <h4 className="text-white font-bold text-2xl">Elite</h4>
@@ -353,7 +360,7 @@ export default function App() {
           <div className="text-center mb-20 space-y-4">
              <span className="text-[#c5a059] text-[10px] tracking-[1em] uppercase font-black block">Private Invitation</span>
              <h2 className="text-5xl md:text-7xl font-cinzel text-white uppercase leading-none">Request <br/> <span className="text-[#c5a059]">A Session</span></h2>
-             <p className="text-gray-500 font-serif text-xl italic max-w-xl mx-auto">Experience the pinnacle of bespoke beauty in our Al Dhaid sanctuary.</p>
+             <p className="text-gray-500 font-serif text-xl italic max-w-xl mx-auto">Experience the pinnacle of bespoke beauty in our Abu Dhabi sanctuary.</p>
           </div>
 
           <motion.div 
@@ -403,15 +410,15 @@ export default function App() {
 
           <div className="mt-20 flex flex-wrap justify-center gap-16">
              <div className="flex items-center gap-4">
-               <MapPin size={16} className="text-[#c5a059]" />
-               <span className="text-[10px] tracking-widest text-gray-400 uppercase font-bold">7v9Q+p2 Al Dhaid - Sharjah</span>
+               <MapPin size={16} className="text-[#c5a059] shrink-0" />
+               <span className="text-[10px] tracking-widest text-gray-400 uppercase font-bold max-w-[200px] leading-relaxed">Shabiya 10 Al gurg tower-C15-C 16 M6, Abu Dhabi</span>
              </div>
              <div className="flex items-center gap-4">
-               <Phone size={16} className="text-[#c5a059]" />
+               <Phone size={16} className="text-[#c5a059] shrink-0" />
                <span className="text-[10px] tracking-widest text-gray-400 uppercase font-bold">{CONTACT_NUMBER}</span>
              </div>
              <div className="flex items-center gap-4">
-               <Clock size={16} className="text-[#c5a059]" />
+               <Clock size={16} className="text-[#c5a059] shrink-0" />
                <span className="text-[10px] tracking-widest text-gray-400 uppercase font-bold">10:00 — 22:00 Daily</span>
              </div>
           </div>
@@ -427,7 +434,7 @@ export default function App() {
             className="w-full h-[500px] rounded-[40px] overflow-hidden border border-[#c5a059]/20"
           >
             <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14430.435773177114!2d55.8824147!3d25.2858169!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f739665a3979f%3A0xc3b86064789504c3!2sAl%20Dhaid%20-%20Sharjah!5e0!3m2!1sen!2sae!4v1715432000000!5m2!1sen!2sae" 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14436.46746404396!2d55.24250289196924!3d25.2329381666542173!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f4305c4530069%3A0xc0f1b29a29d4793d!2sJumeirah%201%20-%20Dubai!5e0!3m2!1sen!2sae!4v1715432000000!5m2!1sen!2sae" 
               width="100%" 
               height="100%" 
               style={{ border: 0, filter: 'grayscale(1) invert(0.9) contrast(1.2)' }} 
@@ -459,13 +466,13 @@ export default function App() {
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
                 </div>
                 <div className="text-center lg:text-left">
-                  <h4 className="font-cinzel text-3xl text-white tracking-[0.5em] font-bold leading-none">SAIMAASLAM</h4>
-                  <span className="text-[8px] text-[#c5a059] tracking-[1.2em] uppercase font-black block mt-3">Beauty Salon</span>
+                  <h4 className="font-cinzel text-3xl text-white tracking-[0.5em] font-bold leading-none">FAIR WORLD</h4>
+                  <span className="text-[8px] text-[#c5a059] tracking-[1.2em] uppercase font-black block mt-3">Professional Salon</span>
                 </div>
               </motion.div>
               
               <p className="text-white/30 text-xs font-serif italic leading-relaxed tracking-widest max-w-sm text-center lg:text-left">
-                Where high-fashion architecture meets biological precision. A sanctuary for Sharjah's most distinguished elite.
+                Where high-fashion architecture meets biological precision. A sanctuary for Abu Dhabi's most distinguished elite since 2012.
               </p>
 
               {/* Newsletter Elite - WOW Feature */}
@@ -530,7 +537,7 @@ export default function App() {
             <div className="lg:col-span-3 flex flex-col items-center lg:items-end space-y-12 w-full">
               <div className="text-center lg:text-right space-y-4">
                 <span className="text-[#c5a059] text-[10px] tracking-[0.5em] uppercase font-black block">The Address</span>
-                <p className="text-white text-xs tracking-[0.2em] font-serif italic">7v9Q+p2 Al Dhaid - Sharjah<br/>United Arab Emirates</p>
+                <p className="text-white text-xs tracking-[0.2em] font-serif italic leading-relaxed">Shabiya 10 Al gurg tower-C15-C 16 M6<br/>behind Ghee rice Restaurant<br/>Abu Dhabi - UAE</p>
                 <p className="text-[#c5a059] text-[11px] tracking-widest font-bold mt-4">{CONTACT_NUMBER}</p>
               </div>
 
@@ -554,7 +561,7 @@ export default function App() {
           {/* Bottom Bar - Cinematic Finish */}
           <div className="pt-16 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-10">
             <div className="flex flex-col md:flex-row items-center gap-6">
-              <span className="text-[8px] text-white/20 tracking-[0.8em] uppercase">&copy; 2024 SaimaAslam beauty salon</span>
+              <span className="text-[8px] text-white/20 tracking-[0.8em] uppercase">&copy; 2024 Fair World Professional Ladies Beauty Salon</span>
               <div className="hidden md:block w-8 h-[1px] bg-white/10" />
               <button className="text-[8px] text-white/20 tracking-[0.6em] uppercase hover:text-[#c5a059] transition-colors">Legal Mentions</button>
               <button className="text-[8px] text-white/20 tracking-[0.6em] uppercase hover:text-[#c5a059] transition-colors">Privacy Charter</button>
