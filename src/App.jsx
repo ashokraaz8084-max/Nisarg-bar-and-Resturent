@@ -8,26 +8,26 @@ import {
 
 // --- CONFIGURATION & DATA ---
 const CLINIC_INFO = {
-  name: "DR RACHANA KHEDEKAR'S HOMEOPATHIC CLINIC",
-  shortName: "Dr. Rachana's Clinic",
-  phone: "+91 98210 86117",
-  whatsapp: "919821086117",
-  address: "Lion Tarachand Bapa Hospital Marg, West Mumbai, Maharashtra",
-  email: "care@drrachanaclinic.com",
+  name: "Dr. Patil Homeopathy Clinic",
+  shortName: "Dr. Patil's Clinic",
+  phone: "+91 98330 41468",
+  whatsapp: "919833041468",
+  address: "2RFX+6WF Dr. Talwalkar Poly Clinic, opposite Ruia College, Mumbai, Maharashtra",
+  email: "care@drpatilclinic.com",
   timings: "Mon - Sat: 10:00 AM - 8:00 PM"
 };
 
 const IMAGES = {
   logo: "https://img.sanishtech.com/u/228a22b3b8e646bd998249faebdc55a8.png",
-  hero: "https://img.sanishtech.com/u/4d37767c8fa653cf4106b30fe680d6b3.jpg",
-  about: "https://img.sanishtech.com/u/1227afab01976f9c71cd62a6752491a6.jpg",
+  hero: "https://img.sanishtech.com/u/4a489c565f8bcfd8d03e0eccf476eb7f.jpg",
+  about: "https://img.sanishtech.com/u/2f61a6cfe62798afe0b5343fb3d29656.jpg",
   gallery: [
-    "https://img.sanishtech.com/u/142cb6810ee7ba2ca6d6b5da1494f089.jpg",
-    "https://img.sanishtech.com/u/f23ea7fac443934cac4e82d0d4ae9f8d.jpg",
-    "https://img.sanishtech.com/u/2bd45ea60adcc5268b5557dcfa75c453.jpg",
-    "https://img.sanishtech.com/u/ff17ecff38ac9429103581578f091969.jpg",
-    "https://img.sanishtech.com/u/2f766daa7901e4a5fbe36db5b9c7155b.jpg",
-    "https://img.sanishtech.com/u/fc07637ccf4701fcb27fecb6b87402f7.jpg"
+    "https://img.sanishtech.com/u/ab5b95c7c77d60947459fc596b9f6ec7.jpg",
+    "https://img.sanishtech.com/u/d71be7420c1dd38be84a7b06c165450b.jpg",
+    "https://img.sanishtech.com/u/395543eea3df5f56cba678064144b657.jpg",
+    "https://img.sanishtech.com/u/bc0ec2dc7d5535e9911f485a7fae7dea.jpg",
+    "https://img.sanishtech.com/u/f81058b02b198a0ea9632933fc9e3a8b.jpg",
+    "https://img.sanishtech.com/u/0be43c82c88f307417ee9cb63a810358.jpg"
   ]
 };
 
@@ -135,7 +135,7 @@ export default function App() {
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
-  const handleWhatsAppClick = (message = "Hello Dr. Rachana, I would like to book an appointment.") => {
+  const handleWhatsAppClick = (message = "Hello Dr. Patil, I would like to book an appointment.") => {
     const url = `https://wa.me/${CLINIC_INFO.whatsapp}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
   };
@@ -197,7 +197,7 @@ export default function App() {
             </div>
             <div className="flex flex-col">
               <span className={`text-xl font-bold tracking-tight transition-colors ${isScrolled || mobileMenuOpen || darkMode ? 'text-gray-900 dark:text-white' : 'text-gray-900 dark:text-white md:text-white'}`}>
-                Dr. Rachana's
+                Dr. Patil's
               </span>
               <span className={`text-xs font-semibold tracking-widest uppercase transition-colors ${isScrolled || mobileMenuOpen || darkMode ? 'text-orange-500' : 'text-orange-500 md:text-orange-300'}`}>
                 Homeopathic Clinic
@@ -327,11 +327,11 @@ export default function App() {
             
             <div ref={aboutRef} className={`w-full lg:w-1/2 relative transition-all duration-1000 transform ${aboutVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`}>
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                <img src={IMAGES.about} alt="Dr. Rachana Khedekar" className="w-full h-auto object-cover aspect-[4/5]" />
+                <img src={IMAGES.about} alt="Dr. Patil" className="w-full h-auto object-cover aspect-[4/5]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"></div>
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                   <div className="glass-panel rounded-2xl p-6 border-white/20">
-                    <h3 className="text-2xl font-bold text-white mb-1">Dr. Rachana Khedekar</h3>
+                    <h3 className="text-2xl font-bold text-white mb-1">Dr. Patil</h3>
                     <p className="text-orange-400 font-medium mb-3">BHMS, MD (Homeopathy)</p>
                     <p className="text-gray-200 text-sm">Dedicated to resolving the root cause of illness through classical homeopathic principles and modern diagnostics.</p>
                   </div>
@@ -345,7 +345,7 @@ export default function App() {
             <div className={`w-full lg:w-1/2 transition-all duration-1000 delay-300 transform ${aboutVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
               <SectionHeading subtitle="About The Doctor" title="Healing from within, naturally." />
               <p className="text-gray-600 dark:text-gray-300 text-lg mb-6 leading-relaxed">
-                With over two decades of clinical experience, Dr. Rachana Khedekar brings a deeply personalized approach to homeopathy. We don't just treat symptoms; we understand your entire physiological and psychological makeup to stimulate your body's innate healing mechanisms.
+                With over two decades of clinical experience, Dr. Patil brings a deeply personalized approach to homeopathy. We don't just treat symptoms; we understand your entire physiological and psychological makeup to stimulate your body's innate healing mechanisms.
               </p>
               <p className="text-gray-600 dark:text-gray-300 text-lg mb-8 leading-relaxed">
                 Our clinic seamlessly blends traditional homeopathic wisdom with a modern, evidence-based approach, providing a safe haven for patients seeking long-term relief from chronic and acute ailments without the burden of side effects.
@@ -369,7 +369,7 @@ export default function App() {
                  <img src={IMAGES.logo} alt="Clinic Logo" className="w-16 h-16 rounded-full shadow-md" />
                  <div>
                    <p className="text-sm text-gray-500 dark:text-gray-400">Founder & Chief Consultant</p>
-                   <p className="text-xl font-bold text-gray-900 dark:text-white">DR RACHANA KHEDEKAR'S CLINIC</p>
+                   <p className="text-xl font-bold text-gray-900 dark:text-white">DR. PATIL HOMEOPATHY CLINIC</p>
                  </div>
               </div>
             </div>
@@ -672,7 +672,7 @@ export default function App() {
                 <div className="w-10 h-10 bg-white rounded-lg p-1">
                   <img src={IMAGES.logo} alt="Logo" className="w-full h-full object-contain" />
                 </div>
-                <span className="text-lg font-bold">Dr. Rachana's</span>
+                <span className="text-lg font-bold">Dr. Patil's</span>
               </div>
               <p className="text-gray-400 text-sm leading-relaxed mb-6">
                 Premium homeopathic care combining traditional wisdom with modern diagnostics for complete, side-effect-free healing.
@@ -689,7 +689,7 @@ export default function App() {
             <div>
               <h4 className="text-lg font-semibold mb-6">Quick Links</h4>
               <ul className="space-y-3">
-                {['Home', 'About Dr. Rachana', 'Treatments', 'Patient Reviews', 'Contact Us'].map((link, i) => (
+                {['Home', 'About Dr. Patil', 'Treatments', 'Patient Reviews', 'Contact Us'].map((link, i) => (
                   <li key={i}>
                     <a href="#" className="text-gray-400 hover:text-orange-500 text-sm transition-colors flex items-center">
                       <ChevronRight size={14} className="mr-1" /> {link}
@@ -735,7 +735,7 @@ export default function App() {
           </div>
           
           <div className="pt-8 border-t border-gray-800 text-center flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-            <p>&copy; {new Date().getFullYear()} {CLINIC_INFO.name}. All Rights Reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Dr. Patil Homeopathy Clinic. All Rights Reserved.</p>
             <div className="flex space-x-4 mt-4 md:mt-0">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
