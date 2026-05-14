@@ -18,18 +18,20 @@ const CLINIC_INFO = {
 };
 
 const IMAGES = {
-  logo: "https://img.sanishtech.com/u/228a22b3b8e646bd998249faebdc55a8.png",
-  hero: "https://img.sanishtech.com/u/4a489c565f8bcfd8d03e0eccf476eb7f.jpg",
-  about: "https://img.sanishtech.com/u/2f61a6cfe62798afe0b5343fb3d29656.jpg",
+  logo: "https://www.image2url.com/r2/default/images/1778727089202-d9599629-92c6-46f3-8c97-7116626b5676.jpg",
+  hero: "https://www.image2url.com/r2/default/images/1778727395405-edb13cda-d5ae-455c-8e1d-d26aca764e1f.jpg",
+  about: "https://www.image2url.com/r2/default/images/1778727338239-b0c7f104-42bb-4947-83c9-5f9709cd786f.jpg",
   gallery: [
-    "https://img.sanishtech.com/u/ab5b95c7c77d60947459fc596b9f6ec7.jpg",
-    "https://img.sanishtech.com/u/d71be7420c1dd38be84a7b06c165450b.jpg",
-    "https://img.sanishtech.com/u/395543eea3df5f56cba678064144b657.jpg",
-    "https://img.sanishtech.com/u/bc0ec2dc7d5535e9911f485a7fae7dea.jpg",
-    "https://img.sanishtech.com/u/f81058b02b198a0ea9632933fc9e3a8b.jpg",
-    "https://img.sanishtech.com/u/0be43c82c88f307417ee9cb63a810358.jpg"
+    "https://www.image2url.com/r2/default/images/1778727276125-d9c71be2-fdd2-4474-8647-f2cfcdea5397.jpg",
+    "https://www.image2url.com/r2/default/images/1778727205538-f395e33d-feef-407e-834e-bb6ed998930e.jpg",
+    "https://www.image2url.com/r2/default/images/1778727089202-d9599629-92c6-46f3-8c97-7116626b5676.jpg",
+    "https://www.image2url.com/r2/default/images/1778727144396-6629324b-62fa-457b-9f4f-a7c61b81d61b.jpg",
+    "https://www.image2url.com/r2/default/images/1778727338239-b0c7f104-42bb-4947-83c9-5f9709cd786f.jpg",
+    "https://www.image2url.com/r2/default/images/1778727395405-edb13cda-d5ae-455c-8e1d-d26aca764e1f.jpg"
   ]
 };
+
+
 
 const TREATMENTS = [
   { id: 1, title: 'Skin & Hair', icon: Sun, desc: 'Acne, Eczema, Psoriasis, Hair Fall, Alopecia' },
