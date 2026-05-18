@@ -1,809 +1,1095 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { 
-  Phone, MapPin, Clock, Calendar, ChevronRight, Menu, X, 
-  Activity, Heart, Brain, Leaf, Droplets, Sun, Wind, 
-  ShieldCheck, Award, Users, Star, ArrowRight, MessageCircle,
-  Moon, Sun as SunIcon, Stethoscope, ChevronDown, CheckCircle2,
-  Target, Mail, Instagram, Facebook, Twitter
+  Shield, Clock, Sparkles, Building, Phone, ChevronRight, ChevronLeft,
+  MapPin, Star, ShieldCheck, CheckCircle2, ChevronDown, Instagram, 
+  Facebook, Twitter, Award, Droplets, Bug, ArrowRight,
+  Leaf, GripVertical, MessageCircle, Quote
 } from 'lucide-react';
 
-// --- CONFIGURATION & DATA ---
-const CLINIC_INFO = {
-  name: "Dr. Patil Homeopathy Clinic",
-  shortName: "Dr. Patil's Clinic",
-  phone: "+91 98330 41468",
-  whatsapp: "919833041468",
-  address: "2RFX+6WF Dr. Talwalkar Poly Clinic, Mumbai, Maharashtra",
-  email: "care@drpatilclinic.com",
-  timings: "Mon - Sat: 10:00 AM - 8:00 PM"
-};
+const PHONE_NUMBER = "+919359813265";
+const WHATSAPP_LINK = `https://wa.me/919359813265?text=Hi%20Bhavani%20Enterprises,%20I%20am%20looking%20for%20premium%20pest%20control%20services.`;
 
-const IMAGES = {
-  logo: "https://www.image2url.com/r2/default/images/1778727089202-d9599629-92c6-46f3-8c97-7116626b5676.jpg",
-  hero: "https://www.image2url.com/r2/default/images/1778727395405-edb13cda-d5ae-455c-8e1d-d26aca764e1f.jpg",
-  about: "https://www.image2url.com/r2/default/images/1778727338239-b0c7f104-42bb-4947-83c9-5f9709cd786f.jpg",
-  gallery: [
-    "https://www.image2url.com/r2/default/images/1778727276125-d9c71be2-fdd2-4474-8647-f2cfcdea5397.jpg",
-    "https://www.image2url.com/r2/default/images/1778727205538-f395e33d-feef-407e-834e-bb6ed998930e.jpg",
-    "https://www.image2url.com/r2/default/images/1778727089202-d9599629-92c6-46f3-8c97-7116626b5676.jpg",
-    "https://www.image2url.com/r2/default/images/1778727144396-6629324b-62fa-457b-9f4f-a7c61b81d61b.jpg",
-    "https://www.image2url.com/r2/default/images/1778727338239-b0c7f104-42bb-4947-83c9-5f9709cd786f.jpg",
-    "https://www.image2url.com/r2/default/images/1778727395405-edb13cda-d5ae-455c-8e1d-d26aca764e1f.jpg"
-  ]
-};
+// Ultra Luxury Theme Variables - Premium 40px Volume Design
+const GOLD_TEXT = "text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#AA771C]";
+const GOLD_BG = "bg-gradient-to-r from-[#AA771C] via-[#E8C872] to-[#8A5A19]";
+const CARD_BG = "bg-gradient-to-br from-[#121212] to-[#080808]";
+const PREMIUM_SHADOW = "shadow-[0_25px_60px_rgba(0,0,0,0.8)]";
+const GOLD_GLOW_SHADOW = "shadow-[0_20px_50px_rgba(212,175,55,0.12)]";
+const HOVER_GLOW = "hover:shadow-[0_25px_60px_rgba(212,175,55,0.22)]";
 
-const TREATMENTS = [
-  { id: 1, title: 'Skin & Hair', icon: Sun, desc: 'Acne, Eczema, Psoriasis, Hair Fall, Alopecia' },
-  { id: 2, title: 'Respiratory & Allergies', icon: Wind, desc: 'Asthma, Bronchitis, Allergic Rhinitis, Sinusitis' },
-  { id: 3, title: 'Women\'s Health', icon: Heart, desc: 'PCOS, Menstrual Issues, Menopause, Thyroid' },
-  { id: 4, title: 'Digestive Disorders', icon: Droplets, desc: 'IBS, Acidity, Gastritis, Constipation' },
-  { id: 5, title: 'Stress & Anxiety', icon: Brain, desc: 'Depression, Insomnia, Migraines, Tension' },
-  { id: 6, title: 'Child Care', icon: Activity, desc: 'Immunity boosting, Teething issues, ADHD' },
+const LUX_EASE = [0.16, 1, 0.3, 1];
+
+// --- DATA CONFIGURATION (Guaranteed rendering high-resolution Unsplash URLs) ---
+const SERVICES = [
+  { 
+    title: "Cockroach Control", 
+    icon: <Bug size={30} strokeWidth={1.5} />, 
+    desc: "Advanced gel baiting and odorless molecular spraying for total eradication in luxury gourmet kitchens.", 
+    image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=1200&auto=format&fit=crop" 
+  },
+  { 
+    title: "Termite Treatment", 
+    icon: <ShieldCheck size={30} strokeWidth={1.5} />, 
+    desc: "Anti-termite precision piping and chemical barriers protecting precious teak wood structures permanently.", 
+    image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop" 
+  },
+  { 
+    title: "Bed Bug Eradication", 
+    icon: <Sparkles size={30} strokeWidth={1.5} />, 
+    desc: "Intensive deep chemical sanitization treatment to eliminate micro-infestations for flawless night rest.", 
+    image: "https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=1200&auto=format&fit=crop" 
+  },
+  { 
+    title: "Rodent Management", 
+    icon: <Bug size={30} strokeWidth={1.5} />, 
+    desc: "Discreet strategic trapping and seamless physical sealing of entryways behind custom cabinetry.", 
+    image: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?q=80&w=1200&auto=format&fit=crop" 
+  },
+  { 
+    title: "Mosquito Fogging", 
+    icon: <Droplets size={30} strokeWidth={1.5} />, 
+    desc: "High-volume thermal fogging and larvicidal controls to keep expansive lawns and pool decks completely pest-free.", 
+    image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=1200&auto=format&fit=crop" 
+  },
+  { 
+    title: "Commercial AMC", 
+    icon: <Building size={30} strokeWidth={1.5} />, 
+    desc: "Tailored continuous Annual Maintenance Contracts designed for corporate towers, premium retail, and luxury hotels.", 
+    image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1200&auto=format&fit=crop" 
+  },
+  { 
+    title: "Wood Borer Control", 
+    icon: <Leaf size={30} strokeWidth={1.5} />, 
+    desc: "Specialized micro-injection wood preservation treatments to safeguard heritage woodcraft and expensive antiques.", 
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop" 
+  },
+  { 
+    title: "Deep Sanitization", 
+    icon: <Shield size={30} strokeWidth={1.5} />, 
+    desc: "Premium grade eco-certified bacterial and viral disinfection designed for pristine medical facilities and luxury lobbies.", 
+    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1200&auto=format&fit=crop" 
+  }
 ];
 
-const FAQS = [
-  { q: "Is homeopathic treatment safe?", a: "Yes, homeopathic medicines are highly diluted, natural, and completely safe for people of all ages, including infants and pregnant women, with zero side effects." },
-  { q: "How long does the treatment take?", a: "The duration varies depending on whether the condition is acute or chronic. Acute problems like colds can resolve in days, while chronic issues like PCOS or Psoriasis may take a few months of consistent care." },
-  { q: "Do I need to avoid certain foods?", a: "Generally, we advise avoiding strong-smelling substances like raw onion, garlic, or coffee 15 minutes before and after taking the medicine, as it can interfere with absorption." },
-  { q: "Can I take homeopathy with allopathic medicines?", a: "Yes. In most cases, homeopathic remedies can be taken safely alongside conventional treatments. However, always inform the doctor about all medications you are currently taking." }
+const GALLERY_IMAGES = [
+  "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1200&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1613545325278-f24b0cae1224?q=80&w=1200&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=1200&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1200&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop"
+];
+
+const STATS = [
+  { value: "5000+", label: "Elite Estates Sanitized" },
+  { value: "24/7", label: "Priority Fast Response" },
+  { value: "100%", label: "Govt. Certified Safety" },
+  { value: "15+", label: "Years of Masterpiece Service" }
 ];
 
 const REVIEWS = [
-  { id: 1, name: "Priya Sharma", role: "Patient", text: "Dr. Patil's treatment for my chronic migraines was life-changing. After years of suffering, I finally found relief through his personalized homeopathic approach. Highly recommended!", rating: 5 },
-  { id: 2, name: "Rahul Verma", role: "Patient", text: "I visited for severe skin allergies. The natural remedies provided clear results within a few months without any side effects. The clinic is very professional and welcoming.", rating: 5 },
-  { id: 3, name: "Anita Desai", role: "Patient", text: "Excellent experience. Dr. Patil is very patient and listens carefully to all concerns. The immunity-boosting treatment for my son has worked wonders.", rating: 5 }
+  { 
+    name: "Rahul Singhania", 
+    role: "Heritage Villa Owner, Miraj", 
+    rating: 5, 
+    text: "Truly a masterclass in home safety operations. Bhavani Enterprises handled our multi-acre family estate with absolute privacy, leaving everything pristine and beautifully scent-free. Highly recommended.", 
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
+    verified: "Verified VIP Residence Audit"
+  },
+  { 
+    name: "Dr. Priya Kulkarni", 
+    role: "Founder, Kulkarni Medical Diagnostics", 
+    rating: 5, 
+    text: "Bhavani Enterprises manages our regular sanitation and AMC. Their hygiene protocol exceeds the stringent diagnostic safety standards. It feels like experiencing high-end hospitality in pest control.", 
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop",
+    verified: "Verified Healthcare Facility AMC"
+  },
+  { 
+    name: "Amit Deshmukh", 
+    role: "Chief Exec, Deshmukh Corporate Spaces", 
+    rating: 5, 
+    text: "Extremely meticulous. Their specialized wood borer treatment restored our boardroom teak antiques without any damage. Outstanding execution, absolutely zero operational disruption.", 
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop",
+    verified: "Verified Corporate Asset Protection"
+  }
 ];
 
-// --- CUSTOM HOOKS ---
+const FAQS = [
+  { q: "Are your premium chemicals safe for exotic pets and infant rooms?", a: "Yes. We source premium-grade bio-rational formulations approved by the CIBRC. These target pests at microscopic levels but remain completely odorless and safe for infants, premium upholstery, and pets once set." },
+  { q: "Do your service vehicles carry corporate branding?", a: "We understand your need for absolute discretion. Upon request, our elite team can arrive in clean, unmarked luxury utility vehicles to keep your service entirely private." },
+  { q: "Is there a comprehensive warranty on residential termite control?", a: "Yes, our certified termite barriers carry an executive warranty ranging from 1 to 5 years, accompanied by complimentary, scheduled maintenance check-ups." },
+  { q: "How fast can your team respond in Miraj?", a: "We operate a dedicated local rapid-response squad for the Miraj and Sangli region. Emergencies are addressed with priority same-day scheduling." },
+  { q: "Will chemical spraying stain our imported Italian marble or custom wood finishes?", a: "Not at all. We employ precision gel application, dust baiting, and targeted micro-injection. This leaves zero liquid pooling or stains on expensive marble, teakwood, or silk wallpaper." }
+];
 
-// Intersection Observer Hook for smooth scroll animations
-const useScrollReveal = (options = { threshold: 0.1, triggerOnce: true }) => {
-  const ref = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
+const PROCESS = [
+  { title: "Thermal Auditing", desc: "Using advanced thermal and acoustic sensors to track unseen pest nests behind marble and woodwork." },
+  { title: "Bespoke Architecting", desc: "Formulating a tailored treatment recipe suited precisely to the layout and materials of your property." },
+  { title: "Precision Shielding", desc: "Applying low-odor, targeted treatments with surgical accuracy, leaving the air fresh and surfaces clean." },
+  { title: "Eternal Protection", desc: "Periodic premium monitoring and barrier enforcement for complete, year-round peace of mind." }
+];
 
+// --- MAIN COMPONENTS ---
+
+const Preloader = ({ onComplete }) => {
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true);
-        if (options.triggerOnce && ref.current) observer.unobserve(ref.current);
-      } else if (!options.triggerOnce) {
-        setIsVisible(false);
-      }
-    }, options);
+    const timer = setTimeout(onComplete, 2400);
+    return () => clearTimeout(timer);
+  }, [onComplete]);
 
-    if (ref.current) observer.observe(ref.current);
-    return () => { if (ref.current) observer.unobserve(ref.current); };
-  }, [options.threshold, options.triggerOnce]);
-
-  return [ref, isVisible];
-};
-
-// --- COMPONENTS ---
-
-const SectionHeading = ({ subtitle, title, centered = false }) => {
-  const [ref, isVisible] = useScrollReveal();
   return (
-    <div ref={ref} className={`mb-12 lg:mb-16 ${centered ? 'text-center flex flex-col items-center' : ''} transition-all duration-1000 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-      <span className="text-orange-500 font-bold tracking-[0.2em] uppercase text-xs md:text-sm mb-4 block">
-        {subtitle}
-      </span>
-      <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-gray-900 dark:text-white tracking-tight leading-tight max-w-4xl">
-        {title}
-      </h2>
-      <div className={`h-[2px] w-24 bg-gradient-to-r from-orange-500 to-green-500 mt-8 ${centered ? 'mx-auto' : ''}`} />
-    </div>
+    <motion.div 
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0, transition: { duration: 1, ease: LUX_EASE } }}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050505]"
+    >
+      <div className="absolute inset-0 opacity-[0.02] mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
+      
+      <div className="relative flex flex-col items-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: LUX_EASE }}
+          className="text-center bg-[#0b0b0b] p-12 rounded-[40px] shadow-[0_30px_60px_rgba(212,175,55,0.08)] border border-white/5 backdrop-blur-3xl"
+        >
+          <Shield className="w-14 h-14 text-[#D4AF37] mx-auto mb-6 drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]" strokeWidth={1} />
+          <h1 className="text-3xl tracking-[0.4em] font-serif text-white uppercase mb-4 ml-[0.4em]">Bhavani</h1>
+          <motion.div 
+            initial={{ width: 0 }}
+            animate={{ width: "100%" }}
+            transition={{ delay: 0.6, duration: 1.2, ease: LUX_EASE }}
+            className={`h-[1px] ${GOLD_BG} mb-4`}
+          />
+          <h2 className={`text-[10px] tracking-[0.5em] ${GOLD_TEXT} uppercase ml-[0.5em] font-semibold`}>Enterprises</h2>
+        </motion.div>
+      </div>
+    </motion.div>
   );
 };
 
-const Button = ({ children, variant = 'primary', className = '', href, onClick, type = "button" }) => {
-  const baseStyle = "inline-flex items-center justify-center px-8 py-3.5 lg:px-10 lg:py-4 rounded-full text-xs lg:text-sm font-bold uppercase tracking-widest transition-all duration-500 transform hover:-translate-y-1 cursor-pointer overflow-hidden relative group";
-  
+const CustomCursor = () => {
+  const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
+  const [isHovering, setIsHovering] = useState(false);
+
+  useEffect(() => {
+    const updateMousePosition = (e) => setMousePosition({ x: e.clientX, y: e.clientY });
+    const handleMouseOver = (e) => {
+      if (e.target.closest('a') || e.target.closest('button') || e.target.closest('[role="button"]')) {
+        setIsHovering(true);
+      } else {
+        setIsHovering(false);
+      }
+    };
+
+    window.addEventListener('mousemove', updateMousePosition);
+    window.addEventListener('mouseover', handleMouseOver);
+    return () => {
+      window.removeEventListener('mousemove', updateMousePosition);
+      window.removeEventListener('mouseover', handleMouseOver);
+    };
+  }, []);
+
+  return (
+    <>
+      <motion.div
+        className="fixed top-0 left-0 w-2.5 h-2.5 bg-[#D4AF37] rounded-full pointer-events-none z-[9999] mix-blend-difference shadow-[0_0_10px_rgba(212,175,55,1)]"
+        animate={{ x: mousePosition.x - 5, y: mousePosition.y - 5, scale: isHovering ? 0 : 1 }}
+        transition={{ type: "spring", stiffness: 1000, damping: 50 }}
+      />
+      <motion.div
+        className="fixed top-0 left-0 w-12 h-12 border border-[#D4AF37]/60 rounded-full pointer-events-none z-[9998] shadow-[0_0_20px_rgba(212,175,55,0.15)]"
+        animate={{
+          x: mousePosition.x - 24, y: mousePosition.y - 24,
+          scale: isHovering ? 1.6 : 1,
+          backgroundColor: isHovering ? 'rgba(212, 175, 55, 0.08)' : 'transparent',
+          borderColor: isHovering ? 'rgba(212, 175, 55, 1)' : 'rgba(212, 175, 55, 0.4)'
+        }}
+        transition={{ type: "spring", stiffness: 350, damping: 28 }}
+      />
+    </>
+  );
+};
+
+const Button = ({ children, variant = 'primary', className = '', href, onClick, type = 'button' }) => {
+  const baseStyle = "relative inline-flex items-center justify-center px-10 py-4.5 overflow-hidden text-xs uppercase tracking-[0.25em] font-bold rounded-[40px] transition-all duration-500 group";
   const variants = {
-    primary: "bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:shadow-2xl hover:shadow-gray-900/30 dark:hover:shadow-white/30",
-    secondary: "bg-gradient-to-r from-emerald-600 to-green-700 text-white shadow-xl shadow-green-900/20 hover:shadow-2xl hover:shadow-green-600/40",
-    outline: "border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:border-gray-900 dark:hover:border-white hover:bg-gray-50 dark:hover:bg-gray-800",
-    glass: "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 hover:shadow-xl hover:shadow-white/10"
+    primary: `${GOLD_BG} text-black shadow-[0_12px_35px_rgba(212,175,55,0.35)] hover:shadow-[0_18px_45px_rgba(212,175,55,0.55)] hover:-translate-y-1`,
+    secondary: `bg-[#0c0c0c] text-white border border-white/10 hover:border-[#D4AF37]/50 hover:bg-[#141414] shadow-[0_12px_35px_rgba(0,0,0,0.6)] hover:shadow-[0_18px_45px_rgba(212,175,55,0.15)] hover:-translate-y-1 backdrop-blur-xl`,
+    glow: "bg-black text-[#D4AF37] border border-[#D4AF37]/50 hover:bg-[#D4AF37] hover:text-black shadow-[0_12px_35px_rgba(212,175,55,0.25)] hover:-translate-y-1"
   };
 
   const Component = href ? 'a' : 'button';
+  const props = href ? { href, target: "_blank", rel: "noopener noreferrer" } : { onClick, type };
+
   return (
-    <Component 
-      href={href} 
-      onClick={onClick}
-      type={type}
-      className={`${baseStyle} ${variants[variant]} ${className}`}
-    >
-      <span className="relative z-10 flex items-center">{children}</span>
+    <Component className={`${baseStyle} ${variants[variant]} ${className}`} {...props}>
+      <span className="relative z-10 flex items-center gap-3">{children}</span>
+      {variant === 'primary' && (
+        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out rounded-[40px]"></div>
+      )}
     </Component>
   );
 };
 
-// --- MAIN APP ---
+const SectionHeading = ({ subtitle, title, centered = true }) => (
+  <div className={`mb-24 ${centered ? 'text-center' : 'text-left'}`}>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 1, ease: LUX_EASE }}
+      className={`inline-flex items-center gap-3.5 px-6 py-2 mb-8 text-[9px] font-bold tracking-[0.35em] uppercase text-[#D4AF37] bg-[#D4AF37]/8 rounded-full border border-[#D4AF37]/15 shadow-[0_5px_20px_rgba(212,175,55,0.08)]`}
+    >
+      <Sparkles className="w-3.5 h-3.5" />
+      {subtitle}
+    </motion.div>
+    <motion.h2 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: 0.1, duration: 1.2, ease: LUX_EASE }}
+      className={`text-4xl md:text-6xl lg:text-[5.5rem] font-serif text-white leading-[1.08] drop-shadow-2xl`}
+    >
+      {title}
+    </motion.h2>
+  </div>
+);
 
-export default function App() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
-  const [activeFaq, setActiveFaq] = useState(0);
+const Navbar = () => {
+  const [scrolled, setScrolled] = useState(false);
 
-  // Scroll handler for navbar
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Dark mode effect
+  return (
+    <motion.nav 
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1.2, delay: 2.2, ease: LUX_EASE }}
+      className={`fixed top-4 w-full z-50 transition-all duration-700 px-6`}
+    >
+      <div className={`max-w-7xl mx-auto transition-all duration-500 flex justify-between items-center px-8 py-4 rounded-[40px] ${scrolled ? 'bg-[#060606]/85 backdrop-blur-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.6)]' : 'bg-transparent'}`}>
+        <div className="flex items-center gap-4 group cursor-pointer">
+          <div className="w-11 h-11 bg-[#0f0f0f] rounded-full flex items-center justify-center border border-white/10 shadow-lg group-hover:border-[#D4AF37]/40 group-hover:shadow-[0_5px_20px_rgba(212,175,55,0.25)] transition-all duration-500">
+            <Shield className="text-[#D4AF37] w-5 h-5 transition-transform duration-700 group-hover:scale-110" strokeWidth={1.5} />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-lg font-serif tracking-[0.2em] text-white uppercase leading-none">Bhavani</span>
+            <span className={`text-[7px] ${GOLD_TEXT} tracking-[0.42em] uppercase mt-1.5 font-bold`}>Enterprises</span>
+          </div>
+        </div>
+        
+        <div className="hidden lg:flex items-center gap-2 bg-[#0d0d0d]/90 backdrop-blur-2xl p-1.5 rounded-[40px] border border-white/5 shadow-inner">
+          {['Services', 'About', 'Gallery', 'Reviews'].map((item) => (
+            <a key={item} href={`#${item.toLowerCase()}`} className="px-6 py-2.5 rounded-[40px] text-[9px] font-bold text-gray-400 hover:text-black hover:bg-gradient-to-r hover:from-[#D4AF37] hover:to-[#AA771C] transition-all duration-300 uppercase tracking-[0.25em]">
+              {item}
+            </a>
+          ))}
+        </div>
+
+        <div className="flex items-center">
+          <Button href={WHATSAPP_LINK} variant="primary" className="hidden sm:flex py-3 px-8 text-[9px]">
+            Audits & Concierge
+          </Button>
+        </div>
+      </div>
+    </motion.nav>
+  );
+};
+
+const Hero = () => {
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#030303] pt-24">
+      {/* Background with Ambient Gradients */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#030303] via-transparent to-[#030303] z-10"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#D4AF37]/5 via-transparent to-[#030303] z-10"></div>
+        <motion.div 
+          initial={{ scale: 1.15 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 15, ease: LUX_EASE }}
+          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center filter grayscale-[45%] contrast-110 opacity-60"
+        ></motion.div>
+      </div>
+
+      <div className="container mx-auto px-6 relative z-20 pt-16">
+        <div className="max-w-6xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 2.4, ease: LUX_EASE }}
+            className="inline-flex items-center gap-3 px-6 py-2.5 mb-10 bg-[#0f0f0f]/80 backdrop-blur-2xl border border-white/10 rounded-full shadow-[0_12px_35px_rgba(0,0,0,0.6)]"
+          >
+            <div className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse"></div>
+            <span className="text-[9px] font-bold text-gray-300 tracking-[0.35em] uppercase">Private Estate Environmental Shielding</span>
+          </motion.div>
+          
+          <motion.h1 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 2.6, ease: LUX_EASE }}
+            className="text-5xl md:text-8xl lg:text-[6.8rem] font-serif text-white mb-8 leading-[1.05] tracking-tight drop-shadow-[0_15px_35px_rgba(0,0,0,0.95)]"
+          >
+            Luxury Spaces. <br />
+            <span className="italic text-gray-400 font-light">Flawless</span> <span className={GOLD_TEXT}>Hygiene.</span>
+          </motion.h1>
+          
+          <motion.p 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 2.8, ease: LUX_EASE }}
+            className="text-lg md:text-xl text-gray-400 mb-16 max-w-2xl mx-auto leading-relaxed font-light tracking-wide drop-shadow-md"
+          >
+            The premium pest defense firm trusted by high-end residences, elite restaurants, and major commercial offices across Miraj.
+          </motion.p>
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 3, ease: LUX_EASE }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6"
+          >
+            <Button href={WHATSAPP_LINK} variant="primary" className="w-full sm:w-auto text-[10px] px-14 py-5">
+              Secure Your Residence
+            </Button>
+            <Button href={`tel:${PHONE_NUMBER}`} variant="secondary" className="w-full sm:w-auto text-[10px] px-14 py-5">
+              <Phone className="w-4 h-4 mr-3" strokeWidth={1.5} /> Call Representative
+            </Button>
+          </motion.div>
+        </div>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 3.2, duration: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3.5"
+      >
+        <span className="text-[8px] font-bold text-gray-400 uppercase tracking-[0.4em] bg-[#0c0c0c]/80 px-5 py-2 rounded-full border border-white/5 shadow-lg backdrop-blur-md">Scroll Down</span>
+        <div className="w-[1px] h-14 bg-gradient-to-b from-[#D4AF37] to-transparent opacity-40"></div>
+      </motion.div>
+    </section>
+  );
+};
+
+const Services = () => {
+  return (
+    <section id="services" className="py-48 bg-[#030303] relative z-10">
+      {/* Dynamic Gold Light Flare behind Section */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-[#D4AF37]/3 rounded-full blur-[180px] pointer-events-none"></div>
+
+      <div className="container mx-auto px-6 lg:px-16 relative">
+        <SectionHeading subtitle="Elite Operations" title="Specialized Services" />
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {SERVICES.map((service, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ delay: index * 0.08, duration: 1.2, ease: LUX_EASE }}
+              className={`group relative flex flex-col justify-between h-[480px] ${CARD_BG} rounded-[40px] overflow-hidden border border-white/5 ${PREMIUM_SHADOW} ${HOVER_GLOW} transition-all duration-700 ease-out transform hover:-translate-y-2.5`}
+            >
+              {/* Permanent Beautiful Image in Top Half */}
+              <div className="h-[46%] w-full overflow-hidden relative">
+                {/* Visual Glass Divider */}
+                <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-[#121212] to-transparent z-10"></div>
+                <img 
+                  src={service.image} 
+                  alt={service.title} 
+                  className="w-full h-full object-cover filter grayscale-[15%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-[1.8s] ease-out"
+                />
+                <div className="absolute inset-0 bg-[#D4AF37]/5 group-hover:bg-transparent transition-colors duration-700"></div>
+              </div>
+
+              {/* Information Half */}
+              <div className="h-[54%] p-8 flex flex-col justify-between relative z-10">
+                {/* Icon inside styled container */}
+                <div className="absolute -top-7 left-8 w-13 h-13 bg-[#121212] border border-[#D4AF37]/30 rounded-[18px] flex items-center justify-center shadow-lg group-hover:border-[#D4AF37] transition-all duration-500">
+                  <span className="text-[#D4AF37] group-hover:scale-110 transition-transform duration-500">
+                    {service.icon}
+                  </span>
+                </div>
+
+                <div className="mt-6">
+                  <h3 className="text-xl md:text-2xl font-serif text-white mb-3 tracking-wide">{service.title}</h3>
+                  <p className="text-gray-400 text-xs leading-relaxed font-light line-clamp-3">
+                    {service.desc}
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                  <span className="text-[8px] tracking-[0.2em] uppercase font-bold text-gray-500 group-hover:text-gray-300 transition-colors">Premium Class</span>
+                  <a href={WHATSAPP_LINK} className="inline-flex items-center text-[#D4AF37] text-[9px] font-bold uppercase tracking-[0.2em] bg-[#D4AF37]/8 px-4 py-2 rounded-[40px] border border-[#D4AF37]/15 group-hover:bg-[#D4AF37] group-hover:text-black transition-all duration-500 shadow-md">
+                    Request <ArrowRight className="w-3 h-3 ml-2" />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const About = () => {
+  return (
+    <section id="about" className="py-48 bg-[#030303] relative overflow-hidden">
+      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#D4AF37]/4 rounded-full blur-[140px] -translate-y-1/2 pointer-events-none"></div>
+
+      <div className="container mx-auto px-6 lg:px-16 relative z-10">
+        <div className="flex flex-col xl:flex-row gap-24 items-center">
+          
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.96 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, ease: LUX_EASE }}
+            className="xl:w-1/2 relative"
+          >
+            <div className={`relative aspect-[4/5] rounded-[40px] overflow-hidden group ${PREMIUM_SHADOW} border border-white/10`}>
+               <img 
+                 src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1200&auto=format&fit=crop" 
+                 alt="Luxury Clean Lobby"
+                 className="w-full h-full object-cover filter grayscale-[12%] group-hover:scale-105 transition-transform duration-[2.5s] ease-out opacity-90"
+               />
+               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+               
+               {/* Floating High-End Card with 40px rounded */}
+               <motion.div 
+                 animate={{ y: [0, -12, 0] }}
+                 transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+                 className="absolute bottom-8 right-8 z-20 bg-[#0d0d0d]/95 backdrop-blur-2xl border border-white/10 p-8 rounded-[40px] max-w-[320px] shadow-[0_30px_60px_rgba(0,0,0,0.9)]"
+               >
+                  <div className="flex items-center gap-5 mb-5">
+                    <div className="w-14 h-14 rounded-[20px] bg-gradient-to-br from-[#D4AF37] to-[#8A5A19] flex items-center justify-center shadow-[0_8px_20px_rgba(212,175,55,0.4)]">
+                      <ShieldCheck className="text-black w-7 h-7" strokeWidth={1.5} />
+                    </div>
+                    <div>
+                      <div className="text-white font-serif text-3xl mb-0.5 drop-shadow-md">100%</div>
+                      <div className="text-[#D4AF37] text-[8px] uppercase tracking-[0.25em] font-bold">Uncompromising Quality</div>
+                    </div>
+                  </div>
+                  <div className="w-full h-[1px] bg-white/10 mb-5"></div>
+                  <p className="text-gray-400 text-xs leading-relaxed font-light">
+                    We deploy ultra-refined chemical protocols specifically curated to keep precious marble, fabrics, and woods unharmed.
+                  </p>
+               </motion.div>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, ease: LUX_EASE }}
+            className="xl:w-1/2 xl:pl-8"
+          >
+            <SectionHeading subtitle="Corporate Legacy" title="Perfecting Pure Living" centered={false} />
+            
+            <p className="text-2xl md:text-3xl font-serif text-white mb-10 leading-snug drop-shadow-sm">
+              We do not merely control pests;<br/>
+              <span className="text-gray-400 italic">we maintain the ultimate standards of wellness.</span>
+            </p>
+            <p className="text-gray-400 mb-16 leading-relaxed text-base font-light">
+              Bhavani Enterprises Miraj leads with modern molecular science and deep operational rigor. Our team of premium environmental consultants manages insect, termite, rodent, and disinfection tasks across luxury properties. Our protocol focuses on absolute safety, zero stains, and total relief.
+            </p>
+
+            <div className="grid grid-cols-2 gap-8">
+              {STATS.map((stat, i) => (
+                <div key={i} className={`relative group p-6.5 rounded-[40px] ${CARD_BG} border border-white/5 ${PREMIUM_SHADOW} hover:-translate-y-1 transition-all duration-500`}>
+                  <div className="text-3xl md:text-4xl font-serif text-white mb-2 drop-shadow-md">{stat.value}</div>
+                  <div className="text-[8px] text-[#D4AF37] uppercase tracking-[0.2em] font-bold">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-16">
+              <Button href={WHATSAPP_LINK} variant="secondary">
+                Explore Our Methods
+              </Button>
+            </div>
+          </motion.div>
+
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const BeforeAfter = () => {
+  const [sliderPosition, setSliderPosition] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef(null);
+
+  const handleMove = useCallback((clientX) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
+    const percent = (x / rect.width) * 100;
+    setSliderPosition(percent);
+  }, []);
+
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    const handleMouseMove = (e) => isDragging && handleMove(e.clientX);
+    const handleTouchMove = (e) => isDragging && handleMove(e.touches[0].clientX);
+    const stopDragging = () => setIsDragging(false);
+
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('touchmove', handleTouchMove);
+      window.addEventListener('mouseup', stopDragging);
+      window.addEventListener('touchend', stopDragging);
     }
-  }, [darkMode]);
-
-  const toggleDarkMode = () => setDarkMode(!darkMode);
-
-  const handleWhatsAppClick = (message = "Hello Dr. Patil, I would like to book an appointment.") => {
-    const url = `https://wa.me/${CLINIC_INFO.whatsapp}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
-  };
-
-  // Scroll Observers correctly defined at the top level
-  const [heroRef, heroVisible] = useScrollReveal();
-  const [aboutRef, aboutVisible] = useScrollReveal();
-  const [treatmentsRef, treatmentsVisible] = useScrollReveal({ threshold: 0.1 });
-  const [featuresRef, featuresVisible] = useScrollReveal();
-  const [galleryRef, galleryVisible] = useScrollReveal();
-  const [reviewsRef, reviewsVisible] = useScrollReveal({ threshold: 0.1 });
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('mouseup', stopDragging);
+      window.removeEventListener('touchend', stopDragging);
+    };
+  }, [isDragging, handleMove]);
 
   return (
-    <div className={`min-h-screen font-sans antialiased selection:bg-orange-500/30 transition-colors duration-700 ${darkMode ? 'dark bg-[#0a0a0a]' : 'bg-[#f8f9fa]'}`}>
-      
-      {/* GLOBAL STYLES & ANIMATIONS FOR LUXURY FEEL */}
-      <style dangerouslySetInnerHTML={{__html: `
-        html { scroll-behavior: smooth; }
-        .glass-panel {
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .dark .glass-panel {
-          background: rgba(20, 20, 20, 0.4);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .text-gradient {
-          background-clip: text;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-        .cinematic-zoom {
-          animation: slowZoom 30s infinite alternate linear;
-        }
-        @keyframes slowZoom {
-          0% { transform: scale(1); }
-          100% { transform: scale(1.15); }
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
-        }
-        .animate-float { animation: float 8s ease-in-out infinite; }
-        .nav-link::after {
-          content: '';
-          position: absolute;
-          width: 0;
-          height: 1px;
-          bottom: -4px;
-          left: 0;
-          background-color: currentColor;
-          transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .nav-link:hover::after { width: 100%; }
-        /* Minimalist Input Styles */
-        .luxury-input {
-          background: transparent;
-          border: none;
-          border-bottom: 1px solid rgba(156, 163, 175, 0.5);
-          border-radius: 0;
-          padding: 1rem 0;
-          transition: all 0.3s ease;
-        }
-        .dark .luxury-input { border-bottom-color: rgba(255,255,255,0.2); }
-        .luxury-input:focus {
-          outline: none;
-          box-shadow: none;
-          border-bottom-color: #f97316; /* Orange 500 */
-        }
-      `}} />
-
-      {/* --- HEADER (Navbar + Top Bar) --- */}
-      <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-white/90 dark:bg-[#0a0a0a]/90 backdrop-blur-xl shadow-sm border-b border-gray-200 dark:border-gray-800' : 'bg-transparent'}`}>
+    <section className="py-48 bg-[#010101]">
+      <div className="container mx-auto px-6 lg:px-16">
+        <SectionHeading subtitle="Perfect Restorations" title="The Visible Relief" />
         
-        {/* --- TOP BAR (Desktop Only) - Auto hides on scroll --- */}
-        <div className={`hidden lg:flex justify-between items-center px-12 text-xs tracking-widest uppercase transition-all duration-500 overflow-hidden ${isScrolled ? 'max-h-0 py-0 opacity-0' : 'max-h-16 py-3 border-b border-white/10 text-gray-300'}`}>
-          <div className="flex items-center space-x-8">
-            <span className="flex items-center hover:text-white transition-colors"><MapPin size={14} className="mr-2 text-orange-500"/> {CLINIC_INFO.address}</span>
-            <span className="flex items-center hover:text-white transition-colors"><Clock size={14} className="mr-2 text-orange-500"/> {CLINIC_INFO.timings}</span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <span className="flex items-center text-white"><Phone size={14} className="mr-2 text-orange-500"/> {CLINIC_INFO.phone}</span>
-          </div>
+        <div className="max-w-6xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, ease: LUX_EASE }}
+            className={`relative w-full aspect-[16/9] md:aspect-[21/9] rounded-[40px] overflow-hidden cursor-ew-resize bg-[#0f0f0f] border border-white/10 ${PREMIUM_SHADOW} shadow-[0_30px_70px_rgba(0,0,0,0.9)]`}
+            ref={containerRef}
+            onMouseDown={(e) => { setIsDragging(true); handleMove(e.clientX); }}
+            onTouchStart={(e) => { setIsDragging(true); handleMove(e.touches[0].clientX); }}
+          >
+            {/* After Image */}
+            <img 
+              src="https://images.unsplash.com/photo-1505693314120-0d443867891c?q=80&w=1200&auto=format&fit=crop" 
+              alt="Impeccable Sanitized Bed Chamber"
+              className="absolute inset-0 w-full h-full object-cover"
+              draggable="false"
+            />
+            <div className="absolute top-6 right-6 px-5 py-2 bg-black/70 backdrop-blur-xl rounded-full text-white text-[9px] tracking-[0.25em] border border-white/10 uppercase font-bold shadow-lg">
+              After Treatment
+            </div>
+
+            {/* Before Image */}
+            <div 
+              className="absolute inset-0 w-full h-full overflow-hidden"
+              style={{ clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)` }}
+            >
+              <img 
+                src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop" 
+                alt="Dusty Uncleaned Wooden Loft"
+                className="absolute inset-0 w-full h-full object-cover filter grayscale-[40%] contrast-125"
+                draggable="false"
+              />
+              <div className="absolute inset-0 bg-black/45 mix-blend-multiply"></div>
+              <div className="absolute top-6 left-6 px-5 py-2 bg-black/70 backdrop-blur-xl rounded-full text-white text-[9px] tracking-[0.25em] border border-white/10 uppercase font-bold shadow-lg z-10">
+                Before Treatment
+              </div>
+            </div>
+
+            {/* Slider Handle */}
+            <div 
+              className="absolute top-0 bottom-0 w-[2px] bg-[#D4AF37] cursor-ew-resize z-20 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,1)]"
+              style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
+            >
+              <div className="w-12 h-12 bg-[#0c0c0c] border-2 border-[#D4AF37] rounded-full flex items-center justify-center shadow-[0_10px_25px_rgba(0,0,0,0.8)] backdrop-blur-md">
+                <GripVertical className="text-[#D4AF37] w-5 h-5" strokeWidth={2} />
+              </div>
+            </div>
+          </motion.div>
         </div>
+      </div>
+    </section>
+  );
+};
 
-        {/* --- MAIN NAVBAR --- */}
-        <nav className="transition-all duration-500">
-          <div className={`container mx-auto px-4 lg:px-12 max-w-[100rem] flex justify-between items-center transition-all duration-500 ${isScrolled ? 'py-4' : 'py-6'}`}>
-            {/* Logo */}
-            <a href="#" className="flex items-center space-x-4 group">
-              <div className={`rounded-xl overflow-hidden shadow-2xl border border-white/20 transition-all duration-700 group-hover:scale-105 group-hover:rotate-3 ${isScrolled ? 'w-10 h-10 lg:w-12 lg:h-12' : 'w-12 h-12 lg:w-14 lg:h-14'}`}>
-                <img src={IMAGES.logo} alt="Logo" className="w-full h-full object-cover bg-white" />
-              </div>
-              <div className="flex flex-col">
-                <span className={`text-xl lg:text-2xl font-light tracking-tight transition-colors duration-500 ${isScrolled ? 'text-gray-900 dark:text-white' : 'text-white'}`}>
-                  Dr. Patil's
-                </span>
-                <span className={`text-[0.65rem] font-bold tracking-[0.2em] uppercase transition-colors duration-500 ${isScrolled ? 'text-orange-600 dark:text-orange-400' : 'text-orange-400'}`}>
-                  Homeopathic Clinic
-                </span>
-              </div>
-            </a>
+const Process = () => {
+  return (
+    <section id="process" className="py-48 bg-[#030303] relative">
+      <div className="container mx-auto px-6 lg:px-16">
+        <SectionHeading subtitle="Surgical Execution" title="Our Blueprint" />
+        
+        <div className="max-w-6xl mx-auto mt-24">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+            <div className="hidden md:block absolute top-12 left-[12%] right-[12%] h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-0"></div>
 
-            {/* Desktop Links */}
-            <div className="hidden lg:flex items-center space-x-10">
-              {['Home', 'About', 'Treatments', 'Gallery', 'Reviews'].map((item) => (
-                <a 
-                  key={item} 
-                  href={`#${item.toLowerCase()}`}
-                  className={`nav-link relative text-xs font-bold uppercase tracking-widest transition-colors duration-500 ${
-                    isScrolled ? 'text-gray-700 hover:text-orange-500 dark:text-gray-300 dark:hover:text-white' : 'text-gray-200 hover:text-white'
-                  }`}
-                >
-                  {item}
-                </a>
-              ))}
-            </div>
-
-            {/* Actions */}
-            <div className="hidden lg:flex items-center space-x-6">
-              <button onClick={toggleDarkMode} className={`p-2 rounded-full transition-all duration-500 hover:scale-110 ${isScrolled ? 'text-gray-700 dark:text-gray-300 hover:text-orange-500 dark:hover:text-white' : 'text-white hover:text-orange-400'}`}>
-                {darkMode ? <SunIcon size={20} /> : <Moon size={20} />}
-              </button>
-              <Button onClick={() => document.getElementById('book').scrollIntoView()} variant={isScrolled ? 'primary' : 'glass'} className={isScrolled ? "px-6 py-2.5 text-xs" : "px-8 py-3.5"}>
-                Book Appointment
-              </Button>
-            </div>
-
-            {/* Mobile Menu Toggle */}
-            <div className="lg:hidden flex items-center space-x-4">
-              <button onClick={toggleDarkMode} className={`p-2 transition-colors ${isScrolled || mobileMenuOpen ? 'text-gray-900 dark:text-white' : 'text-white'}`}>
-                {darkMode ? <SunIcon size={22} /> : <Moon size={22} />}
-              </button>
-              <button 
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className={`transition-colors ${isScrolled || mobileMenuOpen ? 'text-gray-900 dark:text-white' : 'text-white'}`}
+            {PROCESS.map((step, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.15, duration: 1, ease: LUX_EASE }}
+                className={`relative z-10 flex flex-col items-center text-center p-8 rounded-[40px] ${CARD_BG} border border-white/5 ${PREMIUM_SHADOW} hover:-translate-y-2 transition-all duration-500`}
               >
-                {mobileMenuOpen ? <X size={30} /> : <Menu size={30} />}
-              </button>
-            </div>
-          </div>
-        </nav>
-
-        {/* Mobile Menu Dropdown */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 w-full bg-white dark:bg-[#0a0a0a] border-t border-gray-200 dark:border-gray-800 py-8 px-6 flex flex-col space-y-6 shadow-2xl min-h-[50vh]">
-            {['Home', 'About', 'Treatments', 'Gallery', 'Reviews'].map((item) => (
-              <a 
-                key={item} 
-                href={`#${item.toLowerCase()}`}
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-xl font-light text-gray-900 dark:text-white pb-4 border-b border-gray-200/50 dark:border-gray-800/50 tracking-wide"
-              >
-                {item}
-              </a>
+                <div className="w-18 h-18 bg-[#030303] rounded-[20px] border border-[#D4AF37]/30 flex items-center justify-center text-lg font-serif text-[#D4AF37] mb-8 shadow-inner">
+                  0{index + 1}
+                </div>
+                <h4 className="text-xl font-serif text-white mb-4 tracking-wide">{step.title}</h4>
+                <p className="text-gray-400 text-xs leading-relaxed font-light">{step.desc}</p>
+              </motion.div>
             ))}
-            <Button onClick={() => { setMobileMenuOpen(false); document.getElementById('book').scrollIntoView(); }} variant="primary" className="w-full mt-6 py-5">
-              Book Appointment
-            </Button>
-          </div>
-        )}
-      </header>
-
-      {/* --- HERO SECTION --- */}
-      <section id="home" className="relative min-h-[100svh] lg:min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0 z-0 bg-black">
-          <img src={IMAGES.hero} alt="Clinic Interior" className="w-full h-full object-cover object-center cinematic-zoom opacity-70" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/30 dark:from-black dark:via-black/80 dark:to-black/40"></div>
-        </div>
-
-        {/* Subtle Luxury Light Leaks */}
-        <div className="absolute top-0 -left-1/4 w-[50vw] h-[50vw] bg-orange-600/20 rounded-full filter blur-[120px] mix-blend-screen pointer-events-none"></div>
-        <div className="absolute bottom-0 right-0 w-[40vw] h-[40vw] bg-emerald-600/20 rounded-full filter blur-[100px] mix-blend-screen pointer-events-none"></div>
-
-        <div className="container mx-auto px-4 lg:px-12 max-w-[100rem] relative z-10 pt-40 lg:pt-48 pb-20 flex flex-col justify-center h-full">
-          <div ref={heroRef} className={`max-w-4xl transition-all duration-1000 transform ${heroVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}>
-            
-            <div className="inline-flex items-center px-5 py-2.5 rounded-full glass-panel mb-8 lg:mb-10 shadow-2xl shadow-black/50">
-              <ShieldCheck size={16} className="text-green-400 mr-3" />
-              <span className="text-xs lg:text-sm font-bold text-white tracking-[0.15em] uppercase">Trusted Homeopathic Care</span>
-            </div>
-            
-            <h1 className="text-5xl md:text-6xl lg:text-[6.5rem] font-extralight text-white leading-[1.05] mb-8 tracking-tighter">
-              Holistic Healing <br />
-              <span className="font-light italic bg-gradient-to-r from-orange-300 via-orange-400 to-orange-600 text-gradient">Refined</span> Naturally.
-            </h1>
-            
-            <p className="text-lg md:text-xl lg:text-2xl text-gray-300 mb-12 max-w-2xl font-light leading-relaxed lg:leading-loose">
-              Experience the absolute pinnacle of natural healing. Bespoke, side-effect-free treatments tailored exclusively to your unique constitution for enduring wellness.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-6">
-              <Button onClick={() => document.getElementById('book').scrollIntoView()} variant="primary" className="lg:w-auto w-full">
-                Book Consultation <ArrowRight className="ml-3" size={18} />
-              </Button>
-              <Button onClick={() => handleWhatsAppClick()} variant="glass" className="lg:w-auto w-full group">
-                <MessageCircle className="mr-3 text-green-400 group-hover:text-green-300 transition-colors" size={18} /> WhatsApp Connect
-              </Button>
-            </div>
-
-            <div className="mt-20 lg:mt-28 grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-16 pt-10 border-t border-white/10">
-              {[
-                { label: 'Happy Patients', value: '15,000+' },
-                { label: 'Years Experience', value: '20+' },
-                { label: 'Natural Remedies', value: '100%' },
-                { label: 'Google Rating', value: '4.9/5' }
-              ].map((stat, idx) => (
-                <div key={idx} className="flex flex-col group cursor-default">
-                  <span className="text-3xl lg:text-4xl font-light text-white mb-2 group-hover:text-orange-400 transition-colors duration-500">{stat.value}</span>
-                  <span className="text-xs text-gray-400 uppercase tracking-[0.2em] font-bold">{stat.label}</span>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+};
 
-      {/* --- ABOUT DOCTOR SECTION --- */}
-      <section id="about" className="py-24 lg:py-32 relative z-10 bg-white dark:bg-[#0a0a0a]">
-        <div className="container mx-auto px-4 lg:px-12 max-w-[90rem]">
-          <div className="flex flex-col lg:flex-row items-center lg:items-stretch gap-16 lg:gap-24 xl:gap-32">
-            
-            <div ref={aboutRef} className={`w-full lg:w-5/12 relative transition-all duration-1000 transform ${aboutVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-16'}`}>
-              <div className="relative z-10 rounded-[2rem] lg:rounded-[3rem] overflow-hidden shadow-2xl shadow-gray-900/20 dark:shadow-black/50 aspect-[3/4] lg:aspect-auto lg:h-full">
-                <img src={IMAGES.about} alt="Dr. Patil" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-10">
-                  <div className="glass-panel rounded-3xl p-6 lg:p-8">
-                    <h3 className="text-2xl lg:text-3xl font-light text-white mb-2">Dr. Patil</h3>
-                    <p className="text-orange-400 text-sm lg:text-xs font-bold uppercase tracking-widest mb-4">BHMS, MD (Homeopathy)</p>
-                    <p className="text-gray-300 text-sm lg:text-base font-light leading-relaxed">Dedicated to resolving the root cause of illness through classical homeopathic principles and state-of-the-art diagnostics.</p>
-                  </div>
-                </div>
+const Gallery = () => {
+  return (
+    <section id="gallery" className="py-48 bg-[#080808]">
+      <div className="container mx-auto px-6 lg:px-16">
+        <SectionHeading subtitle="Visual Excellence" title="Our Portfolio" />
+        
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8 mt-20">
+          {GALLERY_IMAGES.map((src, index) => (
+            <motion.div 
+              key={index}
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.08, duration: 1.2 }}
+              className={`relative rounded-[40px] overflow-hidden group break-inside-avoid bg-[#101010] border border-white/5 ${PREMIUM_SHADOW}`}
+            >
+              <img 
+                src={src} 
+                alt={`Premium Treatment Portfolio ${index + 1}`} 
+                className="w-full h-auto transform group-hover:scale-105 transition-transform duration-[2s] ease-out opacity-85 group-hover:opacity-100"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex items-end justify-center pb-8">
+                <span className="text-black bg-[#D4AF37] px-6 py-2.5 rounded-full text-[9px] uppercase tracking-[0.25em] font-bold shadow-lg">Verify Work</span>
               </div>
-              <div className="hidden lg:block absolute top-10 -right-10 bottom-10 -left-10 border border-gray-200 dark:border-gray-800 rounded-[3rem] -z-10 pointer-events-none"></div>
-            </div>
-
-            <div className={`w-full lg:w-7/12 flex flex-col justify-center transition-all duration-1000 delay-300 transform ${aboutVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}>
-              <SectionHeading subtitle="The Philosophy" title="True healing begins from within." />
-              <div className="prose prose-lg lg:prose-xl text-gray-600 dark:text-gray-300 font-light leading-relaxed mb-12">
-                <p>
-                  With over two decades of clinical mastery, Dr. Patil brings a deeply personalized, highly attentive approach to homeopathy. We believe in treating the individual, not just the diagnosis.
-                </p>
-                <p className="mt-6">
-                  Our practice seamlessly marries traditional homeopathic wisdom with modern, evidence-based methodologies. This creates a sophisticated healing environment designed for those seeking enduring relief from complex conditions, entirely free from the burden of conventional side effects.
-                </p>
-              </div>
-              
-              <div className="space-y-6 lg:space-y-8 mb-12 lg:mb-16">
-                {[
-                  "Detailed Case Taking & Constitutional Analysis",
-                  "Highest Quality German Homeopathic Medicines",
-                  "Holistic Lifestyle & Diet Counseling",
-                  "Continuous Monitoring & Support"
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center text-gray-800 dark:text-gray-200 group">
-                    <div className="w-10 h-10 rounded-full bg-gray-50 dark:bg-gray-900 flex items-center justify-center mr-5 border border-gray-100 dark:border-gray-800 group-hover:border-orange-500 transition-colors duration-500 flex-shrink-0">
-                      <CheckCircle2 className="text-orange-500" size={20} />
-                    </div>
-                    <span className="font-light text-lg lg:text-xl tracking-wide">{item}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex items-center space-x-6 pt-8 border-t border-gray-200 dark:border-gray-800">
-                 <img src={IMAGES.logo} alt="Clinic Logo" className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl shadow-xl object-cover" />
-                 <div>
-                   <p className="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase tracking-[0.2em] mb-1">Founder & Chief Consultant</p>
-                   <p className="text-lg lg:text-2xl font-light text-gray-900 dark:text-white tracking-wide">DR. PATIL HOMEOPATHY</p>
-                 </div>
-              </div>
-            </div>
-
-          </div>
+            </motion.div>
+          ))}
         </div>
-      </section>
+      </div>
+    </section>
+  );
+};
 
-      {/* --- TREATMENTS SECTION --- */}
-      <section id="treatments" className="py-24 lg:py-32 bg-[#f8f9fa] dark:bg-[#0a0a0a] relative border-t border-gray-200/50 dark:border-gray-900">
-        <div className="container mx-auto px-4 lg:px-12 max-w-[100rem] relative z-10">
-          <SectionHeading subtitle="Areas of Expertise" title="Advanced Treatment Protocols" centered={true} />
+const Testimonials = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % REVIEWS.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + REVIEWS.length) % REVIEWS.length);
+  };
+
+  return (
+    <section id="reviews" className="py-48 bg-[#030303] relative overflow-hidden">
+      {/* Decorative Blur Backplates */}
+      <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-[#D4AF37]/5 rounded-full blur-[140px] pointer-events-none"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-[#D4AF37]/3 rounded-full blur-[120px] pointer-events-none"></div>
+
+      <div className="container mx-auto px-6 lg:px-16 relative z-10">
+        <SectionHeading subtitle="Verified Credentials" title="Prestige Client Audits" />
+        
+        {/* Editorial Layout Testimonial Slider */}
+        <div className="max-w-5xl mx-auto mt-20 relative">
           
-          <div ref={treatmentsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-10 xl:gap-12 mt-16 lg:mt-20">
-            {TREATMENTS.map((treatment, index) => {
-              const Icon = treatment.icon;
-              return (
-                <div 
-                  key={treatment.id} 
-                  className={`bg-white dark:bg-[#111] rounded-[2rem] p-8 lg:p-10 shadow-xl shadow-gray-200/40 dark:shadow-none border border-gray-100 dark:border-gray-800 transition-all duration-700 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-500/10 group cursor-pointer ${treatmentsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
-                  style={{ transitionDelay: `${index * 100}ms` }}
-                >
-                  <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-2xl bg-gray-50 dark:bg-black flex items-center justify-center mb-6 border border-gray-100 dark:border-gray-800 group-hover:border-orange-500/30 transition-all duration-500">
-                    <Icon className="text-gray-900 dark:text-white group-hover:text-orange-500 transition-colors duration-500" size={28} strokeWidth={1.5} />
+          <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-b from-[#111] to-[#080808] p-10 md:p-20 shadow-[0_30px_70px_rgba(0,0,0,0.9)]">
+            
+            {/* Watermark Quote Icon */}
+            <Quote className="absolute right-12 top-12 w-32 h-32 text-white/[0.02] pointer-events-none" strokeWidth={1} />
+            
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.8, ease: LUX_EASE }}
+                className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center"
+              >
+                {/* Client Portrait */}
+                <div className="lg:col-span-4 flex justify-center lg:justify-start">
+                  <div className="relative group">
+                    {/* Golden decorative accent frame */}
+                    <div className="absolute -inset-1.5 bg-gradient-to-br from-[#AA771C] to-[#E8C872] rounded-[30px] opacity-30 blur-sm group-hover:opacity-60 transition-opacity duration-700"></div>
+                    <div className="relative w-48 h-56 rounded-[24px] overflow-hidden border border-white/20 shadow-2xl">
+                      <img 
+                        src={REVIEWS[currentIndex].image} 
+                        alt={REVIEWS[currentIndex].name} 
+                        className="w-full h-full object-cover filter grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
+                      />
+                    </div>
                   </div>
-                  <h3 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-4 group-hover:text-orange-500 transition-colors duration-500 tracking-tight">{treatment.title}</h3>
-                  <p className="text-gray-500 dark:text-gray-400 font-light leading-relaxed mb-8 text-base">
-                    {treatment.desc}
-                  </p>
-                  <div className="w-8 h-[1px] bg-gray-300 dark:bg-gray-700 mb-6 group-hover:w-16 group-hover:bg-orange-500 transition-all duration-500"></div>
-                  <button className="flex items-center text-xs font-bold uppercase tracking-widest text-gray-900 dark:text-white group-hover:text-orange-500 transition-colors duration-500">
-                    Explore Protocol <ChevronRight size={16} className="ml-2 group-hover:translate-x-2 transition-transform duration-500" />
+                </div>
+
+                {/* Audit Review Details */}
+                <div className="lg:col-span-8 flex flex-col justify-between h-full text-center lg:text-left">
+                  
+                  <div>
+                    {/* Micro Tag for Verified Audit */}
+                    <div className="inline-flex items-center gap-2 bg-[#D4AF37]/10 border border-[#D4AF37]/25 px-4 py-1.5 rounded-full text-[8px] tracking-[0.25em] font-bold text-[#D4AF37] uppercase mb-6 shadow-inner">
+                      <Shield className="w-3 h-3 text-[#D4AF37]" strokeWidth={2} />
+                      {REVIEWS[currentIndex].verified}
+                    </div>
+
+                    {/* Highly Professional Gold Stars */}
+                    <div className="flex justify-center lg:justify-start text-[#D4AF37] gap-1 mb-6">
+                      {[...Array(REVIEWS[currentIndex].rating)].map((_, idx) => (
+                        <Star key={idx} className="w-4 h-4 drop-shadow-[0_0_8px_rgba(212,175,55,0.6)]" fill="currentColor" strokeWidth={0} />
+                      ))}
+                    </div>
+
+                    <p className="text-xl md:text-2xl font-serif text-white leading-relaxed mb-8 italic font-light">
+                      "{REVIEWS[currentIndex].text}"
+                    </p>
+                  </div>
+
+                  <div className="border-t border-white/10 pt-6 mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div>
+                      <h4 className="text-lg font-serif text-white tracking-wide">{REVIEWS[currentIndex].name}</h4>
+                      <p className="text-[10px] text-gray-500 uppercase tracking-[0.25em] font-medium mt-1">{REVIEWS[currentIndex].role}</p>
+                    </div>
+                    
+                    {/* Swiss Stamp Logo Element */}
+                    <div className="hidden sm:flex items-center gap-2 border border-white/10 rounded-xl px-4 py-2 bg-black/40">
+                      <ShieldCheck className="w-4 h-4 text-[#D4AF37]" strokeWidth={1.5} />
+                      <span className="text-[9px] uppercase tracking-[0.15em] font-bold text-gray-400">Pristine Grade A Certified</span>
+                    </div>
+                  </div>
+
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+          </div>
+
+          {/* Clean Navigation Controls with Soft Rounded Micro Borders */}
+          <div className="flex justify-center lg:justify-end gap-4 mt-8">
+            <button 
+              onClick={prevSlide}
+              className="w-14 h-14 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all duration-300 shadow-md group"
+            >
+              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+            </button>
+            <button 
+              onClick={nextSlide}
+              className="w-14 h-14 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all duration-300 shadow-md group"
+            >
+              <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const FAQAndCTA = () => {
+  const [openFaq, setOpenFaq] = useState(0);
+
+  return (
+    <section className="py-48 bg-[#010101] relative">
+      <div className="container mx-auto px-6 lg:px-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+          
+          {/* FAQ Section */}
+          <div>
+            <div className="mb-12">
+              <span className="inline-flex items-center gap-3 px-6 py-2 mb-6 text-[9px] font-bold tracking-[0.35em] uppercase text-[#D4AF37] bg-[#D4AF37]/8 rounded-full border border-[#D4AF37]/15">
+                 Firms Directory
+              </span>
+              <h2 className="text-4xl md:text-5xl font-serif text-white leading-snug drop-shadow-lg">Executive <br/>Inquiries</h2>
+            </div>
+
+            <div className="space-y-4">
+              {FAQS.map((faq, i) => (
+                <motion.div 
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                  className={`rounded-[40px] ${CARD_BG} border ${openFaq === i ? 'border-[#D4AF37]/35 shadow-[0_15px_40px_rgba(212,175,55,0.08)]' : 'border-white/5'} overflow-hidden transition-all duration-500`}
+                >
+                  <button
+                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                    className="w-full py-6 px-8 flex items-center justify-between text-left focus:outline-none group"
+                  >
+                    <span className={`font-serif text-base md:text-lg transition-colors duration-300 ${openFaq === i ? 'text-[#D4AF37]' : 'text-white group-hover:text-gray-300'}`}>{faq.q}</span>
+                    <div className={`shrink-0 ml-4 w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300 ${openFaq === i ? 'border-[#D4AF37] bg-[#D4AF37]/10' : 'border-white/15 group-hover:border-white/40'}`}>
+                      {openFaq === i ? <span className="text-[#D4AF37] text-lg leading-none">-</span> : <span className="text-white text-lg leading-none">+</span>}
+                    </div>
                   </button>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="mt-20 lg:mt-24 text-center">
-             <Button onClick={() => handleWhatsAppClick("Hi, I want to know if my condition can be treated with homeopathy.")} variant="outline">
-               Discuss Your Condition Privately
-             </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* --- WHY CHOOSE US --- */}
-      <section className="py-24 lg:py-32 bg-white dark:bg-[#050505] overflow-hidden">
-        <div className="container mx-auto px-4 lg:px-12 max-w-[90rem]">
-          <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-32">
-            <div className="w-full lg:w-1/2">
-              <SectionHeading subtitle="The Standard" title="Uncompromising Quality & Care." />
-              <div ref={featuresRef} className="space-y-10 lg:space-y-12 mt-12 lg:mt-16">
-                {[
-                  { icon: Leaf, title: '100% Natural & Safe', desc: 'Our remedies are derived from the purest natural sources, ensuring zero toxic side effects or chemical dependency.' },
-                  { icon: Target, title: 'Bespoke Treatments', desc: 'Medicine selected exclusively based on your unique physical, emotional, and genetic profile.' },
-                  { icon: ShieldCheck, title: 'Immunity Fortification', desc: 'We do not suppress symptoms; we fundamentally strengthen your body\'s internal defense mechanisms.' },
-                  { icon: Heart, title: 'Compassionate Journey', desc: 'We dedicate extensive time to listen, comprehend, and guide you through every nuance of your healing.' }
-                ].map((item, idx) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={idx} className={`flex group transition-all duration-1000 ${featuresVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'}`} style={{ transitionDelay: `${idx * 150}ms` }}>
-                      <div className="flex-shrink-0 mt-1">
-                        <Icon className="text-gray-300 dark:text-gray-700 group-hover:text-orange-500 transition-colors duration-500" size={32} strokeWidth={1} />
-                      </div>
-                      <div className="ml-6 lg:ml-8">
-                        <h4 className="text-xl lg:text-2xl font-light text-gray-900 dark:text-white mb-2 tracking-wide">{item.title}</h4>
-                        <p className="text-gray-500 dark:text-gray-400 font-light leading-relaxed text-base lg:text-lg">{item.desc}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            
-            <div className="w-full lg:w-1/2 relative h-full">
-               <div className="grid grid-cols-2 gap-4 lg:gap-6">
-                  <img src={IMAGES.gallery[0]} alt="Clinic Treatment" className="rounded-[2rem] lg:rounded-[3rem] w-full h-64 lg:h-80 object-cover mt-12 lg:mt-16 shadow-2xl transition-transform duration-1000 hover:scale-[1.02]" />
-                  <img src={IMAGES.gallery[1]} alt="Modern Diagnostics" className="rounded-[2rem] lg:rounded-[3rem] w-full h-64 lg:h-80 object-cover shadow-2xl transition-transform duration-1000 hover:scale-[1.02]" />
-               </div>
-               {/* Floating Luxury Badge */}
-               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 glass-panel p-8 lg:p-10 rounded-full aspect-square flex flex-col items-center justify-center text-center shadow-2xl animate-float">
-                 <Award className="text-orange-500 mb-2 lg:mb-3" size={40} strokeWidth={1} />
-                 <p className="font-light text-white text-lg lg:text-xl tracking-widest uppercase">Premium</p>
-                 <p className="text-[0.65rem] text-gray-300 font-bold uppercase tracking-[0.2em] mt-1">Care Clinic</p>
-               </div>
+                  <AnimatePresence>
+                    {openFaq === i && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-8 pb-8 text-gray-400 text-xs md:text-sm leading-relaxed pt-1 font-light">
+                          {faq.a}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* --- GALLERY SECTION --- */}
-      <section id="gallery" className="py-24 lg:py-32 bg-[#f8f9fa] dark:bg-[#0a0a0a]">
-        <div className="container mx-auto px-4 lg:px-12 max-w-[100rem]">
-          <SectionHeading subtitle="The Environment" title="A Space Designed for Healing" centered={true} />
-          
-          <div ref={galleryRef} className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 mt-16 lg:mt-20">
-            {IMAGES.gallery.map((img, index) => (
-              <div 
-                key={index} 
-                className={`relative group rounded-2xl md:rounded-[2rem] overflow-hidden aspect-[4/5] lg:aspect-square transition-all duration-1000 ${galleryVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
-                style={{ transitionDelay: `${index * 100}ms` }}
-              >
-                <img src={img} alt={`Clinic facility ${index + 1}`} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center backdrop-blur-sm">
-                  <div className="w-16 h-16 rounded-full border border-white/30 flex items-center justify-center text-white transform translate-y-8 group-hover:translate-y-0 transition-all duration-500">
-                    <Activity size={24} strokeWidth={1} />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* --- REVIEWS SECTION --- */}
-      <section id="reviews" className="py-24 lg:py-32 bg-white dark:bg-[#050505] border-y border-gray-100 dark:border-gray-900">
-        <div className="container mx-auto px-4 lg:px-12 max-w-[100rem]">
-          <SectionHeading subtitle="Patient Stories" title="Words of Appreciation" centered={true} />
-
-          <div ref={reviewsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 mt-16 lg:mt-20">
-            {REVIEWS.map((review, index) => (
-              <div
-                key={review.id}
-                className={`bg-gray-50 dark:bg-[#111] p-10 lg:p-12 rounded-[2rem] lg:rounded-[3rem] border border-gray-200/50 dark:border-gray-800 transition-all duration-1000 hover:-translate-y-2 hover:shadow-xl hover:bg-white dark:hover:bg-[#151515] group ${reviewsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}
-                style={{ transitionDelay: `${index * 150}ms` }}
-              >
-                <div className="flex space-x-2 mb-8 lg:mb-10">
-                  {[...Array(review.rating)].map((_, i) => (
-                    <Star key={i} size={16} className="text-orange-400 fill-orange-400 opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
-                  ))}
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 mb-10 lg:mb-12 font-light leading-relaxed text-lg relative">
-                  <span className="absolute -top-6 -left-4 text-6xl text-gray-200 dark:text-gray-800 font-serif opacity-50">"</span>
-                  {review.text}
-                </p>
-                <div className="flex items-center pt-8 border-t border-gray-200 dark:border-gray-800">
-                  <div className="w-12 h-12 rounded-full bg-gray-200 dark:bg-black flex items-center justify-center text-gray-500 dark:text-gray-400 font-light text-xl mr-4 flex-shrink-0 border border-gray-300 dark:border-gray-700">
-                    {review.name.charAt(0)}
-                  </div>
-                  <div>
-                    <h4 className="font-light text-lg text-gray-900 dark:text-white tracking-wide">{review.name}</h4>
-                    <p className="text-[0.65rem] text-orange-500 font-bold uppercase tracking-[0.2em] mt-1">{review.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* --- APPOINTMENT SECTION --- */}
-      <section id="book" className="py-24 lg:py-32 relative overflow-hidden bg-black">
-        {/* Background */}
-        <div className="absolute inset-0">
-           <img src={IMAGES.hero} alt="Background" className="w-full h-full object-cover opacity-30 cinematic-zoom mix-blend-luminosity" />
-           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black"></div>
-        </div>
-        
-        <div className="container mx-auto px-4 lg:px-12 max-w-[90rem] relative z-10">
-          <div className="glass-panel rounded-[2.5rem] lg:rounded-[3rem] overflow-hidden shadow-2xl shadow-black flex flex-col lg:flex-row backdrop-blur-3xl">
-            
-            {/* Form Side - Minimalist Luxury */}
-            <div className="w-full lg:w-3/5 p-10 lg:p-16 bg-white/95 dark:bg-[#0a0a0a]/95">
-              <span className="text-orange-500 font-bold tracking-[0.2em] uppercase text-xs mb-4 block">Consultation</span>
-              <h2 className="text-4xl lg:text-5xl font-light text-gray-900 dark:text-white mb-4 tracking-tight">Request an Appointment</h2>
-              <p className="text-gray-500 dark:text-gray-400 mb-12 font-light text-lg">Take the definitive step towards holistic well-being.</p>
-              
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target);
-                const msg = `New Appointment Request:\nName: ${formData.get('name')}\nPhone: ${formData.get('phone')}\nDate: ${formData.get('date')}\nConcern: ${formData.get('concern')}`;
-                handleWhatsAppClick(msg);
-              }} className="space-y-8 lg:space-y-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-                  <div>
-                    <label className="block text-[0.65rem] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Full Name</label>
-                    <input required name="name" type="text" className="w-full luxury-input text-gray-900 dark:text-white font-light text-base" placeholder="Enter your full name" />
-                  </div>
-                  <div>
-                    <label className="block text-[0.65rem] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Phone Number</label>
-                    <input required name="phone" type="tel" className="w-full luxury-input text-gray-900 dark:text-white font-light text-base" placeholder="+91" />
-                  </div>
-                </div>
+          {/* Emergency CTA - 3D Volume Card */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.96 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2, ease: LUX_EASE }}
+            className="relative lg:mt-24"
+          >
+             <div className="absolute inset-0 bg-[#D4AF37] rounded-[40px] blur-[80px] opacity-15"></div>
+             
+             <div className={`relative h-full ${CARD_BG} border border-[#D4AF37]/25 p-12 md:p-16 rounded-[40px] flex flex-col justify-center text-center ${PREMIUM_SHADOW} overflow-hidden`}>
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-30"></div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-                  <div>
-                    <label className="block text-[0.65rem] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Preferred Date</label>
-                    <input required name="date" type="date" className="w-full luxury-input text-gray-900 dark:text-white font-light text-base uppercase" />
+                <div className="relative z-10">
+                  <div className="w-20 h-20 rounded-full bg-[#030303] border border-[#D4AF37]/30 mx-auto mb-8 flex items-center justify-center shadow-2xl">
+                    <Phone className="w-8 h-8 text-[#D4AF37] drop-shadow-[0_0_10px_rgba(212,175,55,0.7)] animate-pulse" strokeWidth={1.5} />
                   </div>
-                  <div>
-                    <label className="block text-[0.65rem] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Department</label>
-                    <select name="department" className="w-full luxury-input text-gray-900 dark:text-white font-light text-base bg-transparent appearance-none">
-                      <option className="text-gray-900">General Consultation</option>
-                      <option className="text-gray-900">Skin & Hair</option>
-                      <option className="text-gray-900">Respiratory</option>
-                      <option className="text-gray-900">Child Care</option>
-                    </select>
+                  
+                  <h3 className="text-3xl font-serif text-white mb-6 drop-shadow-md">Express Dispatch</h3>
+                  <p className="text-gray-400 mb-10 text-xs md:text-sm leading-relaxed font-light max-w-xs mx-auto">
+                    In cases of severe infestation on high-profile corporate assets, dispatch our emergency unit instantly.
+                  </p>
+                  
+                  <div className="flex flex-col gap-5">
+                    <Button href={`tel:${PHONE_NUMBER}`} variant="primary" className="w-full shadow-lg">
+                      Call Coordinator
+                    </Button>
+                    <a href={WHATSAPP_LINK} className="text-white hover:text-[#D4AF37] font-bold uppercase tracking-[0.2em] text-[9px] transition-colors flex items-center justify-center gap-2 mt-2 bg-white/5 py-3 rounded-[40px] border border-white/10">
+                      <MessageCircle className="w-4 h-4" /> Message Direct Desk
+                    </a>
                   </div>
                 </div>
+             </div>
+          </motion.div>
 
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ContactAndFooter = () => {
+  const [formData, setFormData] = useState({ name: '', phone: '', service: '', location: '', message: '' });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const text = `*New High-End Client Lead*%0A%0A*Name:* ${formData.name}%0A*Phone:* ${formData.phone}%0A*Service:* ${formData.service}%0A*Estate Location:* ${formData.location}%0A*Message Details:* ${formData.message}`;
+    window.open(`https://wa.me/919359813265?text=${text}`, '_blank');
+  };
+
+  return (
+    <>
+      {/* Contact Section */}
+      <section id="contact" className="py-48 bg-[#030303] relative">
+        <div className="container mx-auto px-6 lg:px-16 relative z-10">
+          <SectionHeading subtitle="Strategic Engagement" title="Request an Assessment" />
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, ease: LUX_EASE }}
+            className={`max-w-5xl mx-auto ${CARD_BG} p-10 md:p-16 rounded-[40px] border border-white/10 ${PREMIUM_SHADOW}`}
+          >
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <label className="block text-[0.65rem] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-2">Primary Concern (Optional)</label>
-                  <textarea name="concern" rows="2" className="w-full luxury-input text-gray-900 dark:text-white font-light text-base resize-none" placeholder="Briefly describe your symptoms..."></textarea>
+                  <label className="block text-[9px] text-gray-400 mb-3 uppercase tracking-[0.25em] font-bold ml-2">Client Full Name</label>
+                  <input required type="text" placeholder="John Doe" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, name: e.target.value})} />
                 </div>
-                
-                <div className="pt-4">
-                  <Button type="submit" variant="primary" className="w-full md:w-auto text-xs">
-                    Submit Request <ChevronRight className="ml-3" size={16} />
-                  </Button>
+                <div>
+                  <label className="block text-[9px] text-gray-400 mb-3 uppercase tracking-[0.25em] font-bold ml-2">Confidential Contact</label>
+                  <input required type="tel" placeholder="+91 XXXXX XXXXX" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, phone: e.target.value})} />
                 </div>
-              </form>
-            </div>
-
-            {/* Info Side */}
-            <div className="w-full lg:w-2/5 bg-gray-50/90 dark:bg-[#050505]/90 p-10 lg:p-16 flex flex-col justify-center border-l border-gray-200/50 dark:border-gray-900">
-               <h3 className="text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-10">Direct Contact</h3>
-               
-               <div className="space-y-8 lg:space-y-10">
-                 <div className="flex items-start group cursor-pointer">
-                   <div className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-800 flex items-center justify-center flex-shrink-0 mr-5 group-hover:border-orange-500 transition-colors duration-500">
-                     <Phone className="text-gray-500 group-hover:text-orange-500 transition-colors" size={18} strokeWidth={1.5} />
-                   </div>
-                   <div>
-                     <p className="text-[0.65rem] text-gray-500 font-bold uppercase tracking-[0.2em] mb-1">Call Us</p>
-                     <p className="text-lg font-light text-gray-900 dark:text-white">{CLINIC_INFO.phone}</p>
-                   </div>
-                 </div>
-
-                 <div className="flex items-start group cursor-pointer">
-                   <div className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-800 flex items-center justify-center flex-shrink-0 mr-5 group-hover:border-orange-500 transition-colors duration-500">
-                     <MapPin className="text-gray-500 group-hover:text-orange-500 transition-colors" size={18} strokeWidth={1.5} />
-                   </div>
-                   <div>
-                     <p className="text-[0.65rem] text-gray-500 font-bold uppercase tracking-[0.2em] mb-1">Visit Clinic</p>
-                     <p className="text-base font-light text-gray-900 dark:text-white leading-relaxed">{CLINIC_INFO.address}</p>
-                   </div>
-                 </div>
-
-                 <div className="flex items-start group">
-                   <div className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-800 flex items-center justify-center flex-shrink-0 mr-5 group-hover:border-orange-500 transition-colors duration-500">
-                     <Clock className="text-gray-500 group-hover:text-orange-500 transition-colors" size={18} strokeWidth={1.5} />
-                   </div>
-                   <div>
-                     <p className="text-[0.65rem] text-gray-500 font-bold uppercase tracking-[0.2em] mb-1">Hours</p>
-                     <p className="text-base font-light text-gray-900 dark:text-white mb-1">{CLINIC_INFO.timings}</p>
-                     <p className="text-[0.65rem] text-orange-500 font-bold uppercase tracking-widest mt-1">Sunday Closed</p>
-                   </div>
-                 </div>
-               </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* --- FAQ SECTION --- */}
-      <section className="py-24 lg:py-32 bg-white dark:bg-[#0a0a0a]">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <SectionHeading subtitle="Inquiries" title="Frequently Asked Questions" centered={true} />
-          
-          <div className="mt-16 lg:mt-20 space-y-4">
-            {FAQS.map((faq, index) => (
-              <div 
-                key={index} 
-                className={`border-b border-gray-200 dark:border-gray-800 transition-all duration-500`}
-              >
-                <button 
-                  className="w-full py-6 flex justify-between items-center text-left group"
-                  onClick={() => setActiveFaq(activeFaq === index ? -1 : index)}
-                >
-                  <span className="text-xl lg:text-2xl font-light text-gray-900 dark:text-white group-hover:text-orange-500 transition-colors duration-300 pr-8">{faq.q}</span>
-                  <div className={`w-8 h-8 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-500 ${activeFaq === index ? 'border-orange-500 bg-orange-500 text-white' : 'border-gray-300 dark:border-gray-700 text-gray-400 group-hover:border-orange-500'}`}>
-                    <ChevronDown className={`transition-transform duration-500 ${activeFaq === index ? 'rotate-180' : ''}`} size={16} strokeWidth={1.5} />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <label className="block text-[9px] text-gray-400 mb-3 uppercase tracking-[0.25em] font-bold ml-2">Requested Service</label>
+                  <div className="relative">
+                    <select required className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-5 text-white focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 appearance-none font-light text-xs md:text-sm cursor-pointer" onChange={e => setFormData({...formData, service: e.target.value})}>
+                      <option value="" className="text-gray-600">Choose Treatment Method</option>
+                      {SERVICES.map(s => <option key={s.title} value={s.title}>{s.title}</option>)}
+                    </select>
+                    <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-600 w-5 h-5 pointer-events-none" />
                   </div>
-                </button>
-                <div 
-                  className={`overflow-hidden transition-all duration-700 ease-in-out ${activeFaq === index ? 'max-h-96 opacity-100 pb-8' : 'max-h-0 opacity-0'}`}
-                >
-                  <p className="text-gray-500 dark:text-gray-400 font-light leading-relaxed text-lg pl-4 border-l-2 border-orange-500/30">{faq.a}</p>
+                </div>
+                <div>
+                  <label className="block text-[9px] text-gray-400 mb-3 uppercase tracking-[0.25em] font-bold ml-2">Estate / Office Location</label>
+                  <input required type="text" placeholder="Miraj / Sangli Area" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, location: e.target.value})} />
                 </div>
               </div>
-            ))}
-          </div>
+              <div>
+                <label className="block text-[9px] text-gray-400 mb-3 uppercase tracking-[0.25em] font-bold ml-2">Special Site Concerns</label>
+                <textarea rows="4" placeholder="Briefly specify material concerns, pets, or high ceiling areas..." className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 resize-none font-light text-xs md:text-sm" onChange={e => setFormData({...formData, message: e.target.value})}></textarea>
+              </div>
+              
+              <div className="flex justify-center pt-6">
+                <Button type="submit" variant="primary" className="w-full md:w-auto px-16 py-5 text-[10px]">
+                  Dispatch Audit Inquiry
+                </Button>
+              </div>
+            </form>
+          </motion.div>
         </div>
       </section>
 
-      {/* --- FOOTER --- */}
-      <footer id="contact" className="bg-[#050505] pt-24 lg:pt-32 pb-12 relative overflow-hidden">
-        {/* Subtle background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-full bg-orange-600/5 blur-[150px] pointer-events-none"></div>
+      {/* Footer */}
+      <footer className="bg-[#010101] border-t border-white/10 pt-32 pb-12 relative overflow-hidden">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent"></div>
 
-        <div className="container mx-auto px-4 lg:px-12 max-w-[100rem] relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-20 mb-20">
+        <div className="container mx-auto px-6 lg:px-16 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
             
-            {/* Brand */}
-            <div className="space-y-6">
-              <a href="#" className="flex items-center space-x-4">
-                <div className="w-10 h-10 rounded-xl overflow-hidden bg-white">
-                  <img src={IMAGES.logo} alt="Logo" className="w-full h-full object-cover" />
-                </div>
+            <div className="lg:col-span-1 bg-[#090909] p-8 rounded-[40px] border border-white/5 shadow-lg">
+              <div className="flex items-center gap-4 mb-8">
+                <Shield className="text-[#D4AF37] w-8 h-8 drop-shadow-md" strokeWidth={1.5} />
                 <div className="flex flex-col">
-                  <span className="text-xl font-light text-white tracking-tight">Dr. Patil's</span>
+                  <span className="text-xl font-serif tracking-[0.2em] text-white uppercase leading-none">Bhavani</span>
                 </div>
-              </a>
-              <p className="text-gray-400 font-light leading-relaxed text-sm pr-8">
-                Committed to providing authentic, highly personalized homeopathic treatment to restore your health naturally and sustainably.
+              </div>
+              <p className="text-gray-400 text-xs leading-loose mb-8 font-light">
+                Setting the executive standard for pest eradication and environmental hygiene for Miraj's premiere properties.
               </p>
-              <div className="flex space-x-4 pt-4">
-                <a href="#" className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-orange-500 transition-all duration-500 hover:bg-orange-500/10">
-                  <Facebook size={16} strokeWidth={1.5} />
-                </a>
-                <a href="#" className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-orange-500 transition-all duration-500 hover:bg-orange-500/10">
-                  <Instagram size={16} strokeWidth={1.5} />
-                </a>
-                <a href="#" className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center text-gray-400 hover:text-white hover:border-orange-500 transition-all duration-500 hover:bg-orange-500/10">
-                  <Twitter size={16} strokeWidth={1.5} />
-                </a>
+              <div className="flex gap-4">
+                <a href="#" className="w-10 h-10 rounded-full bg-[#030303] border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all duration-300 shadow-inner"><Facebook size={16} /></a>
+                <a href="#" className="w-10 h-10 rounded-full bg-[#030303] border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all duration-300 shadow-inner"><Instagram size={16} /></a>
+                <a href="#" className="w-10 h-10 rounded-full bg-[#030303] border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all duration-300 shadow-inner"><Twitter size={16} /></a>
               </div>
             </div>
 
-            {/* Quick Links */}
             <div>
-              <h4 className="text-white font-bold text-[0.65rem] uppercase tracking-[0.2em] mb-6">Navigation</h4>
+              <h4 className="text-white font-bold mb-8 uppercase tracking-[0.3em] text-[10px] ml-2">Services</h4>
               <ul className="space-y-4">
-                {['Home', 'About Dr. Patil', 'Treatments', 'Gallery', 'Testimonials', 'Contact Us'].map((link, i) => (
-                  <li key={i}>
-                    <a href="#" className="text-gray-400 hover:text-orange-400 transition-colors font-light text-sm flex items-center group">
-                      <div className="w-0 h-[1px] bg-orange-400 mr-0 group-hover:w-3 group-hover:mr-3 transition-all duration-300"></div>
-                      {link}
+                {SERVICES.slice(0,5).map(s => (
+                  <li key={s.title}>
+                    <a href="#services" className="text-gray-400 hover:text-[#D4AF37] text-sm transition-colors font-light flex items-center gap-2 group">
+                      <span className="w-1 h-1 rounded-full bg-white/15 group-hover:bg-[#D4AF37] transition-colors"></span>
+                      {s.title}
                     </a>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Treatments */}
             <div>
-              <h4 className="text-white font-bold text-[0.65rem] uppercase tracking-[0.2em] mb-6">Specialties</h4>
+              <h4 className="text-white font-bold mb-8 uppercase tracking-[0.3em] text-[10px] ml-2">Navigation</h4>
               <ul className="space-y-4">
-                {TREATMENTS.map((t, i) => (
-                  <li key={i}>
-                    <a href={`#treatments`} className="text-gray-400 hover:text-orange-400 transition-colors font-light text-sm flex items-center group">
-                      <div className="w-0 h-[1px] bg-orange-400 mr-0 group-hover:w-3 group-hover:mr-3 transition-all duration-300"></div>
-                      {t.title}
+                {['About Us', 'Process', 'Portfolio', 'Testimonials', 'Contact'].map(l => (
+                  <li key={l}>
+                    <a href={`#${l.toLowerCase().split(' ')[0]}`} className="text-gray-400 hover:text-[#D4AF37] text-sm transition-colors font-light flex items-center gap-2 group">
+                      <span className="w-1 h-1 rounded-full bg-white/15 group-hover:bg-[#D4AF37] transition-colors"></span>
+                      {l}
                     </a>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Contact Details */}
             <div>
-              <h4 className="text-white font-bold text-[0.65rem] uppercase tracking-[0.2em] mb-6">Connect</h4>
-              <ul className="space-y-5">
-                <li className="flex items-start text-gray-400 font-light text-sm">
-                  <MapPin size={18} className="text-gray-600 mr-4 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
-                  <span>{CLINIC_INFO.address}</span>
+              <h4 className="text-white font-bold mb-8 uppercase tracking-[0.3em] text-[10px] ml-2">Headquarters</h4>
+              <ul className="space-y-6">
+                <li className="flex gap-4 items-start text-gray-400 text-sm font-light bg-[#090909] p-4.5 rounded-[30px] border border-white/5">
+                  <MapPin className="w-5 h-5 text-[#D4AF37] shrink-0 mt-0.5" strokeWidth={1.5} />
+                  <span className="leading-relaxed">Mirchi Market, Miraj - Malgaon Main Rd, Sangli Miraj Kupwad</span>
                 </li>
-                <li className="flex items-center text-gray-400 font-light text-sm">
-                  <Phone size={18} className="text-gray-600 mr-4 flex-shrink-0" strokeWidth={1.5} />
-                  <span>{CLINIC_INFO.phone}</span>
-                </li>
-                <li className="flex items-center text-gray-400 font-light text-sm">
-                  <Mail size={18} className="text-gray-600 mr-4 flex-shrink-0" strokeWidth={1.5} />
-                  <span>{CLINIC_INFO.email}</span>
-                </li>
-                <li className="flex items-center text-gray-400 font-light text-sm pt-2">
-                  <Clock size={18} className="text-orange-500 mr-4 flex-shrink-0" strokeWidth={1.5} />
-                  <span className="text-white">{CLINIC_INFO.timings}</span>
+                <li className="flex gap-4 items-center text-gray-400 text-sm font-light bg-[#090909] p-4.5 rounded-[30px] border border-white/5">
+                  <Phone className="w-5 h-5 text-[#D4AF37] shrink-0" strokeWidth={1.5} />
+                  <span className="leading-relaxed">{PHONE_NUMBER}</span>
                 </li>
               </ul>
             </div>
-
           </div>
 
-          <div className="pt-8 border-t border-gray-900 text-center flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-600 text-[0.65rem] tracking-widest uppercase">
-              &copy; {new Date().getFullYear()} {CLINIC_INFO.name}.
-            </p>
-            <div className="flex space-x-6 text-[0.65rem] text-gray-600 uppercase tracking-widest font-bold">
-              <a href="#" className="hover:text-white transition-colors">Privacy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms</a>
+          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p className="text-gray-500 text-[9px] font-bold uppercase tracking-[0.22em]">© {new Date().getFullYear()} Bhavani Enterprises. All rights reserved.</p>
+            <div className="text-gray-500 text-[9px] flex gap-8 font-bold uppercase tracking-[0.22em]">
+              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
             </div>
           </div>
         </div>
       </footer>
-    </div>
+
+      {/* Modern Capsule WhatsApp Button */}
+      <a 
+        href={WHATSAPP_LINK} 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="fixed bottom-8 right-8 z-[60] bg-[#25D366] text-black px-7 py-4.5 rounded-[40px] flex items-center gap-3.5 shadow-[0_12px_35px_rgba(37,211,102,0.4)] hover:shadow-[0_18px_45px_rgba(37,211,102,0.6)] hover:-translate-y-1 transition-all duration-500 font-bold text-xs uppercase tracking-[0.18em]"
+      >
+        <MessageCircle className="w-5 h-5" strokeWidth={2.2} />
+        <span className="hidden md:inline">Contact Office</span>
+      </a>
+    </>
+  );
+};
+
+export default function App() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    document.documentElement.style.scrollBehavior = 'smooth';
+    return () => { document.documentElement.style.scrollBehavior = 'auto'; };
+  }, []);
+
+  return (
+    <>
+      <AnimatePresence>
+        {loading && <Preloader onComplete={() => setLoading(false)} />}
+      </AnimatePresence>
+
+      {!loading && (
+        <div className="bg-[#030303] min-h-screen text-white font-sans selection:bg-[#D4AF37]/35 selection:text-white cursor-none">
+          {/* Global cinema grain overlay */}
+          <div className="pointer-events-none fixed inset-0 z-[999] h-full w-full opacity-[0.015] mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
+
+          <CustomCursor />
+          
+          {/* Elegant Top Progress Bar */}
+          <motion.div 
+            className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#AA771C] via-[#E8C872] to-[#8A5A19] origin-left z-[70] shadow-[0_0_15px_rgba(212,175,55,0.85)]"
+            style={{ scaleX }}
+          />
+          
+          <Navbar />
+          <main>
+            <Hero />
+            <Services />
+            <About />
+            <BeforeAfter />
+            <Process />
+            <Gallery />
+            <Testimonials />
+            <FAQAndCTA />
+            <ContactAndFooter />
+          </main>
+        </div>
+      )}
+    </>
   );
 }
