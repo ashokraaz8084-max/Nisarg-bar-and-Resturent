@@ -7,11 +7,10 @@ import {
   Leaf, GripVertical, MessageCircle, Quote, Menu, X
 } from 'lucide-react';
 
-const PHONE_NUMBER = "+919922198475";
-const DISPLAY_PHONE = "+91 99221 98475";
-const WHATSAPP_LINK = `https://wa.me/919922198475?text=Hi%20Shree%20Pest%20Control%20Services,%20I%20am%20looking%20for%20premium%20pest%20control%20services.`;
+const PHONE_NUMBER = "+919823579434";
+const DISPLAY_PHONE = "+91 98235 79434";
+const WHATSAPP_LINK = `https://wa.me/919823579434?text=Hi%20SHRI%20PEST%20CONTROL%20SERVICE%20%26%20SHRI%20AGRO%20CHEMICALS,%20I%20am%20looking%20for%20premium%20pest%20control%20services.`;
 
-// Ultra Luxury Theme Variables - Premium Dynamic Volume Design
 const GOLD_TEXT = "text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#AA771C]";
 const GOLD_BG = "bg-gradient-to-r from-[#AA771C] via-[#E8C872] to-[#8A5A19]";
 const CARD_BG = "bg-gradient-to-br from-[#121212] to-[#080808]";
@@ -90,9 +89,9 @@ const STATS = [
 const REVIEWS = [
   { 
     name: "Rahul Singhania", 
-    role: "Heritage Villa Owner, Amalner", 
+    role: "Heritage Villa Owner, Malegaon", 
     rating: 5, 
-    text: "Truly a masterclass in home safety operations. Shree Pest Control Services handled our family estate with absolute privacy, leaving everything pristine and beautifully scent-free. Highly recommended.", 
+    text: "Truly a masterclass in home safety operations. SHRI PEST CONTROL SERVICE handled our family estate with absolute privacy, leaving everything pristine and beautifully scent-free. Highly recommended.", 
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
     verified: "Verified VIP Residence Audit"
   },
@@ -100,7 +99,7 @@ const REVIEWS = [
     name: "Dr. Priya Kulkarni", 
     role: "Founder, Kulkarni Diagnostics", 
     rating: 5, 
-    text: "Shree Pest Control Services manages our regular sanitation and AMC. Their hygiene protocol exceeds the stringent diagnostic safety standards. It feels like experiencing high-end hospitality in pest control.", 
+    text: "SHRI PEST CONTROL SERVICE manages our regular sanitation and AMC. Their hygiene protocol exceeds the stringent diagnostic safety standards. It feels like experiencing high-end hospitality in pest control.", 
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop",
     verified: "Verified Healthcare Facility AMC"
   },
@@ -118,7 +117,7 @@ const FAQS = [
   { q: "Are your premium chemicals safe for exotic pets and infant rooms?", a: "Yes. We source premium-grade bio-rational formulations approved by the CIBRC. These target pests at microscopic levels but remain completely odorless and safe for infants, premium upholstery, and pets once set." },
   { q: "Do your service vehicles carry corporate branding?", a: "We understand your need for absolute discretion. Upon request, our elite team can arrive in clean, unmarked luxury utility vehicles to keep your service entirely private." },
   { q: "Is there a comprehensive warranty on residential termite control?", a: "Yes, our certified termite barriers carry an executive warranty ranging from 1 to 5 years, accompanied by complimentary, scheduled maintenance check-ups." },
-  { q: "How fast can your team respond in Amalner?", a: "We operate a dedicated local rapid-response squad for the Amalner region. Emergencies are addressed with priority same-day scheduling." },
+  { q: "How fast can your team respond in Malegaon?", a: "We operate a dedicated local rapid-response squad for the Malegaon region. Emergencies are addressed with priority same-day scheduling." },
   { q: "Will chemical spraying stain our imported Italian marble or custom wood finishes?", a: "Not at all. We employ precision gel application, dust baiting, and targeted micro-injection. This leaves zero liquid pooling or stains on expensive marble, teakwood, or silk wallpaper." }
 ];
 
@@ -143,22 +142,22 @@ const Preloader = ({ onComplete }) => {
     >
       <div className="absolute inset-0 opacity-[0.02] mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
       
-      <div className="relative flex flex-col items-center px-4">
+      <div className="relative flex flex-col items-center px-4 w-full max-w-md">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1.2, ease: LUX_EASE }}
-          className="text-center bg-[#0b0b0b] p-8 md:p-12 rounded-[30px] md:rounded-[40px] shadow-[0_30px_60px_rgba(212,175,55,0.08)] border border-white/5 backdrop-blur-3xl w-full max-w-sm"
+          className="text-center bg-[#0b0b0b] p-8 md:p-12 rounded-[30px] md:rounded-[40px] shadow-[0_30px_60px_rgba(212,175,55,0.08)] border border-white/5 backdrop-blur-3xl w-full"
         >
           <Shield className="w-12 h-12 text-[#D4AF37] mx-auto mb-6 drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]" strokeWidth={1} />
-          <h1 className="text-2xl md:text-3xl tracking-[0.4em] font-serif text-white uppercase mb-4 ml-[0.4em]">Shree</h1>
+          <h1 className="text-xl md:text-2xl tracking-[0.2em] font-serif text-white uppercase mb-4 text-center leading-relaxed">SHRI PEST CONTROL</h1>
           <motion.div 
             initial={{ width: 0 }}
             animate={{ width: "100%" }}
             transition={{ delay: 0.6, duration: 1.2, ease: LUX_EASE }}
             className={`h-[1px] ${GOLD_BG} mb-4`}
           />
-          <h2 className={`text-[9px] md:text-[10px] tracking-[0.5em] ${GOLD_TEXT} uppercase ml-[0.5em] font-semibold`}>Pest Control</h2>
+          <h2 className={`text-[9px] md:text-[10px] tracking-[0.3em] ${GOLD_TEXT} uppercase font-semibold text-center`}>& SHRI AGRO CHEMICALS</h2>
         </motion.div>
       </div>
     </motion.div>
@@ -296,8 +295,8 @@ const Navbar = () => {
               <Shield className="text-[#D4AF37] w-4.5 h-4.5 md:w-5 md:h-5 transition-transform duration-700 group-hover:scale-110" strokeWidth={1.5} />
             </div>
             <div className="flex flex-col">
-              <span className="text-base md:text-lg font-serif tracking-[0.1em] text-white uppercase leading-none">Shree Pest Control</span>
-              <span className={`text-[6.5px] md:text-[7px] ${GOLD_TEXT} tracking-[0.15em] uppercase mt-1 md:mt-1.5 font-bold`}>Services. Sagar</span>
+              <span className="text-sm md:text-base font-serif tracking-[0.05em] text-white uppercase leading-tight">SHRI PEST CONTROL</span>
+              <span className={`text-[6.5px] md:text-[7px] ${GOLD_TEXT} tracking-[0.1em] uppercase mt-1 font-bold`}>& SHRI AGRO CHEMICALS</span>
             </div>
           </a>
           
@@ -409,7 +408,7 @@ const Hero = () => {
             transition={{ duration: 1.2, delay: 2.8, ease: LUX_EASE }}
             className="text-sm md:text-base lg:text-xl text-gray-400 mb-10 md:mb-16 max-w-2xl mx-auto leading-relaxed font-light tracking-wide drop-shadow-md"
           >
-            The premium pest defense firm trusted by high-end residences, elite restaurants, and major commercial offices across Amalner.
+            The premium pest defense firm trusted by high-end residences, elite restaurants, and major commercial offices across Malegaon.
           </motion.p>
           
           <motion.div 
@@ -558,7 +557,7 @@ const About = () => {
               <span className="text-gray-400 italic font-serif">we maintain the ultimate standards of wellness.</span>
             </p>
             <p className="text-gray-400 mb-10 md:mb-16 leading-relaxed text-sm md:text-base font-light">
-              Shree Pest Control Services leads with modern molecular science and deep operational rigor. Our team of premium environmental consultants manages insect, termite, rodent, and disinfection tasks across luxury properties. Our protocol focuses on absolute safety, zero stains, and total relief.
+              SHRI PEST CONTROL SERVICE & SHRI AGRO CHEMICALS leads with modern molecular science and deep operational rigor. Our team of premium environmental consultants manages insect, termite, rodent, and disinfection tasks across luxury properties. Our protocol focuses on absolute safety, zero stains, and total relief.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
@@ -949,8 +948,8 @@ const ContactAndFooter = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const text = `*New Shree Pest Control Assessment Request*%0A%0A*Name:* ${formData.name}%0A*Phone:* ${formData.phone}%0A*Service:* ${formData.service}%0A*Estate Location:* ${formData.location}%0A*Message Details:* ${formData.message}`;
-    window.open(`https://wa.me/919922198475?text=${text}`, '_blank');
+    const text = `*New Assessment Request*%0A%0A*Name:* ${formData.name}%0A*Phone:* ${formData.phone}%0A*Service:* ${formData.service}%0A*Estate Location:* ${formData.location}%0A*Message Details:* ${formData.message}`;
+    window.open(`https://wa.me/919823579434?text=${text}`, '_blank');
   };
 
   return (
@@ -991,7 +990,7 @@ const ContactAndFooter = () => {
                 </div>
                 <div>
                   <label className="block text-[8.5px] md:text-[9px] text-gray-400 mb-2.5 uppercase tracking-[0.25em] font-bold ml-2">Estate / Office Location</label>
-                  <input required type="text" placeholder="Amalner / Nearby Area" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, location: e.target.value})} />
+                  <input required type="text" placeholder="Malegaon / Nearby Area" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, location: e.target.value})} />
                 </div>
               </div>
               <div>
@@ -1009,7 +1008,6 @@ const ContactAndFooter = () => {
         </div>
       </section>
 
-      { }
       {/* Footer */}
       <footer className="bg-[#010101] border-t border-white/10 pt-20 md:pt-32 pb-12 relative overflow-hidden">
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent"></div>
@@ -1022,12 +1020,12 @@ const ContactAndFooter = () => {
                 <div className="flex items-center gap-4 mb-6">
                   <Shield className="text-[#D4AF37] w-7 h-7 drop-shadow-md" strokeWidth={1.5} />
                   <div className="flex flex-col">
-                    <span className="text-sm font-serif tracking-[0.1em] text-white uppercase leading-none">Shree Pest Control</span>
-                    <span className={`text-[6.5px] ${GOLD_TEXT} tracking-[0.1em] uppercase mt-1 font-bold`}>Services. Sagar</span>
+                    <span className="text-sm font-serif tracking-[0.05em] text-white uppercase leading-tight">SHRI PEST CONTROL</span>
+                    <span className={`text-[7px] ${GOLD_TEXT} tracking-[0.05em] uppercase mt-1 font-bold`}>& SHRI AGRO CHEMICALS</span>
                   </div>
                 </div>
                 <p className="text-gray-400 text-xs leading-loose mb-6 font-light">
-                  Setting the executive standard for pest eradication and environmental hygiene for Amalner's premiere properties.
+                  Setting the executive standard for pest eradication and environmental hygiene for Malegaon's premiere properties.
                 </p>
               </div>
               <div className="flex gap-3">
@@ -1070,7 +1068,7 @@ const ContactAndFooter = () => {
               <ul className="space-y-4 md:space-y-6">
                 <li className="flex gap-4 items-start text-gray-400 text-xs font-light bg-[#090909] p-4 rounded-[25px] border border-white/5">
                   <MapPin className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" strokeWidth={1.5} />
-                  <span className="leading-relaxed">plot S,302 Aditya sankul, Pimple Rd , Amalner , Maharashtra .</span>
+                  <span className="leading-relaxed text-left">Shop No 05, Shriram Plaza, Wavhal Hospital , Malegaon , Maharashtra .</span>
                 </li>
                 <li className="flex gap-4 items-center text-gray-400 text-xs font-light bg-[#090909] p-4 rounded-[25px] border border-white/5">
                   <Phone className="w-4 h-4 text-[#D4AF37] shrink-0" strokeWidth={1.5} />
@@ -1081,7 +1079,7 @@ const ContactAndFooter = () => {
           </div>
 
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-500 text-[8.5px] sm:text-[9px] font-bold uppercase tracking-[0.22em] text-center md:text-left">© {new Date().getFullYear()} Shree Pest Control Services. All rights reserved.</p>
+            <p className="text-gray-500 text-[8.5px] sm:text-[9px] font-bold uppercase tracking-[0.22em] text-center md:text-left">© {new Date().getFullYear()} SHRI PEST CONTROL SERVICE & SHRI AGRO CHEMICALS. All rights reserved.</p>
             <div className="text-gray-500 text-[8.5px] sm:text-[9px] flex gap-6 md:gap-8 font-bold uppercase tracking-[0.22em]">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
