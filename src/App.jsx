@@ -7,9 +7,9 @@ import {
   Leaf, GripVertical, MessageCircle, Quote, Menu, X
 } from 'lucide-react';
 
-const PHONE_NUMBER = "+919284072241";
-const DISPLAY_PHONE = "+91 92840 72241";
-const WHATSAPP_LINK = `https://wa.me/919284072241?text=Hi%20Pest%20Control%20of%20Maharashtra,%20I%20am%20looking%20for%20premium%20pest%20control%20services.`;
+const PHONE_NUMBER = "+919922198475";
+const DISPLAY_PHONE = "+91 99221 98475";
+const WHATSAPP_LINK = `https://wa.me/919922198475?text=Hi%20Shree%20Pest%20Control%20Services,%20I%20am%20looking%20for%20premium%20pest%20control%20services.`;
 
 // Ultra Luxury Theme Variables - Premium Dynamic Volume Design
 const GOLD_TEXT = "text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#AA771C]";
@@ -20,7 +20,6 @@ const HOVER_GLOW = "hover:shadow-[0_25px_60px_rgba(212,175,55,0.22)]";
 
 const LUX_EASE = [0.16, 1, 0.3, 1];
 
-// --- DATA CONFIGURATION ---
 const SERVICES = [
   { 
     title: "Cockroach Control", 
@@ -91,23 +90,23 @@ const STATS = [
 const REVIEWS = [
   { 
     name: "Rahul Singhania", 
-    role: "Heritage Villa Owner, Maharashtra", 
+    role: "Heritage Villa Owner, Amalner", 
     rating: 5, 
-    text: "Truly a masterclass in home safety operations. Pest Control of Maharashtra handled our family estate with absolute privacy, leaving everything pristine and beautifully scent-free. Highly recommended.", 
+    text: "Truly a masterclass in home safety operations. Shree Pest Control Services handled our family estate with absolute privacy, leaving everything pristine and beautifully scent-free. Highly recommended.", 
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
     verified: "Verified VIP Residence Audit"
   },
   { 
     name: "Dr. Priya Kulkarni", 
-    role: "Founder, Kulkarni Medical Diagnostics", 
+    role: "Founder, Kulkarni Diagnostics", 
     rating: 5, 
-    text: "Pest Control of Maharashtra manages our regular sanitation and AMC. Their hygiene protocol exceeds the stringent diagnostic safety standards. It feels like experiencing high-end hospitality in pest control.", 
+    text: "Shree Pest Control Services manages our regular sanitation and AMC. Their hygiene protocol exceeds the stringent diagnostic safety standards. It feels like experiencing high-end hospitality in pest control.", 
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop",
     verified: "Verified Healthcare Facility AMC"
   },
   { 
     name: "Amit Deshmukh", 
-    role: "Chief Exec, Deshmukh Corporate Spaces", 
+    role: "Chief Exec, Corporate Spaces", 
     rating: 5, 
     text: "Extremely meticulous. Their specialized wood borer treatment restored our boardroom teak antiques without any damage. Outstanding execution, absolutely zero operational disruption.", 
     image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop",
@@ -119,7 +118,7 @@ const FAQS = [
   { q: "Are your premium chemicals safe for exotic pets and infant rooms?", a: "Yes. We source premium-grade bio-rational formulations approved by the CIBRC. These target pests at microscopic levels but remain completely odorless and safe for infants, premium upholstery, and pets once set." },
   { q: "Do your service vehicles carry corporate branding?", a: "We understand your need for absolute discretion. Upon request, our elite team can arrive in clean, unmarked luxury utility vehicles to keep your service entirely private." },
   { q: "Is there a comprehensive warranty on residential termite control?", a: "Yes, our certified termite barriers carry an executive warranty ranging from 1 to 5 years, accompanied by complimentary, scheduled maintenance check-ups." },
-  { q: "How fast can your team respond in Maharashtra?", a: "We operate a dedicated local rapid-response squad for the Maharashtra region. Emergencies are addressed with priority same-day scheduling." },
+  { q: "How fast can your team respond in Amalner?", a: "We operate a dedicated local rapid-response squad for the Amalner region. Emergencies are addressed with priority same-day scheduling." },
   { q: "Will chemical spraying stain our imported Italian marble or custom wood finishes?", a: "Not at all. We employ precision gel application, dust baiting, and targeted micro-injection. This leaves zero liquid pooling or stains on expensive marble, teakwood, or silk wallpaper." }
 ];
 
@@ -129,8 +128,6 @@ const PROCESS = [
   { title: "Precision Shielding", desc: "Applying low-odor, targeted treatments with surgical accuracy, leaving the air fresh and surfaces clean." },
   { title: "Eternal Protection", desc: "Periodic premium monitoring and barrier enforcement for complete, year-round peace of mind." }
 ];
-
-// --- MAIN COMPONENTS ---
 
 const Preloader = ({ onComplete }) => {
   useEffect(() => {
@@ -146,22 +143,22 @@ const Preloader = ({ onComplete }) => {
     >
       <div className="absolute inset-0 opacity-[0.02] mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
       
-      <div className="relative flex flex-col items-center px-4 w-full max-w-md">
+      <div className="relative flex flex-col items-center px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1.2, ease: LUX_EASE }}
-          className="text-center bg-[#0b0b0b] p-8 md:p-12 rounded-[30px] md:rounded-[40px] shadow-[0_30px_60px_rgba(212,175,55,0.08)] border border-white/5 backdrop-blur-3xl w-full"
+          className="text-center bg-[#0b0b0b] p-8 md:p-12 rounded-[30px] md:rounded-[40px] shadow-[0_30px_60px_rgba(212,175,55,0.08)] border border-white/5 backdrop-blur-3xl w-full max-w-sm"
         >
           <Shield className="w-12 h-12 text-[#D4AF37] mx-auto mb-6 drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]" strokeWidth={1} />
-          <h1 className="text-xl sm:text-2xl tracking-[0.2em] font-serif text-white uppercase mb-4">Pest Control</h1>
+          <h1 className="text-2xl md:text-3xl tracking-[0.4em] font-serif text-white uppercase mb-4 ml-[0.4em]">Shree</h1>
           <motion.div 
             initial={{ width: 0 }}
             animate={{ width: "100%" }}
             transition={{ delay: 0.6, duration: 1.2, ease: LUX_EASE }}
             className={`h-[1px] ${GOLD_BG} mb-4`}
           />
-          <h2 className={`text-[10px] sm:text-xs tracking-[0.3em] ${GOLD_TEXT} uppercase font-semibold`}>Of Maharashtra</h2>
+          <h2 className={`text-[9px] md:text-[10px] tracking-[0.5em] ${GOLD_TEXT} uppercase ml-[0.5em] font-semibold`}>Pest Control</h2>
         </motion.div>
       </div>
     </motion.div>
@@ -299,8 +296,8 @@ const Navbar = () => {
               <Shield className="text-[#D4AF37] w-4.5 h-4.5 md:w-5 md:h-5 transition-transform duration-700 group-hover:scale-110" strokeWidth={1.5} />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm md:text-base font-serif tracking-[0.1em] text-white uppercase leading-none">Pest Control</span>
-              <span className={`text-[6.5px] md:text-[7px] ${GOLD_TEXT} tracking-[0.2em] uppercase mt-1 md:mt-1.5 font-bold`}>of Maharashtra</span>
+              <span className="text-base md:text-lg font-serif tracking-[0.1em] text-white uppercase leading-none">Shree Pest Control</span>
+              <span className={`text-[6.5px] md:text-[7px] ${GOLD_TEXT} tracking-[0.15em] uppercase mt-1 md:mt-1.5 font-bold`}>Services. Sagar</span>
             </div>
           </a>
           
@@ -412,7 +409,7 @@ const Hero = () => {
             transition={{ duration: 1.2, delay: 2.8, ease: LUX_EASE }}
             className="text-sm md:text-base lg:text-xl text-gray-400 mb-10 md:mb-16 max-w-2xl mx-auto leading-relaxed font-light tracking-wide drop-shadow-md"
           >
-            The premium pest defense firm trusted by high-end residences, elite restaurants, and major commercial offices across Maharashtra.
+            The premium pest defense firm trusted by high-end residences, elite restaurants, and major commercial offices across Amalner.
           </motion.p>
           
           <motion.div 
@@ -425,7 +422,7 @@ const Hero = () => {
               Secure Your Residence
             </Button>
             <Button href={`tel:${PHONE_NUMBER}`} variant="secondary" className="w-full sm:w-auto text-[10px] px-10 md:px-14 py-4 md:py-5">
-              <Phone className="w-4 h-4 mr-3" strokeWidth={1.5} /> Call Coordinator
+              <Phone className="w-4 h-4 mr-3" strokeWidth={1.5} /> Call Representative
             </Button>
           </motion.div>
         </div>
@@ -561,7 +558,7 @@ const About = () => {
               <span className="text-gray-400 italic font-serif">we maintain the ultimate standards of wellness.</span>
             </p>
             <p className="text-gray-400 mb-10 md:mb-16 leading-relaxed text-sm md:text-base font-light">
-              Pest Control of Maharashtra leads with modern molecular science and deep operational rigor. Our team of premium environmental consultants manages insect, termite, rodent, and disinfection tasks across luxury properties. Our protocol focuses on absolute safety, zero stains, and total relief.
+              Shree Pest Control Services leads with modern molecular science and deep operational rigor. Our team of premium environmental consultants manages insect, termite, rodent, and disinfection tasks across luxury properties. Our protocol focuses on absolute safety, zero stains, and total relief.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
@@ -931,7 +928,7 @@ const FAQAndCTA = () => {
                   
                   <div className="flex flex-col gap-4 sm:gap-5">
                     <Button href={`tel:${PHONE_NUMBER}`} variant="primary" className="w-full shadow-lg py-4">
-                      Call Coordinator
+                      Call Representative
                     </Button>
                     <a href={WHATSAPP_LINK} className="text-white hover:text-[#D4AF37] font-bold uppercase tracking-[0.2em] text-[8.5px] sm:text-[9px] transition-colors flex items-center justify-center gap-2 mt-2 bg-white/5 py-3 rounded-[40px] border border-white/10 w-full">
                       <MessageCircle className="w-3.5 h-3.5" /> Message Direct Desk
@@ -952,8 +949,8 @@ const ContactAndFooter = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const text = `*New High-End Client Lead*%0A%0A*Name:* ${formData.name}%0A*Phone:* ${formData.phone}%0A*Service:* ${formData.service}%0A*Estate Location:* ${formData.location}%0A*Message Details:* ${formData.message}`;
-    window.open(`https://wa.me/919284072241?text=${text}`, '_blank');
+    const text = `*New Shree Pest Control Assessment Request*%0A%0A*Name:* ${formData.name}%0A*Phone:* ${formData.phone}%0A*Service:* ${formData.service}%0A*Estate Location:* ${formData.location}%0A*Message Details:* ${formData.message}`;
+    window.open(`https://wa.me/919922198475?text=${text}`, '_blank');
   };
 
   return (
@@ -986,7 +983,7 @@ const ContactAndFooter = () => {
                   <label className="block text-[8.5px] md:text-[9px] text-gray-400 mb-2.5 uppercase tracking-[0.25em] font-bold ml-2">Requested Service</label>
                   <div className="relative">
                     <select required className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 appearance-none font-light text-xs md:text-sm cursor-pointer" onChange={e => setFormData({...formData, service: e.target.value})}>
-                      <option value="" className="text-gray-655">Choose Treatment Method</option>
+                      <option value="" className="text-gray-650">Choose Treatment Method</option>
                       {SERVICES.map(s => <option key={s.title} value={s.title}>{s.title}</option>)}
                     </select>
                     <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-600 w-5 h-5 pointer-events-none" />
@@ -994,7 +991,7 @@ const ContactAndFooter = () => {
                 </div>
                 <div>
                   <label className="block text-[8.5px] md:text-[9px] text-gray-400 mb-2.5 uppercase tracking-[0.25em] font-bold ml-2">Estate / Office Location</label>
-                  <input required type="text" placeholder="Maharashtra Area" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, location: e.target.value})} />
+                  <input required type="text" placeholder="Amalner / Nearby Area" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, location: e.target.value})} />
                 </div>
               </div>
               <div>
@@ -1004,7 +1001,7 @@ const ContactAndFooter = () => {
               
               <div className="flex justify-center pt-4">
                 <Button type="submit" variant="primary" className="w-full md:w-auto px-16 py-4.5 text-[10px]">
-                  Dispatch Audit Inquiry
+                  Dispatch Assessment Inquiry
                 </Button>
               </div>
             </form>
@@ -1012,6 +1009,7 @@ const ContactAndFooter = () => {
         </div>
       </section>
 
+      { }
       {/* Footer */}
       <footer className="bg-[#010101] border-t border-white/10 pt-20 md:pt-32 pb-12 relative overflow-hidden">
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent"></div>
@@ -1024,12 +1022,12 @@ const ContactAndFooter = () => {
                 <div className="flex items-center gap-4 mb-6">
                   <Shield className="text-[#D4AF37] w-7 h-7 drop-shadow-md" strokeWidth={1.5} />
                   <div className="flex flex-col">
-                    <span className="text-sm font-serif tracking-[0.1em] text-white uppercase leading-none">Pest Control</span>
-                    <span className={`text-[6.5px] ${GOLD_TEXT} tracking-[0.2em] uppercase mt-1 font-bold`}>of Maharashtra</span>
+                    <span className="text-sm font-serif tracking-[0.1em] text-white uppercase leading-none">Shree Pest Control</span>
+                    <span className={`text-[6.5px] ${GOLD_TEXT} tracking-[0.1em] uppercase mt-1 font-bold`}>Services. Sagar</span>
                   </div>
                 </div>
                 <p className="text-gray-400 text-xs leading-loose mb-6 font-light">
-                  Setting the executive standard for pest eradication and environmental hygiene for Maharashtra's premiere properties.
+                  Setting the executive standard for pest eradication and environmental hygiene for Amalner's premiere properties.
                 </p>
               </div>
               <div className="flex gap-3">
@@ -1072,7 +1070,7 @@ const ContactAndFooter = () => {
               <ul className="space-y-4 md:space-y-6">
                 <li className="flex gap-4 items-start text-gray-400 text-xs font-light bg-[#090909] p-4 rounded-[25px] border border-white/5">
                   <MapPin className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" strokeWidth={1.5} />
-                  <span className="leading-relaxed">Toyota Showroom, Upsite Gajanan Maharaj Temple, Near, Murtizapur Road , Maharashtra .</span>
+                  <span className="leading-relaxed">plot S,302 Aditya sankul, Pimple Rd , Amalner , Maharashtra .</span>
                 </li>
                 <li className="flex gap-4 items-center text-gray-400 text-xs font-light bg-[#090909] p-4 rounded-[25px] border border-white/5">
                   <Phone className="w-4 h-4 text-[#D4AF37] shrink-0" strokeWidth={1.5} />
@@ -1083,7 +1081,7 @@ const ContactAndFooter = () => {
           </div>
 
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-500 text-[8.5px] sm:text-[9px] font-bold uppercase tracking-[0.22em] text-center md:text-left">© {new Date().getFullYear()} Pest Control of Maharashtra. All rights reserved.</p>
+            <p className="text-gray-500 text-[8.5px] sm:text-[9px] font-bold uppercase tracking-[0.22em] text-center md:text-left">© {new Date().getFullYear()} Shree Pest Control Services. All rights reserved.</p>
             <div className="text-gray-500 text-[8.5px] sm:text-[9px] flex gap-6 md:gap-8 font-bold uppercase tracking-[0.22em]">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
@@ -1092,7 +1090,7 @@ const ContactAndFooter = () => {
         </div>
       </footer>
 
-      {/* Modern Capsule WhatsApp Button */}
+      {/* Modern Capsule WhatsApp Button (Always visible on mobile bottom, perfectly scaled) */}
       <a 
         href={WHATSAPP_LINK} 
         target="_blank" 
