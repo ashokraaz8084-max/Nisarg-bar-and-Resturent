@@ -7,9 +7,9 @@ import {
   Leaf, GripVertical, MessageCircle, Quote, Menu, X
 } from 'lucide-react';
 
-const PHONE_NUMBER = "+917875340052";
-const DISPLAY_PHONE = "+91 78753 40052";
-const WHATSAPP_LINK = `https://wa.me/917875340052?text=Hi%20PATIL%20PASHUKHADYA%20SAMUHA%20Khochi,%20I%20am%20looking%20for%20premium%20pest%20control%20services.`;
+const PHONE_NUMBER = "+919762815757";
+const DISPLAY_PHONE = "+91 97628 15757";
+const WHATSAPP_LINK = `https://wa.me/919762815757?text=Hi%20Aditya%20pest%20control,%20I%20am%20looking%20for%20premium%20pest%20control%20services.`;
 
 const GOLD_TEXT = "text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#AA771C]";
 const GOLD_BG = "bg-gradient-to-r from-[#AA771C] via-[#E8C872] to-[#8A5A19]";
@@ -89,9 +89,9 @@ const STATS = [
 const REVIEWS = [
   { 
     name: "Rahul Singhania", 
-    role: "Heritage Villa Owner, Khochi", 
+    role: "Heritage Villa Owner, Terwad", 
     rating: 5, 
-    text: "Truly a masterclass in home safety operations. PATIL PASHUKHADYA SAMUHA Khochi handled our family estate with absolute privacy, leaving everything pristine and beautifully scent-free. Highly recommended.", 
+    text: "Truly a masterclass in home safety operations. Aditya pest control handled our family estate with absolute privacy, leaving everything pristine and beautifully scent-free. Highly recommended.", 
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
     verified: "Verified VIP Residence Audit"
   },
@@ -99,7 +99,7 @@ const REVIEWS = [
     name: "Dr. Priya Kulkarni", 
     role: "Founder, Kulkarni Diagnostics", 
     rating: 5, 
-    text: "PATIL PASHUKHADYA SAMUHA Khochi manages our regular sanitation and AMC. Their hygiene protocol exceeds the stringent diagnostic safety standards. It feels like experiencing high-end hospitality in pest control.", 
+    text: "Aditya pest control manages our regular sanitation and AMC. Their hygiene protocol exceeds the stringent diagnostic safety standards. It feels like experiencing high-end hospitality in pest control.", 
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop",
     verified: "Verified Healthcare Facility AMC"
   },
@@ -117,7 +117,7 @@ const FAQS = [
   { q: "Are your premium chemicals safe for exotic pets and infant rooms?", a: "Yes. We source premium-grade bio-rational formulations approved by the CIBRC. These target pests at microscopic levels but remain completely odorless and safe for infants, premium upholstery, and pets once set." },
   { q: "Do your service vehicles carry corporate branding?", a: "We understand your need for absolute discretion. Upon request, our elite team can arrive in clean, unmarked luxury utility vehicles to keep your service entirely private." },
   { q: "Is there a comprehensive warranty on residential termite control?", a: "Yes, our certified termite barriers carry an executive warranty ranging from 1 to 5 years, accompanied by complimentary, scheduled maintenance check-ups." },
-  { q: "How fast can your team respond in Khochi?", a: "We operate a dedicated local rapid-response squad for the Khochi region. Emergencies are addressed with priority same-day scheduling." },
+  { q: "How fast can your team respond in Terwad?", a: "We operate a dedicated local rapid-response squad for the Terwad region. Emergencies are addressed with priority same-day scheduling." },
   { q: "Will chemical spraying stain our imported Italian marble or custom wood finishes?", a: "Not at all. We employ precision gel application, dust baiting, and targeted micro-injection. This leaves zero liquid pooling or stains on expensive marble, teakwood, or silk wallpaper." }
 ];
 
@@ -150,14 +150,14 @@ const Preloader = ({ onComplete }) => {
           className="text-center bg-[#0b0b0b] p-8 md:p-12 rounded-[30px] md:rounded-[40px] shadow-[0_30px_60px_rgba(212,175,55,0.08)] border border-white/5 backdrop-blur-3xl w-full"
         >
           <Shield className="w-12 h-12 text-[#D4AF37] mx-auto mb-6 drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]" strokeWidth={1} />
-          <h1 className="text-xl md:text-2xl tracking-[0.2em] font-serif text-white uppercase mb-4 text-center leading-relaxed">PATIL PASHUKHADYA</h1>
+          <h1 className="text-xl md:text-2xl tracking-[0.2em] font-serif text-white uppercase mb-4 text-center leading-relaxed">ADITYA PEST</h1>
           <motion.div 
             initial={{ width: 0 }}
             animate={{ width: "100%" }}
             transition={{ delay: 0.6, duration: 1.2, ease: LUX_EASE }}
             className={`h-[1px] ${GOLD_BG} mb-4`}
           />
-          <h2 className={`text-[9px] md:text-[10px] tracking-[0.3em] ${GOLD_TEXT} uppercase font-semibold text-center`}>SAMUHA Khochi</h2>
+          <h2 className={`text-[9px] md:text-[10px] tracking-[0.3em] ${GOLD_TEXT} uppercase font-semibold text-center`}>CONTROL</h2>
         </motion.div>
       </div>
     </motion.div>
@@ -295,8 +295,8 @@ const Navbar = () => {
               <Shield className="text-[#D4AF37] w-4.5 h-4.5 md:w-5 md:h-5 transition-transform duration-700 group-hover:scale-110" strokeWidth={1.5} />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm md:text-base font-serif tracking-[0.05em] text-white uppercase leading-tight">PATIL PASHUKHADYA</span>
-              <span className={`text-[6.5px] md:text-[7px] ${GOLD_TEXT} tracking-[0.1em] uppercase mt-1 font-bold`}>SAMUHA Khochi</span>
+              <span className="text-sm md:text-base font-serif tracking-[0.05em] text-white uppercase leading-tight">ADITYA PEST</span>
+              <span className={`text-[6.5px] md:text-[7px] ${GOLD_TEXT} tracking-[0.1em] uppercase mt-1 font-bold`}>CONTROL</span>
             </div>
           </a>
           
@@ -408,7 +408,7 @@ const Hero = () => {
             transition={{ duration: 1.2, delay: 2.8, ease: LUX_EASE }}
             className="text-sm md:text-base lg:text-xl text-gray-400 mb-10 md:mb-16 max-w-2xl mx-auto leading-relaxed font-light tracking-wide drop-shadow-md"
           >
-            The premium pest defense firm trusted by high-end residences, elite restaurants, and major commercial offices across Khochi.
+            The premium pest defense firm trusted by high-end residences, elite restaurants, and major commercial offices across Terwad.
           </motion.p>
           
           <motion.div 
@@ -557,7 +557,7 @@ const About = () => {
               <span className="text-gray-400 italic font-serif">we maintain the ultimate standards of wellness.</span>
             </p>
             <p className="text-gray-400 mb-10 md:mb-16 leading-relaxed text-sm md:text-base font-light">
-              PATIL PASHUKHADYA SAMUHA Khochi leads with modern molecular science and deep operational rigor. Our team of premium environmental consultants manages insect, termite, rodent, and disinfection tasks across luxury properties. Our protocol focuses on absolute safety, zero stains, and total relief.
+              Aditya pest control Terwad leads with modern molecular science and deep operational rigor. Our team of premium environmental consultants manages insect, termite, rodent, and disinfection tasks across luxury properties. Our protocol focuses on absolute safety, zero stains, and total relief.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
@@ -949,7 +949,7 @@ const ContactAndFooter = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const text = `*New Assessment Request*%0A%0A*Name:* ${formData.name}%0A*Phone:* ${formData.phone}%0A*Service:* ${formData.service}%0A*Estate Location:* ${formData.location}%0A*Message Details:* ${formData.message}`;
-    window.open(`https://wa.me/917875340052?text=${text}`, '_blank');
+    window.open(`https://wa.me/919762815757?text=${text}`, '_blank');
   };
 
   return (
@@ -990,7 +990,7 @@ const ContactAndFooter = () => {
                 </div>
                 <div>
                   <label className="block text-[8.5px] md:text-[9px] text-gray-400 mb-2.5 uppercase tracking-[0.25em] font-bold ml-2">Estate / Office Location</label>
-                  <input required type="text" placeholder="Khochi / Nearby Area" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, location: e.target.value})} />
+                  <input required type="text" placeholder="Terwad / Nearby Area" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, location: e.target.value})} />
                 </div>
               </div>
               <div>
@@ -1020,12 +1020,12 @@ const ContactAndFooter = () => {
                 <div className="flex items-center gap-4 mb-6">
                   <Shield className="text-[#D4AF37] w-7 h-7 drop-shadow-md" strokeWidth={1.5} />
                   <div className="flex flex-col">
-                    <span className="text-sm font-serif tracking-[0.05em] text-white uppercase leading-tight">PATIL PASHUKHADYA</span>
-                    <span className={`text-[7px] ${GOLD_TEXT} tracking-[0.05em] uppercase mt-1 font-bold`}>SAMUHA Khochi</span>
+                    <span className="text-sm font-serif tracking-[0.05em] text-white uppercase leading-tight">ADITYA PEST</span>
+                    <span className={`text-[7px] ${GOLD_TEXT} tracking-[0.05em] uppercase mt-1 font-bold`}>CONTROL</span>
                   </div>
                 </div>
                 <p className="text-gray-400 text-xs leading-loose mb-6 font-light">
-                  Setting the executive standard for pest eradication and environmental hygiene for Khochi's premiere properties.
+                  Setting the executive standard for pest eradication and environmental hygiene for Terwad's premiere properties.
                 </p>
               </div>
               <div className="flex gap-3">
@@ -1068,7 +1068,7 @@ const ContactAndFooter = () => {
               <ul className="space-y-4 md:space-y-6">
                 <li className="flex gap-4 items-start text-gray-400 text-xs font-light bg-[#090909] p-4 rounded-[25px] border border-white/5">
                   <MapPin className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" strokeWidth={1.5} />
-                  <span className="leading-relaxed text-left">Patil Pashukhadya Samuha, Sharad Sugarmil Road, Maharashtra.</span>
+                  <span className="leading-relaxed text-left">Borgaon Road, Terwad, Maharashtra.</span>
                 </li>
                 <li className="flex gap-4 items-center text-gray-400 text-xs font-light bg-[#090909] p-4 rounded-[25px] border border-white/5">
                   <Phone className="w-4 h-4 text-[#D4AF37] shrink-0" strokeWidth={1.5} />
@@ -1079,7 +1079,7 @@ const ContactAndFooter = () => {
           </div>
 
           <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-500 text-[8.5px] sm:text-[9px] font-bold uppercase tracking-[0.22em] text-center md:text-left">© {new Date().getFullYear()} PATIL PASHUKHADYA SAMUHA Khochi. All rights reserved.</p>
+            <p className="text-gray-500 text-[8.5px] sm:text-[9px] font-bold uppercase tracking-[0.22em] text-center md:text-left">© {new Date().getFullYear()} ADITYA PEST CONTROL. All rights reserved.</p>
             <div className="text-gray-500 text-[8.5px] sm:text-[9px] flex gap-6 md:gap-8 font-bold uppercase tracking-[0.22em]">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
