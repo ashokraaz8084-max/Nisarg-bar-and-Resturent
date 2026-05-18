@@ -4,69 +4,68 @@ import {
   Shield, Clock, Sparkles, Building, Phone, ChevronRight, ChevronLeft,
   MapPin, Star, ShieldCheck, CheckCircle2, ChevronDown, Instagram, 
   Facebook, Twitter, Award, Droplets, Bug, ArrowRight,
-  Leaf, GripVertical, MessageCircle, Quote
+  Leaf, GripVertical, MessageCircle, Quote, Menu, X
 } from 'lucide-react';
 
 const PHONE_NUMBER = "+919359813265";
 const WHATSAPP_LINK = `https://wa.me/919359813265?text=Hi%20Bhavani%20Enterprises,%20I%20am%20looking%20for%20premium%20pest%20control%20services.`;
 
-// Ultra Luxury Theme Variables - Premium 40px Volume Design
+// Ultra Luxury Theme Variables - Premium Dynamic Volume Design
 const GOLD_TEXT = "text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#AA771C]";
 const GOLD_BG = "bg-gradient-to-r from-[#AA771C] via-[#E8C872] to-[#8A5A19]";
 const CARD_BG = "bg-gradient-to-br from-[#121212] to-[#080808]";
-const PREMIUM_SHADOW = "shadow-[0_25px_60px_rgba(0,0,0,0.8)]";
-const GOLD_GLOW_SHADOW = "shadow-[0_20px_50px_rgba(212,175,55,0.12)]";
+const PREMIUM_SHADOW = "shadow-[0_20px_50px_rgba(0,0,0,0.8)]";
 const HOVER_GLOW = "hover:shadow-[0_25px_60px_rgba(212,175,55,0.22)]";
 
 const LUX_EASE = [0.16, 1, 0.3, 1];
 
-// --- DATA CONFIGURATION (Guaranteed rendering high-resolution Unsplash URLs) ---
+// --- DATA CONFIGURATION ---
 const SERVICES = [
   { 
     title: "Cockroach Control", 
-    icon: <Bug size={30} strokeWidth={1.5} />, 
+    icon: <Bug size={26} strokeWidth={1.5} />, 
     desc: "Advanced gel baiting and odorless molecular spraying for total eradication in luxury gourmet kitchens.", 
     image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=1200&auto=format&fit=crop" 
   },
   { 
     title: "Termite Treatment", 
-    icon: <ShieldCheck size={30} strokeWidth={1.5} />, 
+    icon: <ShieldCheck size={26} strokeWidth={1.5} />, 
     desc: "Anti-termite precision piping and chemical barriers protecting precious teak wood structures permanently.", 
     image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop" 
   },
   { 
     title: "Bed Bug Eradication", 
-    icon: <Sparkles size={30} strokeWidth={1.5} />, 
+    icon: <Sparkles size={26} strokeWidth={1.5} />, 
     desc: "Intensive deep chemical sanitization treatment to eliminate micro-infestations for flawless night rest.", 
     image: "https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=1200&auto=format&fit=crop" 
   },
   { 
     title: "Rodent Management", 
-    icon: <Bug size={30} strokeWidth={1.5} />, 
+    icon: <Bug size={26} strokeWidth={1.5} />, 
     desc: "Discreet strategic trapping and seamless physical sealing of entryways behind custom cabinetry.", 
     image: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?q=80&w=1200&auto=format&fit=crop" 
   },
   { 
     title: "Mosquito Fogging", 
-    icon: <Droplets size={30} strokeWidth={1.5} />, 
+    icon: <Droplets size={26} strokeWidth={1.5} />, 
     desc: "High-volume thermal fogging and larvicidal controls to keep expansive lawns and pool decks completely pest-free.", 
     image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=1200&auto=format&fit=crop" 
   },
   { 
     title: "Commercial AMC", 
-    icon: <Building size={30} strokeWidth={1.5} />, 
+    icon: <Building size={26} strokeWidth={1.5} />, 
     desc: "Tailored continuous Annual Maintenance Contracts designed for corporate towers, premium retail, and luxury hotels.", 
     image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1200&auto=format&fit=crop" 
   },
   { 
     title: "Wood Borer Control", 
-    icon: <Leaf size={30} strokeWidth={1.5} />, 
+    icon: <Leaf size={26} strokeWidth={1.5} />, 
     desc: "Specialized micro-injection wood preservation treatments to safeguard heritage woodcraft and expensive antiques.", 
     image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop" 
   },
   { 
     title: "Deep Sanitization", 
-    icon: <Shield size={30} strokeWidth={1.5} />, 
+    icon: <Shield size={26} strokeWidth={1.5} />, 
     desc: "Premium grade eco-certified bacterial and viral disinfection designed for pristine medical facilities and luxury lobbies.", 
     image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1200&auto=format&fit=crop" 
   }
@@ -146,22 +145,22 @@ const Preloader = ({ onComplete }) => {
     >
       <div className="absolute inset-0 opacity-[0.02] mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
       
-      <div className="relative flex flex-col items-center">
+      <div className="relative flex flex-col items-center px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1.2, ease: LUX_EASE }}
-          className="text-center bg-[#0b0b0b] p-12 rounded-[40px] shadow-[0_30px_60px_rgba(212,175,55,0.08)] border border-white/5 backdrop-blur-3xl"
+          className="text-center bg-[#0b0b0b] p-8 md:p-12 rounded-[30px] md:rounded-[40px] shadow-[0_30px_60px_rgba(212,175,55,0.08)] border border-white/5 backdrop-blur-3xl w-full max-w-sm"
         >
-          <Shield className="w-14 h-14 text-[#D4AF37] mx-auto mb-6 drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]" strokeWidth={1} />
-          <h1 className="text-3xl tracking-[0.4em] font-serif text-white uppercase mb-4 ml-[0.4em]">Bhavani</h1>
+          <Shield className="w-12 h-12 text-[#D4AF37] mx-auto mb-6 drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]" strokeWidth={1} />
+          <h1 className="text-2xl md:text-3xl tracking-[0.4em] font-serif text-white uppercase mb-4 ml-[0.4em]">Bhavani</h1>
           <motion.div 
             initial={{ width: 0 }}
             animate={{ width: "100%" }}
             transition={{ delay: 0.6, duration: 1.2, ease: LUX_EASE }}
             className={`h-[1px] ${GOLD_BG} mb-4`}
           />
-          <h2 className={`text-[10px] tracking-[0.5em] ${GOLD_TEXT} uppercase ml-[0.5em] font-semibold`}>Enterprises</h2>
+          <h2 className={`text-[9px] md:text-[10px] tracking-[0.5em] ${GOLD_TEXT} uppercase ml-[0.5em] font-semibold`}>Enterprises</h2>
         </motion.div>
       </div>
     </motion.div>
@@ -171,9 +170,25 @@ const Preloader = ({ onComplete }) => {
 const CustomCursor = () => {
   const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
   const [isHovering, setIsHovering] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
-    const updateMousePosition = (e) => setMousePosition({ x: e.clientX, y: e.clientY });
+    // Touchscreen devices me custom cursor ko completely disable kijiye takki tap issues na ho
+    const detectTouch = () => {
+      if (window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 1024) {
+        setIsTouchDevice(true);
+      } else {
+        setIsTouchDevice(false);
+      }
+    };
+    
+    detectTouch();
+    window.addEventListener('resize', detectTouch);
+
+    const updateMousePosition = (e) => {
+      if (!isTouchDevice) setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    
     const handleMouseOver = (e) => {
       if (e.target.closest('a') || e.target.closest('button') || e.target.closest('[role="button"]')) {
         setIsHovering(true);
@@ -184,11 +199,15 @@ const CustomCursor = () => {
 
     window.addEventListener('mousemove', updateMousePosition);
     window.addEventListener('mouseover', handleMouseOver);
+    
     return () => {
+      window.removeEventListener('resize', detectTouch);
       window.removeEventListener('mousemove', updateMousePosition);
       window.removeEventListener('mouseover', handleMouseOver);
     };
-  }, []);
+  }, [isTouchDevice]);
+
+  if (isTouchDevice) return null;
 
   return (
     <>
@@ -212,7 +231,7 @@ const CustomCursor = () => {
 };
 
 const Button = ({ children, variant = 'primary', className = '', href, onClick, type = 'button' }) => {
-  const baseStyle = "relative inline-flex items-center justify-center px-10 py-4.5 overflow-hidden text-xs uppercase tracking-[0.25em] font-bold rounded-[40px] transition-all duration-500 group";
+  const baseStyle = "relative inline-flex items-center justify-center px-6 md:px-10 py-3.5 md:py-4.5 overflow-hidden text-[10px] md:text-xs uppercase tracking-[0.25em] font-bold rounded-[40px] transition-all duration-500 group";
   const variants = {
     primary: `${GOLD_BG} text-black shadow-[0_12px_35px_rgba(212,175,55,0.35)] hover:shadow-[0_18px_45px_rgba(212,175,55,0.55)] hover:-translate-y-1`,
     secondary: `bg-[#0c0c0c] text-white border border-white/10 hover:border-[#D4AF37]/50 hover:bg-[#141414] shadow-[0_12px_35px_rgba(0,0,0,0.6)] hover:shadow-[0_18px_45px_rgba(212,175,55,0.15)] hover:-translate-y-1 backdrop-blur-xl`,
@@ -224,7 +243,7 @@ const Button = ({ children, variant = 'primary', className = '', href, onClick, 
 
   return (
     <Component className={`${baseStyle} ${variants[variant]} ${className}`} {...props}>
-      <span className="relative z-10 flex items-center gap-3">{children}</span>
+      <span className="relative z-10 flex items-center gap-2.5 md:gap-3">{children}</span>
       {variant === 'primary' && (
         <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out rounded-[40px]"></div>
       )}
@@ -233,15 +252,15 @@ const Button = ({ children, variant = 'primary', className = '', href, onClick, 
 };
 
 const SectionHeading = ({ subtitle, title, centered = true }) => (
-  <div className={`mb-24 ${centered ? 'text-center' : 'text-left'}`}>
+  <div className={`mb-12 md:mb-16 lg:mb-24 ${centered ? 'text-center' : 'text-left'}`}>
     <motion.div 
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 15 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 1, ease: LUX_EASE }}
-      className={`inline-flex items-center gap-3.5 px-6 py-2 mb-8 text-[9px] font-bold tracking-[0.35em] uppercase text-[#D4AF37] bg-[#D4AF37]/8 rounded-full border border-[#D4AF37]/15 shadow-[0_5px_20px_rgba(212,175,55,0.08)]`}
+      className={`inline-flex items-center gap-3 px-4 md:px-6 py-2 mb-6 md:mb-8 text-[8px] md:text-[9px] font-bold tracking-[0.35em] uppercase text-[#D4AF37] bg-[#D4AF37]/8 rounded-full border border-[#D4AF37]/15 shadow-[0_5px_20px_rgba(212,175,55,0.08)]`}
     >
-      <Sparkles className="w-3.5 h-3.5" />
+      <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5" />
       {subtitle}
     </motion.div>
     <motion.h2 
@@ -249,7 +268,7 @@ const SectionHeading = ({ subtitle, title, centered = true }) => (
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: 0.1, duration: 1.2, ease: LUX_EASE }}
-      className={`text-4xl md:text-6xl lg:text-[5.5rem] font-serif text-white leading-[1.08] drop-shadow-2xl`}
+      className={`text-3xl md:text-5xl lg:text-7xl font-serif text-white leading-[1.12] drop-shadow-2xl`}
     >
       {title}
     </motion.h2>
@@ -258,6 +277,7 @@ const SectionHeading = ({ subtitle, title, centered = true }) => (
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -266,44 +286,92 @@ const Navbar = () => {
   }, []);
 
   return (
-    <motion.nav 
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 1.2, delay: 2.2, ease: LUX_EASE }}
-      className={`fixed top-4 w-full z-50 transition-all duration-700 px-6`}
-    >
-      <div className={`max-w-7xl mx-auto transition-all duration-500 flex justify-between items-center px-8 py-4 rounded-[40px] ${scrolled ? 'bg-[#060606]/85 backdrop-blur-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.6)]' : 'bg-transparent'}`}>
-        <div className="flex items-center gap-4 group cursor-pointer">
-          <div className="w-11 h-11 bg-[#0f0f0f] rounded-full flex items-center justify-center border border-white/10 shadow-lg group-hover:border-[#D4AF37]/40 group-hover:shadow-[0_5px_20px_rgba(212,175,55,0.25)] transition-all duration-500">
-            <Shield className="text-[#D4AF37] w-5 h-5 transition-transform duration-700 group-hover:scale-110" strokeWidth={1.5} />
+    <>
+      <motion.nav 
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1.2, delay: 2.2, ease: LUX_EASE }}
+        className={`fixed top-0 md:top-4 w-full z-50 transition-all duration-700 px-0 md:px-6`}
+      >
+        <div className={`max-w-7xl mx-auto transition-all duration-500 flex justify-between items-center px-6 md:px-8 py-4 rounded-none md:rounded-[40px] ${scrolled || mobileMenuOpen ? 'bg-[#060606]/95 backdrop-blur-3xl border-b md:border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.6)]' : 'bg-transparent'}`}>
+          <a href="#" className="flex items-center gap-3 md:gap-4 group cursor-pointer">
+            <div className="w-10 h-10 md:w-11 h-11 bg-[#0f0f0f] rounded-full flex items-center justify-center border border-white/10 shadow-lg group-hover:border-[#D4AF37]/40 group-hover:shadow-[0_5px_20px_rgba(212,175,55,0.25)] transition-all duration-500">
+              <Shield className="text-[#D4AF37] w-4.5 h-4.5 md:w-5 md:h-5 transition-transform duration-700 group-hover:scale-110" strokeWidth={1.5} />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-base md:text-lg font-serif tracking-[0.2em] text-white uppercase leading-none">Bhavani</span>
+              <span className={`text-[6.5px] md:text-[7px] ${GOLD_TEXT} tracking-[0.42em] uppercase mt-1 md:mt-1.5 font-bold`}>Enterprises</span>
+            </div>
+          </a>
+          
+          <div className="hidden lg:flex items-center gap-2 bg-[#0d0d0d]/90 backdrop-blur-2xl p-1.5 rounded-[40px] border border-white/5 shadow-inner">
+            {['Services', 'About', 'Gallery', 'Reviews'].map((item) => (
+              <a key={item} href={`#${item.toLowerCase()}`} className="px-5 py-2.5 rounded-[40px] text-[9px] font-bold text-gray-400 hover:text-black hover:bg-gradient-to-r hover:from-[#D4AF37] hover:to-[#AA771C] transition-all duration-300 uppercase tracking-[0.25em]">
+                {item}
+              </a>
+            ))}
           </div>
-          <div className="flex flex-col">
-            <span className="text-lg font-serif tracking-[0.2em] text-white uppercase leading-none">Bhavani</span>
-            <span className={`text-[7px] ${GOLD_TEXT} tracking-[0.42em] uppercase mt-1.5 font-bold`}>Enterprises</span>
-          </div>
-        </div>
-        
-        <div className="hidden lg:flex items-center gap-2 bg-[#0d0d0d]/90 backdrop-blur-2xl p-1.5 rounded-[40px] border border-white/5 shadow-inner">
-          {['Services', 'About', 'Gallery', 'Reviews'].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} className="px-6 py-2.5 rounded-[40px] text-[9px] font-bold text-gray-400 hover:text-black hover:bg-gradient-to-r hover:from-[#D4AF37] hover:to-[#AA771C] transition-all duration-300 uppercase tracking-[0.25em]">
-              {item}
-            </a>
-          ))}
-        </div>
 
-        <div className="flex items-center">
-          <Button href={WHATSAPP_LINK} variant="primary" className="hidden sm:flex py-3 px-8 text-[9px]">
-            Audits & Concierge
-          </Button>
+          <div className="flex items-center gap-4">
+            <Button href={WHATSAPP_LINK} variant="primary" className="hidden sm:flex py-2.5 md:py-3 px-6 md:px-8 text-[9px]">
+              Audits & Concierge
+            </Button>
+
+            {/* Premium Mobile Menu Toggle */}
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="flex lg:hidden w-10 h-10 rounded-full bg-[#111] border border-white/10 items-center justify-center text-[#D4AF37] active:scale-95 transition-transform"
+            >
+              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
         </div>
-      </div>
-    </motion.nav>
+      </motion.nav>
+
+      {/* Beautiful Screen-fitting Responsive Drawer */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5, ease: LUX_EASE }}
+            className="fixed inset-0 z-40 bg-black/98 pt-28 px-8 flex flex-col justify-between pb-12 lg:hidden backdrop-blur-3xl"
+          >
+            <div className="flex flex-col gap-6 mt-4">
+              {['Services', 'About', 'Gallery', 'Reviews'].map((item, index) => (
+                <motion.a 
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1, ease: LUX_EASE }}
+                  key={item} 
+                  href={`#${item.toLowerCase()}`}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-2xl font-serif text-white hover:text-[#D4AF37] tracking-widest uppercase border-b border-white/5 pb-4"
+                >
+                  {item}
+                </motion.a>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-4 mt-8">
+              <Button href={WHATSAPP_LINK} variant="primary" className="w-full py-4.5 text-[10px]">
+                WhatsApp Concierge
+              </Button>
+              <Button href={`tel:${PHONE_NUMBER}`} variant="secondary" className="w-full py-4.5 text-[10px]">
+                Call Representative
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#030303] pt-24">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#030303] pt-24 pb-16 md:pb-24">
       {/* Background with Ambient Gradients */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-[#030303] via-transparent to-[#030303] z-10"></div>
@@ -316,25 +384,25 @@ const Hero = () => {
         ></motion.div>
       </div>
 
-      <div className="container mx-auto px-6 relative z-20 pt-16">
+      <div className="container mx-auto px-6 relative z-20 pt-12 md:pt-16">
         <div className="max-w-6xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 2.4, ease: LUX_EASE }}
-            className="inline-flex items-center gap-3 px-6 py-2.5 mb-10 bg-[#0f0f0f]/80 backdrop-blur-2xl border border-white/10 rounded-full shadow-[0_12px_35px_rgba(0,0,0,0.6)]"
+            className="inline-flex items-center gap-3 px-5 md:px-6 py-2 md:py-2.5 mb-8 md:mb-10 bg-[#0f0f0f]/80 backdrop-blur-2xl border border-white/10 rounded-full shadow-[0_12px_35px_rgba(0,0,0,0.6)]"
           >
             <div className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse"></div>
-            <span className="text-[9px] font-bold text-gray-300 tracking-[0.35em] uppercase">Private Estate Environmental Shielding</span>
+            <span className="text-[8px] md:text-[9px] font-bold text-gray-300 tracking-[0.35em] uppercase">Private Estate Environmental Shielding</span>
           </motion.div>
           
           <motion.h1 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 2.6, ease: LUX_EASE }}
-            className="text-5xl md:text-8xl lg:text-[6.8rem] font-serif text-white mb-8 leading-[1.05] tracking-tight drop-shadow-[0_15px_35px_rgba(0,0,0,0.95)]"
+            className="text-4xl sm:text-6xl md:text-8xl lg:text-[6.8rem] font-serif text-white mb-6 md:mb-8 leading-[1.1] tracking-tight drop-shadow-[0_15px_35px_rgba(0,0,0,0.95)]"
           >
-            Luxury Spaces. <br />
+            Luxury Spaces. <br className="hidden sm:inline" />
             <span className="italic text-gray-400 font-light">Flawless</span> <span className={GOLD_TEXT}>Hygiene.</span>
           </motion.h1>
           
@@ -342,7 +410,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 2.8, ease: LUX_EASE }}
-            className="text-lg md:text-xl text-gray-400 mb-16 max-w-2xl mx-auto leading-relaxed font-light tracking-wide drop-shadow-md"
+            className="text-sm md:text-base lg:text-xl text-gray-400 mb-10 md:mb-16 max-w-2xl mx-auto leading-relaxed font-light tracking-wide drop-shadow-md"
           >
             The premium pest defense firm trusted by high-end residences, elite restaurants, and major commercial offices across Miraj.
           </motion.p>
@@ -351,12 +419,12 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 3, ease: LUX_EASE }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-6"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6"
           >
-            <Button href={WHATSAPP_LINK} variant="primary" className="w-full sm:w-auto text-[10px] px-14 py-5">
+            <Button href={WHATSAPP_LINK} variant="primary" className="w-full sm:w-auto text-[10px] px-10 md:px-14 py-4 md:py-5">
               Secure Your Residence
             </Button>
-            <Button href={`tel:${PHONE_NUMBER}`} variant="secondary" className="w-full sm:w-auto text-[10px] px-14 py-5">
+            <Button href={`tel:${PHONE_NUMBER}`} variant="secondary" className="w-full sm:w-auto text-[10px] px-10 md:px-14 py-4 md:py-5">
               <Phone className="w-4 h-4 mr-3" strokeWidth={1.5} /> Call Representative
             </Button>
           </motion.div>
@@ -367,10 +435,10 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 3.2, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3.5"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3.5"
       >
-        <span className="text-[8px] font-bold text-gray-400 uppercase tracking-[0.4em] bg-[#0c0c0c]/80 px-5 py-2 rounded-full border border-white/5 shadow-lg backdrop-blur-md">Scroll Down</span>
-        <div className="w-[1px] h-14 bg-gradient-to-b from-[#D4AF37] to-transparent opacity-40"></div>
+        <span className="text-[7px] md:text-[8px] font-bold text-gray-400 uppercase tracking-[0.4em] bg-[#0c0c0c]/80 px-4 py-2 rounded-full border border-white/5 shadow-lg backdrop-blur-md">Scroll Down</span>
+        <div className="w-[1px] h-10 md:h-14 bg-gradient-to-b from-[#D4AF37] to-transparent opacity-40"></div>
       </motion.div>
     </section>
   );
@@ -378,14 +446,13 @@ const Hero = () => {
 
 const Services = () => {
   return (
-    <section id="services" className="py-48 bg-[#030303] relative z-10">
-      {/* Dynamic Gold Light Flare behind Section */}
+    <section id="services" className="py-24 md:py-36 lg:py-48 bg-[#030303] relative z-10">
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-[#D4AF37]/3 rounded-full blur-[180px] pointer-events-none"></div>
 
       <div className="container mx-auto px-6 lg:px-16 relative">
         <SectionHeading subtitle="Elite Operations" title="Specialized Services" />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {SERVICES.map((service, index) => (
             <motion.div
               key={index}
@@ -393,11 +460,9 @@ const Services = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ delay: index * 0.08, duration: 1.2, ease: LUX_EASE }}
-              className={`group relative flex flex-col justify-between h-[480px] ${CARD_BG} rounded-[40px] overflow-hidden border border-white/5 ${PREMIUM_SHADOW} ${HOVER_GLOW} transition-all duration-700 ease-out transform hover:-translate-y-2.5`}
+              className={`group relative flex flex-col justify-between h-[450px] md:h-[480px] ${CARD_BG} rounded-[40px] overflow-hidden border border-white/5 ${PREMIUM_SHADOW} ${HOVER_GLOW} transition-all duration-700 ease-out transform hover:-translate-y-2.5`}
             >
-              {/* Permanent Beautiful Image in Top Half */}
-              <div className="h-[46%] w-full overflow-hidden relative">
-                {/* Visual Glass Divider */}
+              <div className="h-[44%] w-full overflow-hidden relative">
                 <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-[#121212] to-transparent z-10"></div>
                 <img 
                   src={service.image} 
@@ -407,25 +472,23 @@ const Services = () => {
                 <div className="absolute inset-0 bg-[#D4AF37]/5 group-hover:bg-transparent transition-colors duration-700"></div>
               </div>
 
-              {/* Information Half */}
-              <div className="h-[54%] p-8 flex flex-col justify-between relative z-10">
-                {/* Icon inside styled container */}
-                <div className="absolute -top-7 left-8 w-13 h-13 bg-[#121212] border border-[#D4AF37]/30 rounded-[18px] flex items-center justify-center shadow-lg group-hover:border-[#D4AF37] transition-all duration-500">
+              <div className="h-[56%] p-6 md:p-8 flex flex-col justify-between relative z-10">
+                <div className="absolute -top-7 left-6 md:left-8 w-12 h-12 md:w-13 md:h-13 bg-[#121212] border border-[#D4AF37]/30 rounded-[18px] flex items-center justify-center shadow-lg group-hover:border-[#D4AF37] transition-all duration-500">
                   <span className="text-[#D4AF37] group-hover:scale-110 transition-transform duration-500">
                     {service.icon}
                   </span>
                 </div>
 
-                <div className="mt-6">
-                  <h3 className="text-xl md:text-2xl font-serif text-white mb-3 tracking-wide">{service.title}</h3>
-                  <p className="text-gray-400 text-xs leading-relaxed font-light line-clamp-3">
+                <div className="mt-4">
+                  <h3 className="text-lg md:text-xl lg:text-2xl font-serif text-white mb-2 md:mb-3 tracking-wide">{service.title}</h3>
+                  <p className="text-gray-400 text-[11px] md:text-xs leading-relaxed font-light line-clamp-3">
                     {service.desc}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                <div className="pt-3.5 border-t border-white/5 flex items-center justify-between mt-4">
                   <span className="text-[8px] tracking-[0.2em] uppercase font-bold text-gray-500 group-hover:text-gray-300 transition-colors">Premium Class</span>
-                  <a href={WHATSAPP_LINK} className="inline-flex items-center text-[#D4AF37] text-[9px] font-bold uppercase tracking-[0.2em] bg-[#D4AF37]/8 px-4 py-2 rounded-[40px] border border-[#D4AF37]/15 group-hover:bg-[#D4AF37] group-hover:text-black transition-all duration-500 shadow-md">
+                  <a href={WHATSAPP_LINK} className="inline-flex items-center text-[#D4AF37] text-[8.5px] font-bold uppercase tracking-[0.2em] bg-[#D4AF37]/8 px-3 py-1.5 md:px-4 md:py-2 rounded-[40px] border border-[#D4AF37]/15 group-hover:bg-[#D4AF37] group-hover:text-black transition-all duration-500 shadow-md">
                     Request <ArrowRight className="w-3 h-3 ml-2" />
                   </a>
                 </div>
@@ -440,18 +503,18 @@ const Services = () => {
 
 const About = () => {
   return (
-    <section id="about" className="py-48 bg-[#030303] relative overflow-hidden">
+    <section id="about" className="py-24 md:py-36 lg:py-48 bg-[#030303] relative overflow-hidden">
       <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#D4AF37]/4 rounded-full blur-[140px] -translate-y-1/2 pointer-events-none"></div>
 
       <div className="container mx-auto px-6 lg:px-16 relative z-10">
-        <div className="flex flex-col xl:flex-row gap-24 items-center">
+        <div className="flex flex-col xl:flex-row gap-16 md:gap-24 items-center">
           
           <motion.div 
             initial={{ opacity: 0, scale: 0.96 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1.5, ease: LUX_EASE }}
-            className="xl:w-1/2 relative"
+            className="w-full xl:w-1/2 relative"
           >
             <div className={`relative aspect-[4/5] rounded-[40px] overflow-hidden group ${PREMIUM_SHADOW} border border-white/10`}>
                <img 
@@ -461,23 +524,23 @@ const About = () => {
                />
                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                
-               {/* Floating High-End Card with 40px rounded */}
+               {/* Floating Luxury Card (Fully Mobile Responsive Sizes) */}
                <motion.div 
                  animate={{ y: [0, -12, 0] }}
                  transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-                 className="absolute bottom-8 right-8 z-20 bg-[#0d0d0d]/95 backdrop-blur-2xl border border-white/10 p-8 rounded-[40px] max-w-[320px] shadow-[0_30px_60px_rgba(0,0,0,0.9)]"
+                 className="absolute bottom-4 right-4 sm:bottom-8 sm:right-8 z-20 bg-[#0d0d0d]/95 backdrop-blur-2xl border border-white/10 p-6 sm:p-8 rounded-[30px] sm:rounded-[40px] max-w-[280px] sm:max-w-[320px] shadow-[0_30px_60px_rgba(0,0,0,0.9)]"
                >
-                  <div className="flex items-center gap-5 mb-5">
-                    <div className="w-14 h-14 rounded-[20px] bg-gradient-to-br from-[#D4AF37] to-[#8A5A19] flex items-center justify-center shadow-[0_8px_20px_rgba(212,175,55,0.4)]">
-                      <ShieldCheck className="text-black w-7 h-7" strokeWidth={1.5} />
+                  <div className="flex items-center gap-4 sm:gap-5 mb-4 sm:mb-5">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[15px] sm:rounded-[20px] bg-gradient-to-br from-[#D4AF37] to-[#8A5A19] flex items-center justify-center shadow-[0_8px_20px_rgba(212,175,55,0.4)]">
+                      <ShieldCheck className="text-black w-6 h-6 sm:w-7 sm:h-7" strokeWidth={1.5} />
                     </div>
                     <div>
-                      <div className="text-white font-serif text-3xl mb-0.5 drop-shadow-md">100%</div>
-                      <div className="text-[#D4AF37] text-[8px] uppercase tracking-[0.25em] font-bold">Uncompromising Quality</div>
+                      <div className="text-white font-serif text-2xl sm:text-3xl mb-0.5 drop-shadow-md">100%</div>
+                      <div className="text-[#D4AF37] text-[7.5px] sm:text-[8px] uppercase tracking-[0.25em] font-bold">Uncompromising Quality</div>
                     </div>
                   </div>
-                  <div className="w-full h-[1px] bg-white/10 mb-5"></div>
-                  <p className="text-gray-400 text-xs leading-relaxed font-light">
+                  <div className="w-full h-[1px] bg-white/10 mb-4 sm:mb-5"></div>
+                  <p className="text-gray-400 text-[11px] sm:text-xs leading-relaxed font-light">
                     We deploy ultra-refined chemical protocols specifically curated to keep precious marble, fabrics, and woods unharmed.
                   </p>
                </motion.div>
@@ -489,29 +552,29 @@ const About = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, ease: LUX_EASE }}
-            className="xl:w-1/2 xl:pl-8"
+            className="w-full xl:w-1/2 xl:pl-8"
           >
             <SectionHeading subtitle="Corporate Legacy" title="Perfecting Pure Living" centered={false} />
             
-            <p className="text-2xl md:text-3xl font-serif text-white mb-10 leading-snug drop-shadow-sm">
+            <p className="text-xl md:text-2xl lg:text-3xl font-serif text-white mb-6 md:mb-10 leading-snug drop-shadow-sm">
               We do not merely control pests;<br/>
-              <span className="text-gray-400 italic">we maintain the ultimate standards of wellness.</span>
+              <span className="text-gray-400 italic font-serif">we maintain the ultimate standards of wellness.</span>
             </p>
-            <p className="text-gray-400 mb-16 leading-relaxed text-base font-light">
+            <p className="text-gray-400 mb-10 md:mb-16 leading-relaxed text-sm md:text-base font-light">
               Bhavani Enterprises Miraj leads with modern molecular science and deep operational rigor. Our team of premium environmental consultants manages insect, termite, rodent, and disinfection tasks across luxury properties. Our protocol focuses on absolute safety, zero stains, and total relief.
             </p>
 
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
               {STATS.map((stat, i) => (
-                <div key={i} className={`relative group p-6.5 rounded-[40px] ${CARD_BG} border border-white/5 ${PREMIUM_SHADOW} hover:-translate-y-1 transition-all duration-500`}>
-                  <div className="text-3xl md:text-4xl font-serif text-white mb-2 drop-shadow-md">{stat.value}</div>
-                  <div className="text-[8px] text-[#D4AF37] uppercase tracking-[0.2em] font-bold">{stat.label}</div>
+                <div key={i} className={`relative group p-5 md:p-6.5 rounded-[30px] md:rounded-[40px] ${CARD_BG} border border-white/5 ${PREMIUM_SHADOW} hover:-translate-y-1 transition-all duration-500`}>
+                  <div className="text-2xl md:text-4xl font-serif text-white mb-1.5 md:mb-2 drop-shadow-md">{stat.value}</div>
+                  <div className="text-[7.5px] md:text-[8px] text-[#D4AF37] uppercase tracking-[0.2em] font-bold">{stat.label}</div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-16">
-              <Button href={WHATSAPP_LINK} variant="secondary">
+            <div className="mt-12 md:mt-16 flex justify-center xl:justify-start">
+              <Button href={WHATSAPP_LINK} variant="secondary" className="w-full sm:w-auto">
                 Explore Our Methods
               </Button>
             </div>
@@ -556,7 +619,7 @@ const BeforeAfter = () => {
   }, [isDragging, handleMove]);
 
   return (
-    <section className="py-48 bg-[#010101]">
+    <section className="py-24 md:py-36 lg:py-48 bg-[#010101]">
       <div className="container mx-auto px-6 lg:px-16">
         <SectionHeading subtitle="Perfect Restorations" title="The Visible Relief" />
         
@@ -566,7 +629,7 @@ const BeforeAfter = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1.5, ease: LUX_EASE }}
-            className={`relative w-full aspect-[16/9] md:aspect-[21/9] rounded-[40px] overflow-hidden cursor-ew-resize bg-[#0f0f0f] border border-white/10 ${PREMIUM_SHADOW} shadow-[0_30px_70px_rgba(0,0,0,0.9)]`}
+            className={`relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-[21/9] rounded-[40px] overflow-hidden cursor-ew-resize bg-[#0f0f0f] border border-white/10 ${PREMIUM_SHADOW} shadow-[0_30px_70px_rgba(0,0,0,0.9)]`}
             ref={containerRef}
             onMouseDown={(e) => { setIsDragging(true); handleMove(e.clientX); }}
             onTouchStart={(e) => { setIsDragging(true); handleMove(e.touches[0].clientX); }}
@@ -575,10 +638,10 @@ const BeforeAfter = () => {
             <img 
               src="https://images.unsplash.com/photo-1505693314120-0d443867891c?q=80&w=1200&auto=format&fit=crop" 
               alt="Impeccable Sanitized Bed Chamber"
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover select-none"
               draggable="false"
             />
-            <div className="absolute top-6 right-6 px-5 py-2 bg-black/70 backdrop-blur-xl rounded-full text-white text-[9px] tracking-[0.25em] border border-white/10 uppercase font-bold shadow-lg">
+            <div className="absolute top-4 right-4 sm:top-6 sm:right-6 px-4 py-2 bg-black/70 backdrop-blur-xl rounded-full text-white text-[8px] sm:text-[9px] tracking-[0.25em] border border-white/10 uppercase font-bold shadow-lg">
               After Treatment
             </div>
 
@@ -590,11 +653,11 @@ const BeforeAfter = () => {
               <img 
                 src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop" 
                 alt="Dusty Uncleaned Wooden Loft"
-                className="absolute inset-0 w-full h-full object-cover filter grayscale-[40%] contrast-125"
+                className="absolute inset-0 w-full h-full object-cover filter grayscale-[40%] contrast-125 select-none"
                 draggable="false"
               />
               <div className="absolute inset-0 bg-black/45 mix-blend-multiply"></div>
-              <div className="absolute top-6 left-6 px-5 py-2 bg-black/70 backdrop-blur-xl rounded-full text-white text-[9px] tracking-[0.25em] border border-white/10 uppercase font-bold shadow-lg z-10">
+              <div className="absolute top-4 left-4 sm:top-6 sm:left-6 px-4 py-2 bg-black/70 backdrop-blur-xl rounded-full text-white text-[8px] sm:text-[9px] tracking-[0.25em] border border-white/10 uppercase font-bold shadow-lg z-10 select-none">
                 Before Treatment
               </div>
             </div>
@@ -604,8 +667,8 @@ const BeforeAfter = () => {
               className="absolute top-0 bottom-0 w-[2px] bg-[#D4AF37] cursor-ew-resize z-20 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,1)]"
               style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
             >
-              <div className="w-12 h-12 bg-[#0c0c0c] border-2 border-[#D4AF37] rounded-full flex items-center justify-center shadow-[0_10px_25px_rgba(0,0,0,0.8)] backdrop-blur-md">
-                <GripVertical className="text-[#D4AF37] w-5 h-5" strokeWidth={2} />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#0c0c0c] border-2 border-[#D4AF37] rounded-full flex items-center justify-center shadow-[0_10px_25px_rgba(0,0,0,0.8)] backdrop-blur-md">
+                <GripVertical className="text-[#D4AF37] w-4.5 h-4.5 sm:w-5 sm:h-5" strokeWidth={2} />
               </div>
             </div>
           </motion.div>
@@ -617,12 +680,12 @@ const BeforeAfter = () => {
 
 const Process = () => {
   return (
-    <section id="process" className="py-48 bg-[#030303] relative">
+    <section id="process" className="py-24 md:py-36 lg:py-48 bg-[#030303] relative">
       <div className="container mx-auto px-6 lg:px-16">
         <SectionHeading subtitle="Surgical Execution" title="Our Blueprint" />
         
-        <div className="max-w-6xl mx-auto mt-24">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+        <div className="max-w-6xl mx-auto mt-16 md:mt-24">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 relative">
             <div className="hidden md:block absolute top-12 left-[12%] right-[12%] h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-0"></div>
 
             {PROCESS.map((step, index) => (
@@ -632,12 +695,12 @@ const Process = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.15, duration: 1, ease: LUX_EASE }}
-                className={`relative z-10 flex flex-col items-center text-center p-8 rounded-[40px] ${CARD_BG} border border-white/5 ${PREMIUM_SHADOW} hover:-translate-y-2 transition-all duration-500`}
+                className={`relative z-10 flex flex-col items-center text-center p-6 md:p-8 rounded-[40px] ${CARD_BG} border border-white/5 ${PREMIUM_SHADOW} hover:-translate-y-2 transition-all duration-500`}
               >
-                <div className="w-18 h-18 bg-[#030303] rounded-[20px] border border-[#D4AF37]/30 flex items-center justify-center text-lg font-serif text-[#D4AF37] mb-8 shadow-inner">
+                <div className="w-16 h-16 md:w-18 md:h-18 bg-[#030303] rounded-[20px] border border-[#D4AF37]/30 flex items-center justify-center text-base md:text-lg font-serif text-[#D4AF37] mb-6 md:mb-8 shadow-inner">
                   0{index + 1}
                 </div>
-                <h4 className="text-xl font-serif text-white mb-4 tracking-wide">{step.title}</h4>
+                <h4 className="text-lg md:text-xl font-serif text-white mb-3 md:mb-4 tracking-wide">{step.title}</h4>
                 <p className="text-gray-400 text-xs leading-relaxed font-light">{step.desc}</p>
               </motion.div>
             ))}
@@ -650,11 +713,11 @@ const Process = () => {
 
 const Gallery = () => {
   return (
-    <section id="gallery" className="py-48 bg-[#080808]">
+    <section id="gallery" className="py-24 md:py-36 lg:py-48 bg-[#080808]">
       <div className="container mx-auto px-6 lg:px-16">
         <SectionHeading subtitle="Visual Excellence" title="Our Portfolio" />
         
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8 mt-20">
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 md:gap-8 space-y-6 md:space-y-8 mt-16 md:mt-20">
           {GALLERY_IMAGES.map((src, index) => (
             <motion.div 
               key={index}
@@ -692,21 +755,18 @@ const Testimonials = () => {
   };
 
   return (
-    <section id="reviews" className="py-48 bg-[#030303] relative overflow-hidden">
-      {/* Decorative Blur Backplates */}
+    <section id="reviews" className="py-24 md:py-36 lg:py-48 bg-[#030303] relative overflow-hidden">
       <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-[#D4AF37]/5 rounded-full blur-[140px] pointer-events-none"></div>
       <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-[#D4AF37]/3 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="container mx-auto px-6 lg:px-16 relative z-10">
         <SectionHeading subtitle="Verified Credentials" title="Prestige Client Audits" />
         
-        {/* Editorial Layout Testimonial Slider */}
-        <div className="max-w-5xl mx-auto mt-20 relative">
+        <div className="max-w-5xl mx-auto mt-16 md:mt-20 relative">
           
-          <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-b from-[#111] to-[#080808] p-10 md:p-20 shadow-[0_30px_70px_rgba(0,0,0,0.9)]">
+          <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-b from-[#111] to-[#080808] p-6 sm:p-10 md:p-20 shadow-[0_30px_70px_rgba(0,0,0,0.9)]">
             
-            {/* Watermark Quote Icon */}
-            <Quote className="absolute right-12 top-12 w-32 h-32 text-white/[0.02] pointer-events-none" strokeWidth={1} />
+            <Quote className="absolute right-6 top-6 sm:right-12 sm:top-12 w-20 h-20 md:w-32 md:h-32 text-white/[0.02] pointer-events-none" strokeWidth={1} />
             
             <AnimatePresence mode="wait">
               <motion.div
@@ -715,14 +775,13 @@ const Testimonials = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.8, ease: LUX_EASE }}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center"
+                className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center"
               >
                 {/* Client Portrait */}
                 <div className="lg:col-span-4 flex justify-center lg:justify-start">
                   <div className="relative group">
-                    {/* Golden decorative accent frame */}
                     <div className="absolute -inset-1.5 bg-gradient-to-br from-[#AA771C] to-[#E8C872] rounded-[30px] opacity-30 blur-sm group-hover:opacity-60 transition-opacity duration-700"></div>
-                    <div className="relative w-48 h-56 rounded-[24px] overflow-hidden border border-white/20 shadow-2xl">
+                    <div className="relative w-40 h-48 sm:w-48 sm:h-56 rounded-[24px] overflow-hidden border border-white/20 shadow-2xl">
                       <img 
                         src={REVIEWS[currentIndex].image} 
                         alt={REVIEWS[currentIndex].name} 
@@ -736,34 +795,31 @@ const Testimonials = () => {
                 <div className="lg:col-span-8 flex flex-col justify-between h-full text-center lg:text-left">
                   
                   <div>
-                    {/* Micro Tag for Verified Audit */}
-                    <div className="inline-flex items-center gap-2 bg-[#D4AF37]/10 border border-[#D4AF37]/25 px-4 py-1.5 rounded-full text-[8px] tracking-[0.25em] font-bold text-[#D4AF37] uppercase mb-6 shadow-inner">
+                    <div className="inline-flex items-center gap-2 bg-[#D4AF37]/10 border border-[#D4AF37]/25 px-4 py-1.5 rounded-full text-[7.5px] sm:text-[8px] tracking-[0.25em] font-bold text-[#D4AF37] uppercase mb-4 sm:mb-6 shadow-inner">
                       <Shield className="w-3 h-3 text-[#D4AF37]" strokeWidth={2} />
                       {REVIEWS[currentIndex].verified}
                     </div>
 
-                    {/* Highly Professional Gold Stars */}
-                    <div className="flex justify-center lg:justify-start text-[#D4AF37] gap-1 mb-6">
+                    <div className="flex justify-center lg:justify-start text-[#D4AF37] gap-1 mb-4 sm:mb-6">
                       {[...Array(REVIEWS[currentIndex].rating)].map((_, idx) => (
-                        <Star key={idx} className="w-4 h-4 drop-shadow-[0_0_8px_rgba(212,175,55,0.6)]" fill="currentColor" strokeWidth={0} />
+                        <Star key={idx} className="w-3.5 h-3.5 sm:w-4 sm:h-4 drop-shadow-[0_0_8px_rgba(212,175,55,0.6)]" fill="currentColor" strokeWidth={0} />
                       ))}
                     </div>
 
-                    <p className="text-xl md:text-2xl font-serif text-white leading-relaxed mb-8 italic font-light">
+                    <p className="text-base sm:text-xl md:text-2xl font-serif text-white leading-relaxed mb-6 sm:mb-8 italic font-light">
                       "{REVIEWS[currentIndex].text}"
                     </p>
                   </div>
 
-                  <div className="border-t border-white/10 pt-6 mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <div>
-                      <h4 className="text-lg font-serif text-white tracking-wide">{REVIEWS[currentIndex].name}</h4>
-                      <p className="text-[10px] text-gray-500 uppercase tracking-[0.25em] font-medium mt-1">{REVIEWS[currentIndex].role}</p>
+                  <div className="border-t border-white/10 pt-5 mt-5 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div className="text-center sm:text-left">
+                      <h4 className="text-base md:text-lg font-serif text-white tracking-wide">{REVIEWS[currentIndex].name}</h4>
+                      <p className="text-[9px] sm:text-[10px] text-gray-500 uppercase tracking-[0.25em] font-medium mt-1">{REVIEWS[currentIndex].role}</p>
                     </div>
                     
-                    {/* Swiss Stamp Logo Element */}
                     <div className="hidden sm:flex items-center gap-2 border border-white/10 rounded-xl px-4 py-2 bg-black/40">
-                      <ShieldCheck className="w-4 h-4 text-[#D4AF37]" strokeWidth={1.5} />
-                      <span className="text-[9px] uppercase tracking-[0.15em] font-bold text-gray-400">Pristine Grade A Certified</span>
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" strokeWidth={1.5} />
+                      <span className="text-[8.5px] uppercase tracking-[0.15em] font-bold text-gray-400">Pristine Grade A Certified</span>
                     </div>
                   </div>
 
@@ -773,19 +829,19 @@ const Testimonials = () => {
 
           </div>
 
-          {/* Clean Navigation Controls with Soft Rounded Micro Borders */}
-          <div className="flex justify-center lg:justify-end gap-4 mt-8">
+          {/* Controls */}
+          <div className="flex justify-center lg:justify-end gap-3 md:gap-4 mt-6 md:mt-8">
             <button 
               onClick={prevSlide}
-              className="w-14 h-14 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all duration-300 shadow-md group"
+              className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all duration-300 shadow-md group"
             >
-              <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+              <ChevronLeft className="w-4.5 h-4.5 md:w-5 md:h-5 group-hover:-translate-x-0.5 transition-transform" />
             </button>
             <button 
               onClick={nextSlide}
-              className="w-14 h-14 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all duration-300 shadow-md group"
+              className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all duration-300 shadow-md group"
             >
-              <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+              <ChevronRight className="w-4.5 h-4.5 md:w-5 md:h-5 group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
 
@@ -799,17 +855,17 @@ const FAQAndCTA = () => {
   const [openFaq, setOpenFaq] = useState(0);
 
   return (
-    <section className="py-48 bg-[#010101] relative">
+    <section className="py-24 md:py-36 lg:py-48 bg-[#010101] relative">
       <div className="container mx-auto px-6 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-20 items-start">
           
           {/* FAQ Section */}
-          <div>
-            <div className="mb-12">
-              <span className="inline-flex items-center gap-3 px-6 py-2 mb-6 text-[9px] font-bold tracking-[0.35em] uppercase text-[#D4AF37] bg-[#D4AF37]/8 rounded-full border border-[#D4AF37]/15">
+          <div className="w-full">
+            <div className="mb-10 md:mb-12">
+              <span className="inline-flex items-center gap-3 px-5 py-2 mb-6 text-[8.5px] sm:text-[9px] font-bold tracking-[0.35em] uppercase text-[#D4AF37] bg-[#D4AF37]/8 rounded-full border border-[#D4AF37]/15">
                  Firms Directory
               </span>
-              <h2 className="text-4xl md:text-5xl font-serif text-white leading-snug drop-shadow-lg">Executive <br/>Inquiries</h2>
+              <h2 className="text-3xl md:text-5xl font-serif text-white leading-snug drop-shadow-lg">Executive <br className="hidden sm:inline" />Inquiries</h2>
             </div>
 
             <div className="space-y-4">
@@ -820,15 +876,15 @@ const FAQAndCTA = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08 }}
-                  className={`rounded-[40px] ${CARD_BG} border ${openFaq === i ? 'border-[#D4AF37]/35 shadow-[0_15px_40px_rgba(212,175,55,0.08)]' : 'border-white/5'} overflow-hidden transition-all duration-500`}
+                  className={`rounded-[30px] md:rounded-[40px] ${CARD_BG} border ${openFaq === i ? 'border-[#D4AF37]/35 shadow-[0_15px_40px_rgba(212,175,55,0.08)]' : 'border-white/5'} overflow-hidden transition-all duration-500`}
                 >
                   <button
                     onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                    className="w-full py-6 px-8 flex items-center justify-between text-left focus:outline-none group"
+                    className="w-full py-5 sm:py-6 px-6 sm:px-8 flex items-center justify-between text-left focus:outline-none group"
                   >
-                    <span className={`font-serif text-base md:text-lg transition-colors duration-300 ${openFaq === i ? 'text-[#D4AF37]' : 'text-white group-hover:text-gray-300'}`}>{faq.q}</span>
-                    <div className={`shrink-0 ml-4 w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300 ${openFaq === i ? 'border-[#D4AF37] bg-[#D4AF37]/10' : 'border-white/15 group-hover:border-white/40'}`}>
-                      {openFaq === i ? <span className="text-[#D4AF37] text-lg leading-none">-</span> : <span className="text-white text-lg leading-none">+</span>}
+                    <span className={`font-serif text-sm md:text-base lg:text-lg transition-colors duration-300 ${openFaq === i ? 'text-[#D4AF37]' : 'text-white group-hover:text-gray-300'}`}>{faq.q}</span>
+                    <div className={`shrink-0 ml-4 w-6 h-6 sm:w-7 sm:h-7 rounded-full border flex items-center justify-center transition-all duration-300 ${openFaq === i ? 'border-[#D4AF37] bg-[#D4AF37]/10' : 'border-white/15 group-hover:border-white/40'}`}>
+                      {openFaq === i ? <span className="text-[#D4AF37] text-base leading-none">-</span> : <span className="text-white text-base leading-none">+</span>}
                     </div>
                   </button>
                   <AnimatePresence>
@@ -839,7 +895,7 @@ const FAQAndCTA = () => {
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden"
                       >
-                        <div className="px-8 pb-8 text-gray-400 text-xs md:text-sm leading-relaxed pt-1 font-light">
+                        <div className="px-6 sm:px-8 pb-6 sm:pb-8 text-gray-400 text-xs md:text-sm leading-relaxed pt-1 font-light">
                           {faq.a}
                         </div>
                       </motion.div>
@@ -856,29 +912,29 @@ const FAQAndCTA = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1.2, ease: LUX_EASE }}
-            className="relative lg:mt-24"
+            className="relative lg:mt-24 w-full"
           >
              <div className="absolute inset-0 bg-[#D4AF37] rounded-[40px] blur-[80px] opacity-15"></div>
              
-             <div className={`relative h-full ${CARD_BG} border border-[#D4AF37]/25 p-12 md:p-16 rounded-[40px] flex flex-col justify-center text-center ${PREMIUM_SHADOW} overflow-hidden`}>
+             <div className={`relative h-full ${CARD_BG} border border-[#D4AF37]/25 p-8 sm:p-12 md:p-16 rounded-[40px] flex flex-col justify-center text-center ${PREMIUM_SHADOW} overflow-hidden`}>
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-30"></div>
                 
                 <div className="relative z-10">
-                  <div className="w-20 h-20 rounded-full bg-[#030303] border border-[#D4AF37]/30 mx-auto mb-8 flex items-center justify-center shadow-2xl">
-                    <Phone className="w-8 h-8 text-[#D4AF37] drop-shadow-[0_0_10px_rgba(212,175,55,0.7)] animate-pulse" strokeWidth={1.5} />
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#030303] border border-[#D4AF37]/30 mx-auto mb-6 sm:mb-8 flex items-center justify-center shadow-2xl">
+                    <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-[#D4AF37] drop-shadow-[0_0_10px_rgba(212,175,55,0.7)] animate-pulse" strokeWidth={1.5} />
                   </div>
                   
-                  <h3 className="text-3xl font-serif text-white mb-6 drop-shadow-md">Express Dispatch</h3>
-                  <p className="text-gray-400 mb-10 text-xs md:text-sm leading-relaxed font-light max-w-xs mx-auto">
+                  <h3 className="text-2xl sm:text-3xl font-serif text-white mb-4 sm:mb-6 drop-shadow-md">Express Dispatch</h3>
+                  <p className="text-gray-400 mb-8 sm:mb-10 text-xs sm:text-sm leading-relaxed font-light max-w-xs mx-auto">
                     In cases of severe infestation on high-profile corporate assets, dispatch our emergency unit instantly.
                   </p>
                   
-                  <div className="flex flex-col gap-5">
-                    <Button href={`tel:${PHONE_NUMBER}`} variant="primary" className="w-full shadow-lg">
+                  <div className="flex flex-col gap-4 sm:gap-5">
+                    <Button href={`tel:${PHONE_NUMBER}`} variant="primary" className="w-full shadow-lg py-4">
                       Call Coordinator
                     </Button>
-                    <a href={WHATSAPP_LINK} className="text-white hover:text-[#D4AF37] font-bold uppercase tracking-[0.2em] text-[9px] transition-colors flex items-center justify-center gap-2 mt-2 bg-white/5 py-3 rounded-[40px] border border-white/10">
-                      <MessageCircle className="w-4 h-4" /> Message Direct Desk
+                    <a href={WHATSAPP_LINK} className="text-white hover:text-[#D4AF37] font-bold uppercase tracking-[0.2em] text-[8.5px] sm:text-[9px] transition-colors flex items-center justify-center gap-2 mt-2 bg-white/5 py-3 rounded-[40px] border border-white/10 w-full">
+                      <MessageCircle className="w-3.5 h-3.5" /> Message Direct Desk
                     </a>
                   </div>
                 </div>
@@ -903,7 +959,7 @@ const ContactAndFooter = () => {
   return (
     <>
       {/* Contact Section */}
-      <section id="contact" className="py-48 bg-[#030303] relative">
+      <section id="contact" className="py-24 md:py-36 lg:py-48 bg-[#030303] relative">
         <div className="container mx-auto px-6 lg:px-16 relative z-10">
           <SectionHeading subtitle="Strategic Engagement" title="Request an Assessment" />
           
@@ -912,42 +968,42 @@ const ContactAndFooter = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1.5, ease: LUX_EASE }}
-            className={`max-w-5xl mx-auto ${CARD_BG} p-10 md:p-16 rounded-[40px] border border-white/10 ${PREMIUM_SHADOW}`}
+            className={`max-w-5xl mx-auto ${CARD_BG} p-6 sm:p-10 md:p-16 rounded-[40px] border border-white/10 ${PREMIUM_SHADOW}`}
           >
-            <form onSubmit={handleSubmit} className="space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <div>
-                  <label className="block text-[9px] text-gray-400 mb-3 uppercase tracking-[0.25em] font-bold ml-2">Client Full Name</label>
-                  <input required type="text" placeholder="John Doe" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, name: e.target.value})} />
+                  <label className="block text-[8.5px] md:text-[9px] text-gray-400 mb-2.5 uppercase tracking-[0.25em] font-bold ml-2">Client Full Name</label>
+                  <input required type="text" placeholder="John Doe" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, name: e.target.value})} />
                 </div>
                 <div>
-                  <label className="block text-[9px] text-gray-400 mb-3 uppercase tracking-[0.25em] font-bold ml-2">Confidential Contact</label>
-                  <input required type="tel" placeholder="+91 XXXXX XXXXX" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, phone: e.target.value})} />
+                  <label className="block text-[8.5px] md:text-[9px] text-gray-400 mb-2.5 uppercase tracking-[0.25em] font-bold ml-2">Confidential Contact</label>
+                  <input required type="tel" placeholder="+91 XXXXX XXXXX" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, phone: e.target.value})} />
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <div>
-                  <label className="block text-[9px] text-gray-400 mb-3 uppercase tracking-[0.25em] font-bold ml-2">Requested Service</label>
+                  <label className="block text-[8.5px] md:text-[9px] text-gray-400 mb-2.5 uppercase tracking-[0.25em] font-bold ml-2">Requested Service</label>
                   <div className="relative">
-                    <select required className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-5 text-white focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 appearance-none font-light text-xs md:text-sm cursor-pointer" onChange={e => setFormData({...formData, service: e.target.value})}>
-                      <option value="" className="text-gray-600">Choose Treatment Method</option>
+                    <select required className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 appearance-none font-light text-xs md:text-sm cursor-pointer" onChange={e => setFormData({...formData, service: e.target.value})}>
+                      <option value="" className="text-gray-650">Choose Treatment Method</option>
                       {SERVICES.map(s => <option key={s.title} value={s.title}>{s.title}</option>)}
                     </select>
                     <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-600 w-5 h-5 pointer-events-none" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-[9px] text-gray-400 mb-3 uppercase tracking-[0.25em] font-bold ml-2">Estate / Office Location</label>
-                  <input required type="text" placeholder="Miraj / Sangli Area" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, location: e.target.value})} />
+                  <label className="block text-[8.5px] md:text-[9px] text-gray-400 mb-2.5 uppercase tracking-[0.25em] font-bold ml-2">Estate / Office Location</label>
+                  <input required type="text" placeholder="Miraj / Sangli Area" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, location: e.target.value})} />
                 </div>
               </div>
               <div>
-                <label className="block text-[9px] text-gray-400 mb-3 uppercase tracking-[0.25em] font-bold ml-2">Special Site Concerns</label>
-                <textarea rows="4" placeholder="Briefly specify material concerns, pets, or high ceiling areas..." className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 resize-none font-light text-xs md:text-sm" onChange={e => setFormData({...formData, message: e.target.value})}></textarea>
+                <label className="block text-[8.5px] md:text-[9px] text-gray-400 mb-2.5 uppercase tracking-[0.25em] font-bold ml-2">Special Site Concerns</label>
+                <textarea rows="4" placeholder="Briefly specify material concerns, pets, or high ceiling areas..." className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 resize-none font-light text-xs md:text-sm" onChange={e => setFormData({...formData, message: e.target.value})}></textarea>
               </div>
               
-              <div className="flex justify-center pt-6">
-                <Button type="submit" variant="primary" className="w-full md:w-auto px-16 py-5 text-[10px]">
+              <div className="flex justify-center pt-4">
+                <Button type="submit" variant="primary" className="w-full md:w-auto px-16 py-4.5 text-[10px]">
                   Dispatch Audit Inquiry
                 </Button>
               </div>
@@ -957,35 +1013,37 @@ const ContactAndFooter = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#010101] border-t border-white/10 pt-32 pb-12 relative overflow-hidden">
+      <footer className="bg-[#010101] border-t border-white/10 pt-20 md:pt-32 pb-12 relative overflow-hidden">
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent"></div>
 
         <div className="container mx-auto px-6 lg:px-16 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16 mb-16 md:mb-24">
             
-            <div className="lg:col-span-1 bg-[#090909] p-8 rounded-[40px] border border-white/5 shadow-lg">
-              <div className="flex items-center gap-4 mb-8">
-                <Shield className="text-[#D4AF37] w-8 h-8 drop-shadow-md" strokeWidth={1.5} />
-                <div className="flex flex-col">
-                  <span className="text-xl font-serif tracking-[0.2em] text-white uppercase leading-none">Bhavani</span>
+            <div className="bg-[#090909] p-6 sm:p-8 rounded-[40px] border border-white/5 shadow-lg flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-4 mb-6">
+                  <Shield className="text-[#D4AF37] w-7 h-7 drop-shadow-md" strokeWidth={1.5} />
+                  <div className="flex flex-col">
+                    <span className="text-lg font-serif tracking-[0.2em] text-white uppercase leading-none">Bhavani</span>
+                  </div>
                 </div>
+                <p className="text-gray-400 text-xs leading-loose mb-6 font-light">
+                  Setting the executive standard for pest eradication and environmental hygiene for Miraj's premiere properties.
+                </p>
               </div>
-              <p className="text-gray-400 text-xs leading-loose mb-8 font-light">
-                Setting the executive standard for pest eradication and environmental hygiene for Miraj's premiere properties.
-              </p>
-              <div className="flex gap-4">
-                <a href="#" className="w-10 h-10 rounded-full bg-[#030303] border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all duration-300 shadow-inner"><Facebook size={16} /></a>
-                <a href="#" className="w-10 h-10 rounded-full bg-[#030303] border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all duration-300 shadow-inner"><Instagram size={16} /></a>
-                <a href="#" className="w-10 h-10 rounded-full bg-[#030303] border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all duration-300 shadow-inner"><Twitter size={16} /></a>
+              <div className="flex gap-3">
+                <a href="#" className="w-9 h-9 rounded-full bg-[#030303] border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all duration-300 shadow-inner"><Facebook size={14} /></a>
+                <a href="#" className="w-9 h-9 rounded-full bg-[#030303] border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all duration-300 shadow-inner"><Instagram size={14} /></a>
+                <a href="#" className="w-9 h-9 rounded-full bg-[#030303] border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all duration-300 shadow-inner"><Twitter size={14} /></a>
               </div>
             </div>
 
             <div>
-              <h4 className="text-white font-bold mb-8 uppercase tracking-[0.3em] text-[10px] ml-2">Services</h4>
-              <ul className="space-y-4">
+              <h4 className="text-white font-bold mb-6 md:mb-8 uppercase tracking-[0.3em] text-[10px] ml-2">Services</h4>
+              <ul className="space-y-3.5">
                 {SERVICES.slice(0,5).map(s => (
                   <li key={s.title}>
-                    <a href="#services" className="text-gray-400 hover:text-[#D4AF37] text-sm transition-colors font-light flex items-center gap-2 group">
+                    <a href="#services" className="text-gray-400 hover:text-[#D4AF37] text-xs transition-colors font-light flex items-center gap-2 group">
                       <span className="w-1 h-1 rounded-full bg-white/15 group-hover:bg-[#D4AF37] transition-colors"></span>
                       {s.title}
                     </a>
@@ -995,11 +1053,11 @@ const ContactAndFooter = () => {
             </div>
 
             <div>
-              <h4 className="text-white font-bold mb-8 uppercase tracking-[0.3em] text-[10px] ml-2">Navigation</h4>
-              <ul className="space-y-4">
+              <h4 className="text-white font-bold mb-6 md:mb-8 uppercase tracking-[0.3em] text-[10px] ml-2">Navigation</h4>
+              <ul className="space-y-3.5">
                 {['About Us', 'Process', 'Portfolio', 'Testimonials', 'Contact'].map(l => (
                   <li key={l}>
-                    <a href={`#${l.toLowerCase().split(' ')[0]}`} className="text-gray-400 hover:text-[#D4AF37] text-sm transition-colors font-light flex items-center gap-2 group">
+                    <a href={`#${l.toLowerCase().split(' ')[0]}`} className="text-gray-400 hover:text-[#D4AF37] text-xs transition-colors font-light flex items-center gap-2 group">
                       <span className="w-1 h-1 rounded-full bg-white/15 group-hover:bg-[#D4AF37] transition-colors"></span>
                       {l}
                     </a>
@@ -1009,23 +1067,23 @@ const ContactAndFooter = () => {
             </div>
 
             <div>
-              <h4 className="text-white font-bold mb-8 uppercase tracking-[0.3em] text-[10px] ml-2">Headquarters</h4>
-              <ul className="space-y-6">
-                <li className="flex gap-4 items-start text-gray-400 text-sm font-light bg-[#090909] p-4.5 rounded-[30px] border border-white/5">
-                  <MapPin className="w-5 h-5 text-[#D4AF37] shrink-0 mt-0.5" strokeWidth={1.5} />
+              <h4 className="text-white font-bold mb-6 md:mb-8 uppercase tracking-[0.3em] text-[10px] ml-2">Headquarters</h4>
+              <ul className="space-y-4 md:space-y-6">
+                <li className="flex gap-4 items-start text-gray-400 text-xs font-light bg-[#090909] p-4 rounded-[25px] border border-white/5">
+                  <MapPin className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" strokeWidth={1.5} />
                   <span className="leading-relaxed">Mirchi Market, Miraj - Malgaon Main Rd, Sangli Miraj Kupwad</span>
                 </li>
-                <li className="flex gap-4 items-center text-gray-400 text-sm font-light bg-[#090909] p-4.5 rounded-[30px] border border-white/5">
-                  <Phone className="w-5 h-5 text-[#D4AF37] shrink-0" strokeWidth={1.5} />
+                <li className="flex gap-4 items-center text-gray-400 text-xs font-light bg-[#090909] p-4 rounded-[25px] border border-white/5">
+                  <Phone className="w-4 h-4 text-[#D4AF37] shrink-0" strokeWidth={1.5} />
                   <span className="leading-relaxed">{PHONE_NUMBER}</span>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-gray-500 text-[9px] font-bold uppercase tracking-[0.22em]">© {new Date().getFullYear()} Bhavani Enterprises. All rights reserved.</p>
-            <div className="text-gray-500 text-[9px] flex gap-8 font-bold uppercase tracking-[0.22em]">
+          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-gray-500 text-[8.5px] sm:text-[9px] font-bold uppercase tracking-[0.22em] text-center md:text-left">© {new Date().getFullYear()} Bhavani Enterprises. All rights reserved.</p>
+            <div className="text-gray-500 text-[8.5px] sm:text-[9px] flex gap-6 md:gap-8 font-bold uppercase tracking-[0.22em]">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
             </div>
@@ -1033,15 +1091,15 @@ const ContactAndFooter = () => {
         </div>
       </footer>
 
-      {/* Modern Capsule WhatsApp Button */}
+      {/* Modern Capsule WhatsApp Button (Always visible on mobile bottom, perfectly scaled) */}
       <a 
         href={WHATSAPP_LINK} 
         target="_blank" 
         rel="noopener noreferrer"
-        className="fixed bottom-8 right-8 z-[60] bg-[#25D366] text-black px-7 py-4.5 rounded-[40px] flex items-center gap-3.5 shadow-[0_12px_35px_rgba(37,211,102,0.4)] hover:shadow-[0_18px_45px_rgba(37,211,102,0.6)] hover:-translate-y-1 transition-all duration-500 font-bold text-xs uppercase tracking-[0.18em]"
+        className="fixed bottom-6 right-6 z-[60] bg-[#25D366] text-black px-5 py-3 sm:px-7 sm:py-4 rounded-[40px] flex items-center gap-2 md:gap-3 shadow-[0_12px_35px_rgba(37,211,102,0.4)] hover:shadow-[0_18px_45px_rgba(37,211,102,0.6)] hover:-translate-y-1 transition-all duration-500 font-bold text-[10px] sm:text-xs uppercase tracking-[0.18em]"
       >
-        <MessageCircle className="w-5 h-5" strokeWidth={2.2} />
-        <span className="hidden md:inline">Contact Office</span>
+        <MessageCircle className="w-4.5 h-4.5 sm:w-5 sm:h-5" strokeWidth={2.2} />
+        <span>Contact Office</span>
       </a>
     </>
   );
@@ -1064,9 +1122,9 @@ export default function App() {
       </AnimatePresence>
 
       {!loading && (
-        <div className="bg-[#030303] min-h-screen text-white font-sans selection:bg-[#D4AF37]/35 selection:text-white cursor-none">
+        <div className="bg-[#030303] min-h-screen text-white font-sans selection:bg-[#D4AF37]/35 selection:text-white cursor-none overflow-x-hidden">
           {/* Global cinema grain overlay */}
-          <div className="pointer-events-none fixed inset-0 z-[999] h-full w-full opacity-[0.015] mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
+          <div className="pointer-events-none fixed inset-0 z-[999] h-full w-full opacity-[0.012] mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
 
           <CustomCursor />
           
@@ -1077,7 +1135,7 @@ export default function App() {
           />
           
           <Navbar />
-          <main>
+          <main className="overflow-x-hidden">
             <Hero />
             <Services />
             <About />
