@@ -1,1150 +1,1115 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { 
-  Shield, Clock, Sparkles, Building, Phone, ChevronRight, ChevronLeft,
-  MapPin, Star, ShieldCheck, CheckCircle2, ChevronDown, Instagram, 
-  Facebook, Twitter, Award, Droplets, Bug, ArrowRight,
-  Leaf, GripVertical, MessageCircle, Quote, Menu, X
-} from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
 
-const PHONE_NUMBER = "+919762815757";
-const DISPLAY_PHONE = "+91 97628 15757";
-const WHATSAPP_LINK = `https://wa.me/919762815757?text=Hi%20Aditya%20pest%20control,%20I%20am%20looking%20for%20premium%20pest%20control%20services.`;
+const COLORS = {
+  matteBlack: '#121212',
+  pureWhite: '#FFFFFF',
+  champagneGold: '#D4AF37',
+  softBeige: '#F5F2EB',
+  walnutBrown: '#4E3629',
+  charcoal: '#1E1E1E',
+  goldGradient: 'linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%)'
+};
 
-const GOLD_TEXT = "text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-[#AA771C]";
-const GOLD_BG = "bg-gradient-to-r from-[#AA771C] via-[#E8C872] to-[#8A5A19]";
-const CARD_BG = "bg-gradient-to-br from-[#121212] to-[#080808]";
-const PREMIUM_SHADOW = "shadow-[0_20px_50px_rgba(0,0,0,0.8)]";
-const HOVER_GLOW = "hover:shadow-[0_25px_60px_rgba(212,175,55,0.22)]";
-
-const LUX_EASE = [0.16, 1, 0.3, 1];
-
-const SERVICES = [
-  { 
-    title: "Cockroach Control", 
-    icon: <Bug size={26} strokeWidth={1.5} />, 
-    desc: "Advanced gel baiting and odorless molecular spraying for total eradication in luxury gourmet kitchens.", 
-    image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=1200&auto=format&fit=crop" 
-  },
-  { 
-    title: "Termite Treatment", 
-    icon: <ShieldCheck size={26} strokeWidth={1.5} />, 
-    desc: "Anti-termite precision piping and chemical barriers protecting precious teak wood structures permanently.", 
-    image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop" 
-  },
-  { 
-    title: "Bed Bug Eradication", 
-    icon: <Sparkles size={26} strokeWidth={1.5} />, 
-    desc: "Intensive deep chemical sanitization treatment to eliminate micro-infestations for flawless night rest.", 
-    image: "https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=1200&auto=format&fit=crop" 
-  },
-  { 
-    title: "Rodent Management", 
-    icon: <Bug size={26} strokeWidth={1.5} />, 
-    desc: "Discreet strategic trapping and seamless physical sealing of entryways behind custom cabinetry.", 
-    image: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?q=80&w=1200&auto=format&fit=crop" 
-  },
-  { 
-    title: "Mosquito Fogging", 
-    icon: <Droplets size={26} strokeWidth={1.5} />, 
-    desc: "High-volume thermal fogging and larvicidal controls to keep expansive lawns and pool decks completely pest-free.", 
-    image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=1200&auto=format&fit=crop" 
-  },
-  { 
-    title: "Commercial AMC", 
-    icon: <Building size={26} strokeWidth={1.5} />, 
-    desc: "Tailored continuous Annual Maintenance Contracts designed for corporate towers, premium retail, and luxury hotels.", 
-    image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=1200&auto=format&fit=crop" 
-  },
-  { 
-    title: "Wood Borer Control", 
-    icon: <Leaf size={26} strokeWidth={1.5} />, 
-    desc: "Specialized micro-injection wood preservation treatments to safeguard heritage woodcraft and expensive antiques.", 
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop" 
-  },
-  { 
-    title: "Deep Sanitization", 
-    icon: <Shield size={26} strokeWidth={1.5} />, 
-    desc: "Premium grade eco-certified bacterial and viral disinfection designed for pristine medical facilities and luxury lobbies.", 
-    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1200&auto=format&fit=crop" 
-  }
+const CATEGORIES = [
+  { id: 'sofas', name: 'Luxury Sofas', count: '48+ Designs', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80', desc: 'Italian master craftsmanship meeting supreme velvet lounge comfort.' },
+  { id: 'beds', name: 'Designer Beds', count: '32+ Designs', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80', desc: 'Opulent bedroom sanctuaries tailor-made for royal slumber.' },
+  { id: 'curtains', name: 'Premium Curtains', count: '120+ Fabrics', image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80', desc: 'Elegant bespoke drapes crafted from high-end global silk weaves.' },
+  { id: 'modular', name: 'Modular Furniture', count: '15+ Concepts', image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80', desc: 'Sleek, high-functioning spatial optimizations with marble & wood.' },
+  { id: 'dining', name: 'Dining Sets', count: '24+ Designs', image: 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?auto=format&fit=crop&w=800&q=80', desc: 'Bespoke high-gloss marble and solid walnut dining centerpieces.' },
+  { id: 'office', name: 'Office Furniture', count: '18+ Designs', image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80', desc: 'Executive luxury layouts prioritizing clean lines & absolute ergonomics.' },
+  { id: 'fabrics', name: 'Sofa Fabrics', count: '500+ Texture Rolls', image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80', desc: 'Exclusive imported velvets, jacquards, and premium natural cotton-linen blends.' },
+  { id: 'custom', name: 'Bespoke Designs', count: 'Infinite Options', image: 'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=800&q=80', desc: 'Custom structural furniture custom-scaled precisely for your mansion layout.' }
 ];
 
-const GALLERY_IMAGES = [
-  "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1613545325278-f24b0cae1224?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200&auto=format&fit=crop"
-];
-
-const STATS = [
-  { value: "5000+", label: "Elite Estates Sanitized" },
-  { value: "24/7", label: "Priority Fast Response" },
-  { value: "100%", label: "Govt. Certified Safety" },
-  { value: "15+", label: "Years of Masterpiece Service" }
+const SHOWCASE_PRODUCTS = [
+  { id: 1, name: 'Venezia Royal Velvet Sectional', cat: 'sofas', price: '₹4,50,000', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=1200&q=80' },
+  { id: 2, name: 'Aurelia Champagne Gold Suite', cat: 'beds', price: '₹5,80,000', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80' },
+  { id: 3, name: 'Belgian Pure Silk Drapes', cat: 'curtains', price: '₹1,20,000', image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80' },
+  { id: 4, name: 'Milano Walnut 8-Seater Dining Set', cat: 'dining', price: '₹7,20,000', image: 'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?auto=format&fit=crop&w=1200&q=80' },
+  { id: 5, name: 'Florentine Velvet Accent Armchair', cat: 'sofas', price: '₹1,80,000', image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1200&q=80' },
+  { id: 6, name: 'Imperial Tufted Chesterfield Sofa', cat: 'sofas', price: '₹3,90,000', image: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=1200&q=80' },
+  { id: 7, name: 'Emperor Premium Wooden Headboard', cat: 'beds', price: '₹2,60,000', image: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80' },
+  { id: 8, name: 'Gold-weave Venetian Jacquard Drapes', cat: 'curtains', price: '₹1,95,000', image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80' }
 ];
 
 const REVIEWS = [
-  { 
-    name: "Rahul Singhania", 
-    role: "Heritage Villa Owner, Terwad", 
-    rating: 5, 
-    text: "Truly a masterclass in home safety operations. Aditya pest control handled our family estate with absolute privacy, leaving everything pristine and beautifully scent-free. Highly recommended.", 
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop",
-    verified: "Verified VIP Residence Audit"
-  },
-  { 
-    name: "Dr. Priya Kulkarni", 
-    role: "Founder, Kulkarni Diagnostics", 
-    rating: 5, 
-    text: "Aditya pest control manages our regular sanitation and AMC. Their hygiene protocol exceeds the stringent diagnostic safety standards. It feels like experiencing high-end hospitality in pest control.", 
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop",
-    verified: "Verified Healthcare Facility AMC"
-  },
-  { 
-    name: "Amit Deshmukh", 
-    role: "Chief Exec, Corporate Spaces", 
-    rating: 5, 
-    text: "Extremely meticulous. Their specialized wood borer treatment restored our boardroom teak antiques without any damage. Outstanding execution, absolutely zero operational disruption.", 
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop",
-    verified: "Verified Corporate Asset Protection"
-  }
+  { name: "Rajesh Singhania", role: "Vesu Resident", text: "Harikrishna Furnishing transformed our luxury penthouse with their velvet sofas. The gold-leafing details on our dining table are simply majestic. A truly international, world-class experience right here in Surat!", rating: 5, avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" },
+  { name: "Aaradhya Shah", role: "Adajan Villa Owner", text: "The custom curtains and silk weaves they designed perfectly complement our architectural layout. The team handled precise measurement down to the millimeter. Highly recommended premium brand!", rating: 5, avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" },
+  { name: "Vikramaditya Patel", role: "Real Estate Developer", text: "We partner with Harikrishna for all our luxury model houses in Katargam and VIP Road. Their design aesthetics raise property value instantly. The attention to detail is unmatched in Gujarat.", rating: 5, avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" }
 ];
 
-const FAQS = [
-  { q: "Are your premium chemicals safe for exotic pets and infant rooms?", a: "Yes. We source premium-grade bio-rational formulations approved by the CIBRC. These target pests at microscopic levels but remain completely odorless and safe for infants, premium upholstery, and pets once set." },
-  { q: "Do your service vehicles carry corporate branding?", a: "We understand your need for absolute discretion. Upon request, our elite team can arrive in clean, unmarked luxury utility vehicles to keep your service entirely private." },
-  { q: "Is there a comprehensive warranty on residential termite control?", a: "Yes, our certified termite barriers carry an executive warranty ranging from 1 to 5 years, accompanied by complimentary, scheduled maintenance check-ups." },
-  { q: "How fast can your team respond in Terwad?", a: "We operate a dedicated local rapid-response squad for the Terwad region. Emergencies are addressed with priority same-day scheduling." },
-  { q: "Will chemical spraying stain our imported Italian marble or custom wood finishes?", a: "Not at all. We employ precision gel application, dust baiting, and targeted micro-injection. This leaves zero liquid pooling or stains on expensive marble, teakwood, or silk wallpaper." }
-];
+export default function App() {
+  const [themeMode, setThemeMode] = useState('dark');
+  const [activeTab, setActiveTab] = useState('all');
+  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+  const [chatbotOpen, setChatbotOpen] = useState(false);
+  const [activeReview, setActiveReview] = useState(0);
+  const [chatMessages, setChatMessages] = useState([
+    { role: 'assistant', text: "Welcome to Harikrishna Furnishing. I am Aria, your luxury design concierge. Would you like assistance styling your home today?" }
+  ]);
+  const [userInput, setUserInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [beforeAfterProgress, setBeforeAfterProgress] = useState(50);
+  const [activeModelColor, setActiveModelColor] = useState('#D4AF37'); // Gold default for 3D Customizer
+  const [inquiryName, setInquiryName] = useState('');
+  const [inquiryPhone, setInquiryPhone] = useState('');
+  const [inquiryMsg, setInquiryMsg] = useState('');
+  const [isThreeLoaded, setIsThreeLoaded] = useState(false);
 
-const PROCESS = [
-  { title: "Thermal Auditing", desc: "Using advanced thermal and acoustic sensors to track unseen pest nests behind marble and woodwork." },
-  { title: "Bespoke Architecting", desc: "Formulating a tailored treatment recipe suited precisely to the layout and materials of your property." },
-  { title: "Precision Shielding", desc: "Applying low-odor, targeted treatments with surgical accuracy, leaving the air fresh and surfaces clean." },
-  { title: "Eternal Protection", desc: "Periodic premium monitoring and barrier enforcement for complete, year-round peace of mind." }
-];
-
-const Preloader = ({ onComplete }) => {
-  useEffect(() => {
-    const timer = setTimeout(onComplete, 2400);
-    return () => clearTimeout(timer);
-  }, [onComplete]);
-
-  return (
-    <motion.div 
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0, transition: { duration: 1, ease: LUX_EASE } }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050505]"
-    >
-      <div className="absolute inset-0 opacity-[0.02] mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
-      
-      <div className="relative flex flex-col items-center px-4 w-full max-w-md">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 15 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: LUX_EASE }}
-          className="text-center bg-[#0b0b0b] p-8 md:p-12 rounded-[30px] md:rounded-[40px] shadow-[0_30px_60px_rgba(212,175,55,0.08)] border border-white/5 backdrop-blur-3xl w-full"
-        >
-          <Shield className="w-12 h-12 text-[#D4AF37] mx-auto mb-6 drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]" strokeWidth={1} />
-          <h1 className="text-xl md:text-2xl tracking-[0.2em] font-serif text-white uppercase mb-4 text-center leading-relaxed">ADITYA PEST</h1>
-          <motion.div 
-            initial={{ width: 0 }}
-            animate={{ width: "100%" }}
-            transition={{ delay: 0.6, duration: 1.2, ease: LUX_EASE }}
-            className={`h-[1px] ${GOLD_BG} mb-4`}
-          />
-          <h2 className={`text-[9px] md:text-[10px] tracking-[0.3em] ${GOLD_TEXT} uppercase font-semibold text-center`}>CONTROL</h2>
-        </motion.div>
-      </div>
-    </motion.div>
-  );
-};
-
-const CustomCursor = () => {
-  const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const beforeAfterRef = useRef(null);
+  const canvasRef = useRef(null); 
+  const particlesCanvasRef = useRef(null);
 
   useEffect(() => {
-    const detectTouch = () => {
-      if (window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 1024) {
-        setIsTouchDevice(true);
-      } else {
-        setIsTouchDevice(false);
-      }
+    const handleMouseMove = (e) => {
+      setCursorPos({ x: e.clientX, y: e.clientY });
     };
-    
-    detectTouch();
-    window.addEventListener('resize', detectTouch);
-
-    const updateMousePosition = (e) => {
-      if (!isTouchDevice) setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    
-    const handleMouseOver = (e) => {
-      if (e.target.closest('a') || e.target.closest('button') || e.target.closest('[role="button"]')) {
-        setIsHovering(true);
-      } else {
-        setIsHovering(false);
-      }
-    };
-
-    window.addEventListener('mousemove', updateMousePosition);
-    window.addEventListener('mouseover', handleMouseOver);
-    
-    return () => {
-      window.removeEventListener('resize', detectTouch);
-      window.removeEventListener('mousemove', updateMousePosition);
-      window.removeEventListener('mouseover', handleMouseOver);
-    };
-  }, [isTouchDevice]);
-
-  if (isTouchDevice) return null;
-
-  return (
-    <>
-      <motion.div
-        className="fixed top-0 left-0 w-2.5 h-2.5 bg-[#D4AF37] rounded-full pointer-events-none z-[9999] mix-blend-difference shadow-[0_0_10px_rgba(212,175,55,1)]"
-        animate={{ x: mousePosition.x - 5, y: mousePosition.y - 5, scale: isHovering ? 0 : 1 }}
-        transition={{ type: "spring", stiffness: 1000, damping: 50 }}
-      />
-      <motion.div
-        className="fixed top-0 left-0 w-12 h-12 border border-[#D4AF37]/60 rounded-full pointer-events-none z-[9998] shadow-[0_0_20px_rgba(212,175,55,0.15)]"
-        animate={{
-          x: mousePosition.x - 24, y: mousePosition.y - 24,
-          scale: isHovering ? 1.6 : 1,
-          backgroundColor: isHovering ? 'rgba(212, 175, 55, 0.08)' : 'transparent',
-          borderColor: isHovering ? 'rgba(212, 175, 55, 1)' : 'rgba(212, 175, 55, 0.4)'
-        }}
-        transition={{ type: "spring", stiffness: 350, damping: 28 }}
-      />
-    </>
-  );
-};
-
-const Button = ({ children, variant = 'primary', className = '', href, onClick, type = 'button' }) => {
-  const baseStyle = "relative inline-flex items-center justify-center px-6 md:px-10 py-3.5 md:py-4.5 overflow-hidden text-[10px] md:text-xs uppercase tracking-[0.25em] font-bold rounded-[40px] transition-all duration-500 group";
-  const variants = {
-    primary: `${GOLD_BG} text-black shadow-[0_12px_35px_rgba(212,175,55,0.35)] hover:shadow-[0_18px_45px_rgba(212,175,55,0.55)] hover:-translate-y-1`,
-    secondary: `bg-[#0c0c0c] text-white border border-white/10 hover:border-[#D4AF37]/50 hover:bg-[#141414] shadow-[0_12px_35px_rgba(0,0,0,0.6)] hover:shadow-[0_18px_45px_rgba(212,175,55,0.15)] hover:-translate-y-1 backdrop-blur-xl`,
-    glow: "bg-black text-[#D4AF37] border border-[#D4AF37]/50 hover:bg-[#D4AF37] hover:text-black shadow-[0_12px_35px_rgba(212,175,55,0.25)] hover:-translate-y-1"
-  };
-
-  const Component = href ? 'a' : 'button';
-  const props = href ? { href, target: "_blank", rel: "noopener noreferrer" } : { onClick, type };
-
-  return (
-    <Component className={`${baseStyle} ${variants[variant]} ${className}`} {...props}>
-      <span className="relative z-10 flex items-center gap-2.5 md:gap-3">{children}</span>
-      {variant === 'primary' && (
-        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out rounded-[40px]"></div>
-      )}
-    </Component>
-  );
-};
-
-const SectionHeading = ({ subtitle, title, centered = true }) => (
-  <div className={`mb-12 md:mb-16 lg:mb-24 ${centered ? 'text-center' : 'text-left'}`}>
-    <motion.div 
-      initial={{ opacity: 0, y: 15 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 1, ease: LUX_EASE }}
-      className={`inline-flex items-center gap-3 px-4 md:px-6 py-2 mb-6 md:mb-8 text-[8px] md:text-[9px] font-bold tracking-[0.35em] uppercase text-[#D4AF37] bg-[#D4AF37]/8 rounded-full border border-[#D4AF37]/15 shadow-[0_5px_20px_rgba(212,175,55,0.08)]`}
-    >
-      <Sparkles className="w-3 h-3 md:w-3.5 md:h-3.5" />
-      {subtitle}
-    </motion.div>
-    <motion.h2 
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: 0.1, duration: 1.2, ease: LUX_EASE }}
-      className={`text-3xl md:text-5xl lg:text-7xl font-serif text-white leading-[1.12] drop-shadow-2xl`}
-    >
-      {title}
-    </motion.h2>
-  </div>
-);
-
-const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  return (
-    <>
-      <motion.nav 
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1.2, delay: 2.2, ease: LUX_EASE }}
-        className={`fixed top-0 md:top-4 w-full z-50 transition-all duration-700 px-0 md:px-6`}
-      >
-        <div className={`max-w-7xl mx-auto transition-all duration-500 flex justify-between items-center px-6 md:px-8 py-4 rounded-none md:rounded-[40px] ${scrolled || mobileMenuOpen ? 'bg-[#060606]/95 backdrop-blur-3xl border-b md:border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.6)]' : 'bg-transparent'}`}>
-          <a href="#" className="flex items-center gap-3 md:gap-4 group cursor-pointer">
-            <div className="w-10 h-10 md:w-11 h-11 bg-[#0f0f0f] rounded-full flex items-center justify-center border border-white/10 shadow-lg group-hover:border-[#D4AF37]/40 group-hover:shadow-[0_5px_20px_rgba(212,175,55,0.25)] transition-all duration-500">
-              <Shield className="text-[#D4AF37] w-4.5 h-4.5 md:w-5 md:h-5 transition-transform duration-700 group-hover:scale-110" strokeWidth={1.5} />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm md:text-base font-serif tracking-[0.05em] text-white uppercase leading-tight">ADITYA PEST</span>
-              <span className={`text-[6.5px] md:text-[7px] ${GOLD_TEXT} tracking-[0.1em] uppercase mt-1 font-bold`}>CONTROL</span>
-            </div>
-          </a>
-          
-          <div className="hidden lg:flex items-center gap-2 bg-[#0d0d0d]/90 backdrop-blur-2xl p-1.5 rounded-[40px] border border-white/5 shadow-inner">
-            {['Services', 'About', 'Gallery', 'Reviews'].map((item) => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="px-5 py-2.5 rounded-[40px] text-[9px] font-bold text-gray-400 hover:text-black hover:bg-gradient-to-r hover:from-[#D4AF37] hover:to-[#AA771C] transition-all duration-300 uppercase tracking-[0.25em]">
-                {item}
-              </a>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-4">
-            <Button href={WHATSAPP_LINK} variant="primary" className="hidden sm:flex py-2.5 md:py-3 px-6 md:px-8 text-[9px]">
-              Audits & Concierge
-            </Button>
-
-            {/* Premium Mobile Menu Toggle */}
-            <button 
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="flex lg:hidden w-10 h-10 rounded-full bg-[#111] border border-white/10 items-center justify-center text-[#D4AF37] active:scale-95 transition-transform"
-            >
-              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
-          </div>
-        </div>
-      </motion.nav>
-
-      {/* Screen-fitting Responsive Drawer */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5, ease: LUX_EASE }}
-            className="fixed inset-0 z-40 bg-black/98 pt-28 px-8 flex flex-col justify-between pb-12 lg:hidden backdrop-blur-3xl"
-          >
-            <div className="flex flex-col gap-6 mt-4">
-              {['Services', 'About', 'Gallery', 'Reviews'].map((item, index) => (
-                <motion.a 
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1, ease: LUX_EASE }}
-                  key={item} 
-                  href={`#${item.toLowerCase()}`}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-2xl font-serif text-white hover:text-[#D4AF37] tracking-widest uppercase border-b border-white/5 pb-4"
-                >
-                  {item}
-                </motion.a>
-              ))}
-            </div>
-
-            <div className="flex flex-col gap-4 mt-8">
-              <Button href={WHATSAPP_LINK} variant="primary" className="w-full py-4.5 text-[10px]">
-                WhatsApp Concierge
-              </Button>
-              <Button href={`tel:${PHONE_NUMBER}`} variant="secondary" className="w-full py-4.5 text-[10px]">
-                Call Representative
-              </Button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  );
-};
-
-const Hero = () => {
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#030303] pt-24 pb-16 md:pb-24">
-      {/* Background with Ambient Gradients */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#030303] via-transparent to-[#030303] z-10"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#D4AF37]/5 via-transparent to-[#030303] z-10"></div>
-        <motion.div 
-          initial={{ scale: 1.15 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 15, ease: LUX_EASE }}
-          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center filter grayscale-[45%] contrast-110 opacity-60"
-        ></motion.div>
-      </div>
-
-      <div className="container mx-auto px-6 relative z-20 pt-12 md:pt-16">
-        <div className="max-w-6xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 2.4, ease: LUX_EASE }}
-            className="inline-flex items-center gap-3 px-5 md:px-6 py-2 md:py-2.5 mb-8 md:mb-10 bg-[#0f0f0f]/80 backdrop-blur-2xl border border-white/10 rounded-full shadow-[0_12px_35px_rgba(0,0,0,0.6)]"
-          >
-            <div className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse"></div>
-            <span className="text-[8px] md:text-[9px] font-bold text-gray-300 tracking-[0.35em] uppercase">Private Estate Environmental Shielding</span>
-          </motion.div>
-          
-          <motion.h1 
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 2.6, ease: LUX_EASE }}
-            className="text-4xl sm:text-6xl md:text-8xl lg:text-[6.8rem] font-serif text-white mb-6 md:mb-8 leading-[1.1] tracking-tight drop-shadow-[0_15px_35px_rgba(0,0,0,0.95)]"
-          >
-            Luxury Spaces. <br className="hidden sm:inline" />
-            <span className="italic text-gray-400 font-light">Flawless</span> <span className={GOLD_TEXT}>Hygiene.</span>
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 2.8, ease: LUX_EASE }}
-            className="text-sm md:text-base lg:text-xl text-gray-400 mb-10 md:mb-16 max-w-2xl mx-auto leading-relaxed font-light tracking-wide drop-shadow-md"
-          >
-            The premium pest defense firm trusted by high-end residences, elite restaurants, and major commercial offices across Terwad.
-          </motion.p>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 3, ease: LUX_EASE }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6"
-          >
-            <Button href={WHATSAPP_LINK} variant="primary" className="w-full sm:w-auto text-[10px] px-10 md:px-14 py-4 md:py-5">
-              Secure Your Residence
-            </Button>
-            <Button href={`tel:${PHONE_NUMBER}`} variant="secondary" className="w-full sm:w-auto text-[10px] px-10 md:px-14 py-4 md:py-5">
-              <Phone className="w-4 h-4 mr-3" strokeWidth={1.5} /> Call Representative
-            </Button>
-          </motion.div>
-        </div>
-      </div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 3.2, duration: 1 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3.5"
-      >
-        <span className="text-[7px] md:text-[8px] font-bold text-gray-400 uppercase tracking-[0.4em] bg-[#0c0c0c]/80 px-4 py-2 rounded-full border border-white/5 shadow-lg backdrop-blur-md">Scroll Down</span>
-        <div className="w-[1px] h-10 md:h-14 bg-gradient-to-b from-[#D4AF37] to-transparent opacity-40"></div>
-      </motion.div>
-    </section>
-  );
-};
-
-const Services = () => {
-  return (
-    <section id="services" className="py-24 md:py-36 lg:py-48 bg-[#030303] relative z-10">
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-[#D4AF37]/3 rounded-full blur-[180px] pointer-events-none"></div>
-
-      <div className="container mx-auto px-6 lg:px-16 relative">
-        <SectionHeading subtitle="Elite Operations" title="Specialized Services" />
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {SERVICES.map((service, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: index * 0.08, duration: 1.2, ease: LUX_EASE }}
-              className={`group relative flex flex-col justify-between h-[450px] md:h-[480px] ${CARD_BG} rounded-[40px] overflow-hidden border border-white/5 ${PREMIUM_SHADOW} ${HOVER_GLOW} transition-all duration-700 ease-out transform hover:-translate-y-2.5`}
-            >
-              <div className="h-[44%] w-full overflow-hidden relative">
-                <div className="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-[#121212] to-transparent z-10"></div>
-                <img 
-                  src={service.image} 
-                  alt={service.title} 
-                  className="w-full h-full object-cover filter grayscale-[15%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-[1.8s] ease-out"
-                />
-                <div className="absolute inset-0 bg-[#D4AF37]/5 group-hover:bg-transparent transition-colors duration-700"></div>
-              </div>
-
-              <div className="h-[56%] p-6 md:p-8 flex flex-col justify-between relative z-10">
-                <div className="absolute -top-7 left-6 md:left-8 w-12 h-12 md:w-13 md:h-13 bg-[#121212] border border-[#D4AF37]/30 rounded-[18px] flex items-center justify-center shadow-lg group-hover:border-[#D4AF37] transition-all duration-500">
-                  <span className="text-[#D4AF37] group-hover:scale-110 transition-transform duration-500">
-                    {service.icon}
-                  </span>
-                </div>
-
-                <div className="mt-4">
-                  <h3 className="text-lg md:text-xl lg:text-2xl font-serif text-white mb-2 md:mb-3 tracking-wide">{service.title}</h3>
-                  <p className="text-gray-400 text-[11px] md:text-xs leading-relaxed font-light line-clamp-3">
-                    {service.desc}
-                  </p>
-                </div>
-
-                <div className="pt-3.5 border-t border-white/5 flex items-center justify-between mt-4">
-                  <span className="text-[8px] tracking-[0.2em] uppercase font-bold text-gray-500 group-hover:text-gray-300 transition-colors">Premium Class</span>
-                  <a href={WHATSAPP_LINK} className="inline-flex items-center text-[#D4AF37] text-[8.5px] font-bold uppercase tracking-[0.2em] bg-[#D4AF37]/8 px-3 py-1.5 md:px-4 md:py-2 rounded-[40px] border border-[#D4AF37]/15 group-hover:bg-[#D4AF37] group-hover:text-black transition-all duration-500 shadow-md">
-                    Request <ArrowRight className="w-3 h-3 ml-2" />
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const About = () => {
-  return (
-    <section id="about" className="py-24 md:py-36 lg:py-48 bg-[#030303] relative overflow-hidden">
-      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#D4AF37]/4 rounded-full blur-[140px] -translate-y-1/2 pointer-events-none"></div>
-
-      <div className="container mx-auto px-6 lg:px-16 relative z-10">
-        <div className="flex flex-col xl:flex-row gap-16 md:gap-24 items-center">
-          
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.96 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.5, ease: LUX_EASE }}
-            className="w-full xl:w-1/2 relative"
-          >
-            <div className={`relative aspect-[4/5] rounded-[40px] overflow-hidden group ${PREMIUM_SHADOW} border border-white/10`}>
-               <img 
-                 src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1200&auto=format&fit=crop" 
-                 alt="Luxury Clean Lobby"
-                 className="w-full h-full object-cover filter grayscale-[12%] group-hover:scale-105 transition-transform duration-[2.5s] ease-out opacity-90"
-               />
-               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-               
-               {/* Floating Luxury Card (Fully Mobile Responsive Sizes) */}
-               <motion.div 
-                 animate={{ y: [0, -12, 0] }}
-                 transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-                 className="absolute bottom-4 right-4 sm:bottom-8 sm:right-8 z-20 bg-[#0d0d0d]/95 backdrop-blur-2xl border border-white/10 p-6 sm:p-8 rounded-[30px] sm:rounded-[40px] max-w-[280px] sm:max-w-[320px] shadow-[0_30px_60px_rgba(0,0,0,0.9)]"
-               >
-                  <div className="flex items-center gap-4 sm:gap-5 mb-4 sm:mb-5">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[15px] sm:rounded-[20px] bg-gradient-to-br from-[#D4AF37] to-[#8A5A19] flex items-center justify-center shadow-[0_8px_20px_rgba(212,175,55,0.4)]">
-                      <ShieldCheck className="text-black w-6 h-6 sm:w-7 sm:h-7" strokeWidth={1.5} />
-                    </div>
-                    <div>
-                      <div className="text-white font-serif text-2xl sm:text-3xl mb-0.5 drop-shadow-md">100%</div>
-                      <div className="text-[#D4AF37] text-[7.5px] sm:text-[8px] uppercase tracking-[0.25em] font-bold">Uncompromising Quality</div>
-                    </div>
-                  </div>
-                  <div className="w-full h-[1px] bg-white/10 mb-4 sm:mb-5"></div>
-                  <p className="text-gray-400 text-[11px] sm:text-xs leading-relaxed font-light">
-                    We deploy ultra-refined chemical protocols specifically curated to keep precious marble, fabrics, and woods unharmed.
-                  </p>
-               </motion.div>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.2, ease: LUX_EASE }}
-            className="w-full xl:w-1/2 xl:pl-8"
-          >
-            <SectionHeading subtitle="Corporate Legacy" title="Perfecting Pure Living" centered={false} />
-            
-            <p className="text-xl md:text-2xl lg:text-3xl font-serif text-white mb-6 md:mb-10 leading-snug drop-shadow-sm">
-              We do not merely control pests;<br/>
-              <span className="text-gray-400 italic font-serif">we maintain the ultimate standards of wellness.</span>
-            </p>
-            <p className="text-gray-400 mb-10 md:mb-16 leading-relaxed text-sm md:text-base font-light">
-              Aditya pest control Terwad leads with modern molecular science and deep operational rigor. Our team of premium environmental consultants manages insect, termite, rodent, and disinfection tasks across luxury properties. Our protocol focuses on absolute safety, zero stains, and total relief.
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
-              {STATS.map((stat, i) => (
-                <div key={i} className={`relative group p-5 md:p-6.5 rounded-[30px] md:rounded-[40px] ${CARD_BG} border border-white/5 ${PREMIUM_SHADOW} hover:-translate-y-1 transition-all duration-500`}>
-                  <div className="text-2xl md:text-4xl font-serif text-white mb-1.5 md:mb-2 drop-shadow-md">{stat.value}</div>
-                  <div className="text-[7.5px] md:text-[8px] text-[#D4AF37] uppercase tracking-[0.2em] font-bold">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-12 md:mt-16 flex justify-center xl:justify-start">
-              <Button href={WHATSAPP_LINK} variant="secondary" className="w-full sm:w-auto">
-                Explore Our Methods
-              </Button>
-            </div>
-          </motion.div>
-
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const BeforeAfter = () => {
-  const [sliderPosition, setSliderPosition] = useState(50);
-  const [isDragging, setIsDragging] = useState(false);
-  const containerRef = useRef(null);
-
-  const handleMove = useCallback((clientX) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
-    const percent = (x / rect.width) * 100;
-    setSliderPosition(percent);
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   useEffect(() => {
-    const handleMouseMove = (e) => isDragging && handleMove(e.clientX);
-    const handleTouchMove = (e) => isDragging && handleMove(e.touches[0].clientX);
-    const stopDragging = () => setIsDragging(false);
+    const canvas = particlesCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationId;
+    let particles = [];
 
-    if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('touchmove', handleTouchMove);
-      window.addEventListener('mouseup', stopDragging);
-      window.addEventListener('touchend', stopDragging);
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    for (let i = 0; i < 40; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 0.5,
+        speedX: (Math.random() - 0.5) * 0.2,
+        speedY: (Math.random() - 0.5) * 0.2,
+        alpha: Math.random() * 0.5 + 0.1
+      });
     }
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('mouseup', stopDragging);
-      window.removeEventListener('touchend', stopDragging);
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = themeMode === 'dark' ? 'rgba(212, 175, 55, ' : 'rgba(78, 54, 41, ';
+      particles.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+
+        if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `${ctx.fillStyle.split(', ').slice(0, 3).join(', ')}, ${p.alpha})`;
+        ctx.fill();
+      });
+      animationId = requestAnimationFrame(animate);
     };
-  }, [isDragging, handleMove]);
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      cancelAnimationFrame(animationId);
+    };
+  }, [themeMode]);
+
+  useEffect(() => {
+    if (window.THREE) {
+      setIsThreeLoaded(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+    script.async = true;
+    script.onload = () => {
+      setIsThreeLoaded(true);
+    };
+    document.head.appendChild(script);
+  }, []);
+
+  useEffect(() => {
+    if (!isThreeLoaded || !window.THREE) return;
+    const canvasContainer = canvasRef.current;
+    if (!canvasContainer) return;
+
+    const THREE = window.THREE;
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(themeMode === 'dark' ? 0x121212 : 0xF5F2EB);
+
+    const camera = new THREE.PerspectiveCamera(45, canvasContainer.clientWidth / canvasContainer.clientHeight, 0.1, 100);
+    camera.position.set(0, 1.8, 4);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    
+    canvasContainer.innerHTML = ''; // Ensure canvas clean rebuild
+    canvasContainer.appendChild(renderer.domElement);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    scene.add(ambientLight);
+
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(5, 10, 7);
+    dirLight.castShadow = true;
+    scene.add(dirLight);
+
+    const goldLight = new THREE.PointLight(0xD4AF37, 1.5, 10);
+    goldLight.position.set(-2, 2, 2);
+    scene.add(goldLight);
+
+    const sofaGroup = new THREE.Group();
+
+    const sofaMaterial = new THREE.MeshStandardMaterial({
+      color: new THREE.Color(activeModelColor),
+      roughness: 0.5,
+      metalness: 0.1
+    });
+
+    const woodMaterial = new THREE.MeshStandardMaterial({
+      color: 0x4E3629,
+      roughness: 0.3
+    });
+
+    const goldMaterial = new THREE.MeshStandardMaterial({
+      color: 0xD4AF37,
+      metalness: 0.9,
+      roughness: 0.1
+    });
+
+    const baseGeo = new THREE.BoxGeometry(2.4, 0.15, 0.9);
+    const baseMesh = new THREE.Mesh(baseGeo, woodMaterial);
+    baseMesh.position.y = 0.3;
+    sofaGroup.add(baseMesh);
+
+    const cushionLGeo = new THREE.BoxGeometry(1.1, 0.25, 0.8);
+    const cushionL = new THREE.Mesh(cushionLGeo, sofaMaterial);
+    cushionL.position.set(-0.58, 0.45, 0.02);
+    sofaGroup.add(cushionL);
+
+    const cushionRGeo = new THREE.BoxGeometry(1.1, 0.25, 0.8);
+    const cushionR = new THREE.Mesh(cushionRGeo, sofaMaterial);
+    cushionR.position.set(0.58, 0.45, 0.02);
+    sofaGroup.add(cushionR);
+
+    const backGeo = new THREE.BoxGeometry(2.4, 0.6, 0.25);
+    const back = new THREE.Mesh(backGeo, sofaMaterial);
+    back.position.set(0, 0.75, -0.35);
+    sofaGroup.add(back);
+
+    const armLGeo = new THREE.BoxGeometry(0.2, 0.5, 0.9);
+    const armL = new THREE.Mesh(armLGeo, sofaMaterial);
+    armL.position.set(-1.2, 0.6, 0);
+    sofaGroup.add(armL);
+
+    const armRGeo = new THREE.BoxGeometry(0.2, 0.5, 0.9);
+    const armR = new THREE.Mesh(armRGeo, sofaMaterial);
+    armR.position.set(1.2, 0.6, 0);
+    sofaGroup.add(armR);
+
+    const legGeo = new THREE.CylinderGeometry(0.03, 0.015, 0.3, 8);
+    for (let x of [-1.1, 1.1]) {
+      for (let z of [-0.38, 0.38]) {
+        const leg = new THREE.Mesh(legGeo, goldMaterial);
+        leg.position.set(x, 0.15, z);
+        sofaGroup.add(leg);
+      }
+    }
+
+    scene.add(sofaGroup);
+    sofaGroup.position.y = -0.3;
+
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+
+    const onMouseDown = (e) => {
+      isDragging = true;
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    };
+
+    const onMouseMove = (e) => {
+      if (!isDragging) return;
+      const deltaMove = {
+        x: e.clientX - previousMousePosition.x,
+        y: e.clientY - previousMousePosition.y
+      };
+
+      sofaGroup.rotation.y += deltaMove.x * 0.01;
+      sofaGroup.rotation.x += deltaMove.y * 0.01;
+
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    };
+
+    const onMouseUp = () => {
+      isDragging = false;
+    };
+
+    const onTouchStart = (e) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }
+    };
+
+    const onTouchMove = (e) => {
+      if (!isDragging || e.touches.length !== 1) return;
+      const deltaMove = {
+        x: e.touches[0].clientX - previousMousePosition.x,
+        y: e.touches[0].clientY - previousMousePosition.y
+      };
+
+      sofaGroup.rotation.y += deltaMove.x * 0.01;
+      sofaGroup.rotation.x += deltaMove.y * 0.01;
+
+      previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    };
+
+    canvasContainer.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    canvasContainer.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', onMouseUp);
+
+    const handleResize = () => {
+      if (!canvasContainer || !renderer || !camera) return;
+      camera.aspect = canvasContainer.clientWidth / canvasContainer.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
+    };
+    window.addEventListener('resize', handleResize);
+
+    let animationFrameId;
+    const animateLoop = () => {
+      animationFrameId = requestAnimationFrame(animateLoop);
+      if (!isDragging) {
+        sofaGroup.rotation.y += 0.003;
+      }
+      renderer.render(scene, camera);
+    };
+    animateLoop();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      canvasContainer.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      canvasContainer.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onMouseUp);
+      window.removeEventListener('resize', handleResize);
+      if (renderer.domElement && canvasContainer.contains(renderer.domElement)) {
+        canvasContainer.removeChild(renderer.domElement);
+      }
+      renderer.dispose();
+    };
+  }, [isThreeLoaded, themeMode, activeModelColor]);
+
+  const handleBeforeAfterMove = (clientX) => {
+    if (!beforeAfterRef.current) return;
+    const rect = beforeAfterRef.current.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    setBeforeAfterProgress(percentage);
+  };
+
+  const onSliderTouchMove = (e) => {
+    if (e.touches && e.touches[0]) {
+      handleBeforeAfterMove(e.touches[0].clientX);
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!userInput.trim()) return;
+
+    const userMsg = userInput;
+    setChatMessages(prev => [...prev, { role: 'user', text: userMsg }]);
+    setUserInput('');
+    setIsTyping(true);
+
+    try {
+      const systemPrompt = "You are 'Aria', the ultra-luxury AI Interior Consultant for Harikrishna Furnishing in Surat, Gujarat. Speak in an extremely sophisticated, elegant, and polite manner. Suggest fabric options like silks, velvets, customized Italian sofa frames, custom drapes, and modern layouts. Keep your answers brief (3 sentences max), but exceptionally welcoming. Highlight that we design for top Surat residences.";
+      const userQuery = `User asks: ${userMsg}. Provide a luxury interior styling response.`;
+
+      const apiKey = ""; 
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      const payload = {
+        contents: [{ parts: [{ text: userQuery }] }],
+        systemInstruction: {
+          parts: [{ text: systemPrompt }]
+        }
+      };
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+      const answer = result?.candidates?.[0]?.content?.parts?.[0]?.text || "I would be honored to assist you with bespoke interior layout design. Please join us at our luxury gallery in Katargam, Surat or connect on WhatsApp (+91 88666 60748) to review premium velvet and silk catalogs.";
+
+      setChatMessages(prev => [...prev, { role: 'assistant', text: answer }]);
+    } catch (error) {
+      console.error(error);
+      setChatMessages(prev => [...prev, { role: 'assistant', text: "Forgive me, my connection is momentarily interrupted. Please do message our main design studio directly on WhatsApp at +91 88666 60748 for immediate assistance." }]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
 
   return (
-    <section className="py-24 md:py-36 lg:py-48 bg-[#010101]">
-      <div className="container mx-auto px-6 lg:px-16">
-        <SectionHeading subtitle="Perfect Restorations" title="The Visible Relief" />
-        
-        <div className="max-w-6xl mx-auto">
-          <motion.div 
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.5, ease: LUX_EASE }}
-            className={`relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-[21/9] rounded-[40px] overflow-hidden cursor-ew-resize bg-[#0f0f0f] border border-white/10 ${PREMIUM_SHADOW} shadow-[0_30px_70px_rgba(0,0,0,0.9)]`}
-            ref={containerRef}
-            onMouseDown={(e) => { setIsDragging(true); handleMove(e.clientX); }}
-            onTouchStart={(e) => { setIsDragging(true); handleMove(e.touches[0].clientX); }}
-          >
-            {/* After Image */}
-            <img 
-              src="https://images.unsplash.com/photo-1505693314120-0d443867891c?q=80&w=1200&auto=format&fit=crop" 
-              alt="Impeccable Sanitized Bed Chamber"
-              className="absolute inset-0 w-full h-full object-cover select-none"
-              draggable="false"
-            />
-            <div className="absolute top-4 right-4 sm:top-6 sm:right-6 px-4 py-2 bg-black/70 backdrop-blur-xl rounded-full text-white text-[8px] sm:text-[9px] tracking-[0.25em] border border-white/10 uppercase font-bold shadow-lg">
-              After Treatment
-            </div>
+    <div className={`min-h-screen relative font-sans transition-colors duration-500 overflow-x-hidden select-none ${
+      themeMode === 'dark' ? 'bg-[#121212] text-white' : 'bg-[#F5F2EB] text-[#121212]'
+    }`}>
+      
+      {/* Dynamic Keyframes Injection */}
+      <style>{`
+        @keyframes shine {
+          0% { left: -100%; }
+          100% { left: 150%; }
+        }
+        .animate-shine-hover:hover .shine-overlay {
+          animation: shine 0.9s ease-in-out forwards;
+        }
+      `}</style>
 
-            {/* Before Image */}
-            <div 
-              className="absolute inset-0 w-full h-full overflow-hidden"
-              style={{ clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)` }}
-            >
-              <img 
-                src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1200&auto=format&fit=crop" 
-                alt="Dusty Uncleaned Wooden Loft"
-                className="absolute inset-0 w-full h-full object-cover filter grayscale-[40%] contrast-125 select-none"
-                draggable="false"
-              />
-              <div className="absolute inset-0 bg-black/45 mix-blend-multiply"></div>
-              <div className="absolute top-4 left-4 sm:top-6 sm:left-6 px-4 py-2 bg-black/70 backdrop-blur-xl rounded-full text-white text-[8px] sm:text-[9px] tracking-[0.25em] border border-white/10 uppercase font-bold shadow-lg z-10 select-none">
-                Before Treatment
-              </div>
-            </div>
+      {/* Floating Golden Particles Layer */}
+      <canvas ref={particlesCanvasRef} className="fixed top-0 left-0 w-full h-full pointer-events-none z-0" />
 
-            {/* Slider Handle */}
-            <div 
-              className="absolute top-0 bottom-0 w-[2px] bg-[#D4AF37] cursor-ew-resize z-20 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,1)]"
-              style={{ left: `${sliderPosition}%`, transform: 'translateX(-50%)' }}
+      {/* High-End Floating Golden Glow Cursor */}
+      <div 
+        className="fixed w-8 h-8 rounded-full pointer-events-none z-50 transform -translate-x-1/2 -translate-y-1/2 mix-blend-difference hidden md:block transition-all duration-75"
+        style={{
+          left: `${cursorPos.x}px`,
+          top: `${cursorPos.y}px`,
+          border: `2px solid ${COLORS.champagneGold}`,
+          boxShadow: `0 0 15px ${COLORS.champagneGold}`
+        }}
+      />
+
+      {/* Navigation */}
+      <nav className={`fixed top-0 w-full z-40 backdrop-blur-md border-b transition-all duration-300 ${
+        themeMode === 'dark' ? 'bg-[#121212]/80 border-white/10' : 'bg-[#F5F2EB]/80 border-black/10'
+      }`}>
+        <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+          <div className="flex items-center space-x-2">
+            <span className="text-xl md:text-2xl font-serif tracking-[0.25em] bg-clip-text text-transparent bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] font-bold">
+              HARIKRISHNA
+            </span>
+            <span className="hidden sm:inline text-[9px] uppercase tracking-[0.4em] text-gray-400 border-l border-white/20 pl-2">
+              Furnishing
+            </span>
+          </div>
+
+          <div className="hidden lg:flex items-center space-x-8 text-xs uppercase tracking-widest font-semibold">
+            <a href="#hero" className="hover:text-[#D4AF37] transition">Home</a>
+            <a href="#categories" className="hover:text-[#D4AF37] transition">Collections</a>
+            <a href="#customizer" className="hover:text-[#D4AF37] transition">3D Studio</a>
+            <a href="#transformation" className="hover:text-[#D4AF37] transition">Before/After</a>
+            <a href="#reviews" className="hover:text-[#D4AF37] transition">Testimonials</a>
+            <a href="#contact" className="hover:text-[#D4AF37] transition">Showroom & Maps</a>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <button 
+              onClick={() => setThemeMode(themeMode === 'dark' ? 'light' : 'dark')}
+              className={`p-2.5 rounded-full border transition duration-300 ${
+                themeMode === 'dark' ? 'border-white/10 hover:bg-white/5' : 'border-black/10 hover:bg-black/5'
+              }`}
             >
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-[#0c0c0c] border-2 border-[#D4AF37] rounded-full flex items-center justify-center shadow-[0_10px_25px_rgba(0,0,0,0.8)] backdrop-blur-md">
-                <GripVertical className="text-[#D4AF37] w-4.5 h-4.5 sm:w-5 sm:h-5" strokeWidth={2} />
-              </div>
-            </div>
-          </motion.div>
+              {themeMode === 'dark' ? (
+                <svg className="w-5 h-5 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.364l-.707-.707M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5 text-[#4E3629]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              )}
+            </button>
+
+            {/* Ultra Luxury Button - Nav CTA */}
+            <a 
+              href="https://wa.me/918866660748?text=Hello%20Harikrishna%20Furnishing%2C%20I%20am%20interested%20in%20arranging%20a%20private%20design%20consultation."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative group overflow-hidden bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] bg-[length:200%_auto] hover:bg-right text-black text-[10px] tracking-[0.25em] font-black uppercase px-6 py-3 rounded-[40px] shadow-[0_4px_15px_rgba(212,175,55,0.3)] hover:shadow-[0_4px_30px_rgba(212,175,55,0.7)] transition-all duration-500 transform hover:-translate-y-0.5 flex items-center justify-center animate-shine-hover"
+            >
+              <span className="absolute inset-y-0 left-0 w-16 bg-white/30 transform -skew-x-12 -translate-x-full shine-overlay pointer-events-none" />
+              <span className="relative z-10">Consult Now</span>
+            </a>
+          </div>
         </div>
-      </div>
-    </section>
-  );
-};
+      </nav>
 
-const Process = () => {
-  return (
-    <section id="process" className="py-24 md:py-36 lg:py-48 bg-[#030303] relative">
-      <div className="container mx-auto px-6 lg:px-16">
-        <SectionHeading subtitle="Surgical Execution" title="Our Blueprint" />
+      {/* Hero Section */}
+      <section id="hero" className="relative min-h-screen flex items-center justify-center pt-20 px-6 overflow-hidden">
+        <div className="absolute inset-0 bg-cover bg-center brightness-[0.35] z-0 transition-all duration-1000" style={{
+          backgroundImage: `url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1920&q=80')`
+        }} />
         
-        <div className="max-w-6xl mx-auto mt-16 md:mt-24">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 relative">
-            <div className="hidden md:block absolute top-12 left-[12%] right-[12%] h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-0"></div>
+        <div className="absolute top-1/4 left-10 w-[1px] h-1/2 bg-gradient-to-b from-[#D4AF37]/50 to-transparent animate-pulse" />
+        <div className="absolute bottom-1/4 right-10 w-[1px] h-1/2 bg-gradient-to-t from-[#D4AF37]/50 to-transparent animate-pulse" />
 
-            {PROCESS.map((step, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.15, duration: 1, ease: LUX_EASE }}
-                className={`relative z-10 flex flex-col items-center text-center p-6 md:p-8 rounded-[40px] ${CARD_BG} border border-white/5 ${PREMIUM_SHADOW} hover:-translate-y-2 transition-all duration-500`}
-              >
-                <div className="w-16 h-16 md:w-18 md:h-18 bg-[#030303] rounded-[20px] border border-[#D4AF37]/30 flex items-center justify-center text-base md:text-lg font-serif text-[#D4AF37] mb-6 md:mb-8 shadow-inner">
-                  0{index + 1}
-                </div>
-                <h4 className="text-lg md:text-xl font-serif text-white mb-3 md:mb-4 tracking-wide">{step.title}</h4>
-                <p className="text-gray-400 text-xs leading-relaxed font-light">{step.desc}</p>
-              </motion.div>
+        <div className="relative z-10 max-w-6xl mx-auto text-center space-y-8 mt-12">
+          <div className="inline-flex items-center space-x-2 border border-[#D4AF37]/30 px-5 py-2 rounded-full backdrop-blur-md bg-black/40">
+            <span className="w-2 h-2 rounded-full bg-[#D4AF37] animate-ping" />
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#FCF6BA]">SURAT'S PREMIER LUXURY INTERIOR HUB</span>
+          </div>
+
+          <h1 className="text-4xl md:text-7xl font-serif tracking-tight leading-tight max-w-5xl mx-auto">
+            Luxury Furniture That <br/>
+            <span className="italic bg-clip-text text-transparent bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728]">Defines Your Lifestyle</span>
+          </h1>
+
+          <p className="text-sm md:text-lg max-w-2xl mx-auto font-light text-gray-300 tracking-wide leading-relaxed">
+            Custom-crafted premium living concepts, luxury velvets, and elegant furnishings tailor-made for Surat's most sophisticated residences.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4">
+            {/* Ultra Luxury Button - Hero CTA 1 */}
+            <a 
+              href="#categories" 
+              className="relative group overflow-hidden w-full sm:w-auto px-10 py-5 bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] bg-[length:200%_auto] hover:bg-right text-black text-xs font-black uppercase tracking-[0.2em] rounded-[40px] shadow-[0_4px_20px_rgba(212,175,55,0.4)] hover:shadow-[0_8px_35px_rgba(212,175,55,0.8)] transition-all duration-500 transform hover:-translate-y-0.5 flex items-center justify-center animate-shine-hover"
+            >
+              <span className="absolute inset-y-0 left-0 w-20 bg-white/40 transform -skew-x-12 -translate-x-full shine-overlay pointer-events-none" />
+              <span className="relative z-10">Explore Collections</span>
+            </a>
+
+            {/* Ultra Luxury Button - Hero CTA 2 */}
+            <a 
+              href="https://wa.me/918866660748?text=Hello!%20I%20would%20love%20to%20view%20your%20luxury%20furniture%20catalogues."
+              target="_blank"
+              className="relative group overflow-hidden w-full sm:w-auto px-10 py-5 border border-[#D4AF37] hover:border-transparent bg-black/40 backdrop-blur-md text-white hover:text-black text-xs font-bold uppercase tracking-[0.2em] rounded-[40px] shadow-[0_4px_20px_rgba(212,175,55,0.1)] hover:shadow-[0_8px_35px_rgba(212,175,55,0.5)] bg-gradient-to-r hover:from-[#BF953F] hover:via-[#FCF6BA] hover:to-[#B38728] transition-all duration-500 transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+            >
+              <svg className="w-4 h-4 text-[#D4AF37] group-hover:text-black relative z-10 transition-transform duration-500 group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.022-.008-1.15-.567-1.321-.63-.173-.063-.3-.093-.427.093-.127.188-.49.63-.6.743-.109.115-.22.128-.442.017-1.155-.583-2.03-1.026-2.833-2.424-.075-.133-.075-.244-.02-.37.054-.124.127-.245.19-.367.064-.118.085-.205.127-.341.041-.137.02-.258-.01-.37-.03-.115-.29-.707-.4-.975-.102-.252-.226-.214-.32-.219-.083-.004-.178-.005-.275-.005-.098 0-.258.037-.393.184-.135.148-.52.507-.52 1.238 0 .731.533 1.436.607 1.534.075.099 1.05 1.602 2.54 2.246.354.153.63.245.847.315.356.113.679.097.934.059.285-.043.876-.358 1.002-.704.127-.348.127-.647.088-.707-.038-.06-.153-.095-.27-.154" />
+              </svg>
+              <span className="relative z-10">WhatsApp Inquiry</span>
+            </a>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-16 max-w-5xl mx-auto border-t border-white/10">
+            {[
+              { val: '15+', label: 'Years of Artistry' },
+              { val: '10,000+', label: 'Homes Transformed' },
+              { val: 'Bespoke', label: 'Custom Dimensioning' },
+              { val: 'Katargam', label: 'Luxury Showroom' }
+            ].map((stat, i) => (
+              <div key={i} className="text-center p-6 backdrop-blur-md rounded-[40px] bg-white/5 border border-white/5">
+                <div className="text-2xl md:text-3xl font-serif text-[#D4AF37] font-bold">{stat.val}</div>
+                <div className="text-[10px] tracking-widest text-gray-400 uppercase mt-1">{stat.label}</div>
+              </div>
             ))}
           </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const Gallery = () => {
-  return (
-    <section id="gallery" className="py-24 md:py-36 lg:py-48 bg-[#080808]">
-      <div className="container mx-auto px-6 lg:px-16">
-        <SectionHeading subtitle="Visual Excellence" title="Our Portfolio" />
-        
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 md:gap-8 space-y-6 md:space-y-8 mt-16 md:mt-20">
-          {GALLERY_IMAGES.map((src, index) => (
-            <motion.div 
-              key={index}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08, duration: 1.2 }}
-              className={`relative rounded-[40px] overflow-hidden group break-inside-avoid bg-[#101010] border border-white/5 ${PREMIUM_SHADOW}`}
-            >
-              <img 
-                src={src} 
-                alt={`Premium Treatment Portfolio ${index + 1}`} 
-                className="w-full h-auto transform group-hover:scale-105 transition-transform duration-[2s] ease-out opacity-85 group-hover:opacity-100"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex items-end justify-center pb-8">
-                <span className="text-black bg-[#D4AF37] px-6 py-2.5 rounded-full text-[9px] uppercase tracking-[0.25em] font-bold shadow-lg">Verify Work</span>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const Testimonials = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % REVIEWS.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + REVIEWS.length) % REVIEWS.length);
-  };
-
-  return (
-    <section id="reviews" className="py-24 md:py-36 lg:py-48 bg-[#030303] relative overflow-hidden">
-      <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-[#D4AF37]/5 rounded-full blur-[140px] pointer-events-none"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] bg-[#D4AF37]/3 rounded-full blur-[120px] pointer-events-none"></div>
-
-      <div className="container mx-auto px-6 lg:px-16 relative z-10">
-        <SectionHeading subtitle="Verified Credentials" title="Prestige Client Audits" />
-        
-        <div className="max-w-5xl mx-auto mt-16 md:mt-20 relative">
-          
-          <div className="relative overflow-hidden rounded-[40px] border border-white/10 bg-gradient-to-b from-[#111] to-[#080808] p-6 sm:p-10 md:p-20 shadow-[0_30px_70px_rgba(0,0,0,0.9)]">
-            
-            <Quote className="absolute right-6 top-6 sm:right-12 sm:top-12 w-20 h-20 md:w-32 md:h-32 text-white/[0.02] pointer-events-none" strokeWidth={1} />
-            
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.8, ease: LUX_EASE }}
-                className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center"
-              >
-                {/* Client Portrait */}
-                <div className="lg:col-span-4 flex justify-center lg:justify-start">
-                  <div className="relative group">
-                    <div className="absolute -inset-1.5 bg-gradient-to-br from-[#AA771C] to-[#E8C872] rounded-[30px] opacity-30 blur-sm group-hover:opacity-60 transition-opacity duration-700"></div>
-                    <div className="relative w-40 h-48 sm:w-48 sm:h-56 rounded-[24px] overflow-hidden border border-white/20 shadow-2xl">
-                      <img 
-                        src={REVIEWS[currentIndex].image} 
-                        alt={REVIEWS[currentIndex].name} 
-                        className="w-full h-full object-cover filter grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Audit Review Details */}
-                <div className="lg:col-span-8 flex flex-col justify-between h-full text-center lg:text-left">
-                  
-                  <div>
-                    <div className="inline-flex items-center gap-2 bg-[#D4AF37]/10 border border-[#D4AF37]/25 px-4 py-1.5 rounded-full text-[7.5px] sm:text-[8px] tracking-[0.25em] font-bold text-[#D4AF37] uppercase mb-4 sm:mb-6 shadow-inner">
-                      <Shield className="w-3 h-3 text-[#D4AF37]" strokeWidth={2} />
-                      {REVIEWS[currentIndex].verified}
-                    </div>
-
-                    <div className="flex justify-center lg:justify-start text-[#D4AF37] gap-1 mb-4 sm:mb-6">
-                      {[...Array(REVIEWS[currentIndex].rating)].map((_, idx) => (
-                        <Star key={idx} className="w-3.5 h-3.5 sm:w-4 sm:h-4 drop-shadow-[0_0_8px_rgba(212,175,55,0.6)]" fill="currentColor" strokeWidth={0} />
-                      ))}
-                    </div>
-
-                    <p className="text-base sm:text-xl md:text-2xl font-serif text-white leading-relaxed mb-6 sm:mb-8 italic font-light">
-                      "{REVIEWS[currentIndex].text}"
-                    </p>
-                  </div>
-
-                  <div className="border-t border-white/10 pt-5 mt-5 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <div className="text-center sm:text-left">
-                      <h4 className="text-base md:text-lg font-serif text-white tracking-wide">{REVIEWS[currentIndex].name}</h4>
-                      <p className="text-[9px] sm:text-[10px] text-gray-500 uppercase tracking-[0.25em] font-medium mt-1">{REVIEWS[currentIndex].role}</p>
-                    </div>
-                    
-                    <div className="hidden sm:flex items-center gap-2 border border-white/10 rounded-xl px-4 py-2 bg-black/40">
-                      <ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" strokeWidth={1.5} />
-                      <span className="text-[8.5px] uppercase tracking-[0.15em] font-bold text-gray-400">Pristine Grade A Certified</span>
-                    </div>
-                  </div>
-
-                </div>
-              </motion.div>
-            </AnimatePresence>
-
-          </div>
-
-          {/* Controls */}
-          <div className="flex justify-center lg:justify-end gap-3 md:gap-4 mt-6 md:mt-8">
-            <button 
-              onClick={prevSlide}
-              className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all duration-300 shadow-md group"
-            >
-              <ChevronLeft className="w-4.5 h-4.5 md:w-5 md:h-5 group-hover:-translate-x-0.5 transition-transform" />
-            </button>
-            <button 
-              onClick={nextSlide}
-              className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#111] border border-white/10 flex items-center justify-center text-[#D4AF37] hover:border-[#D4AF37] hover:bg-[#D4AF37] hover:text-black transition-all duration-300 shadow-md group"
-            >
-              <ChevronRight className="w-4.5 h-4.5 md:w-5 md:h-5 group-hover:translate-x-0.5 transition-transform" />
-            </button>
-          </div>
-
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const FAQAndCTA = () => {
-  const [openFaq, setOpenFaq] = useState(0);
-
-  return (
-    <section className="py-24 md:py-36 lg:py-48 bg-[#010101] relative">
-      <div className="container mx-auto px-6 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-20 items-start">
-          
-          {/* FAQ Section */}
-          <div className="w-full">
-            <div className="mb-10 md:mb-12">
-              <span className="inline-flex items-center gap-3 px-5 py-2 mb-6 text-[8.5px] sm:text-[9px] font-bold tracking-[0.35em] uppercase text-[#D4AF37] bg-[#D4AF37]/8 rounded-full border border-[#D4AF37]/15">
-                 Firms Directory
-              </span>
-              <h2 className="text-3xl md:text-5xl font-serif text-white leading-snug drop-shadow-lg">Executive <br className="hidden sm:inline" />Inquiries</h2>
-            </div>
-
-            <div className="space-y-4">
-              {FAQS.map((faq, i) => (
-                <motion.div 
-                  key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
-                  className={`rounded-[30px] md:rounded-[40px] ${CARD_BG} border ${openFaq === i ? 'border-[#D4AF37]/35 shadow-[0_15px_40px_rgba(212,175,55,0.08)]' : 'border-white/5'} overflow-hidden transition-all duration-500`}
-                >
-                  <button
-                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                    className="w-full py-5 sm:py-6 px-6 sm:px-8 flex items-center justify-between text-left focus:outline-none group"
-                  >
-                    <span className={`font-serif text-sm md:text-base lg:text-lg transition-colors duration-300 ${openFaq === i ? 'text-[#D4AF37]' : 'text-white group-hover:text-gray-300'}`}>{faq.q}</span>
-                    <div className={`shrink-0 ml-4 w-6 h-6 sm:w-7 sm:h-7 rounded-full border flex items-center justify-center transition-all duration-300 ${openFaq === i ? 'border-[#D4AF37] bg-[#D4AF37]/10' : 'border-white/15 group-hover:border-white/40'}`}>
-                      {openFaq === i ? <span className="text-[#D4AF37] text-base leading-none">-</span> : <span className="text-white text-base leading-none">+</span>}
-                    </div>
-                  </button>
-                  <AnimatePresence>
-                    {openFaq === i && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="px-6 sm:px-8 pb-6 sm:pb-8 text-gray-400 text-xs md:text-sm leading-relaxed pt-1 font-light">
-                          {faq.a}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          {/* Emergency CTA - 3D Volume Card */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.96 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.2, ease: LUX_EASE }}
-            className="relative lg:mt-24 w-full"
-          >
-             <div className="absolute inset-0 bg-[#D4AF37] rounded-[40px] blur-[80px] opacity-15"></div>
-             
-             <div className={`relative h-full ${CARD_BG} border border-[#D4AF37]/25 p-8 sm:p-12 md:p-16 rounded-[40px] flex flex-col justify-center text-center ${PREMIUM_SHADOW} overflow-hidden`}>
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent opacity-30"></div>
-                
-                <div className="relative z-10">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#030303] border border-[#D4AF37]/30 mx-auto mb-6 sm:mb-8 flex items-center justify-center shadow-2xl">
-                    <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-[#D4AF37] drop-shadow-[0_0_10px_rgba(212,175,55,0.7)] animate-pulse" strokeWidth={1.5} />
-                  </div>
-                  
-                  <h3 className="text-2xl sm:text-3xl font-serif text-white mb-4 sm:mb-6 drop-shadow-md">Express Dispatch</h3>
-                  <p className="text-gray-400 mb-8 sm:mb-10 text-xs sm:text-sm leading-relaxed font-light max-w-xs mx-auto">
-                    In cases of severe infestation on high-profile corporate assets, dispatch our emergency unit instantly.
-                  </p>
-                  
-                  <div className="flex flex-col gap-4 sm:gap-5">
-                    <Button href={`tel:${PHONE_NUMBER}`} variant="primary" className="w-full shadow-lg py-4">
-                      Call Representative
-                    </Button>
-                    <a href={WHATSAPP_LINK} className="text-white hover:text-[#D4AF37] font-bold uppercase tracking-[0.2em] text-[8.5px] sm:text-[9px] transition-colors flex items-center justify-center gap-2 mt-2 bg-white/5 py-3 rounded-[40px] border border-white/10 w-full">
-                      <MessageCircle className="w-3.5 h-3.5" /> Message Direct Desk
-                    </a>
-                  </div>
-                </div>
-             </div>
-          </motion.div>
-
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const ContactAndFooter = () => {
-  const [formData, setFormData] = useState({ name: '', phone: '', service: '', location: '', message: '' });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const text = `*New Assessment Request*%0A%0A*Name:* ${formData.name}%0A*Phone:* ${formData.phone}%0A*Service:* ${formData.service}%0A*Estate Location:* ${formData.location}%0A*Message Details:* ${formData.message}`;
-    window.open(`https://wa.me/919762815757?text=${text}`, '_blank');
-  };
-
-  return (
-    <>
-      {/* Contact Section */}
-      <section id="contact" className="py-24 md:py-36 lg:py-48 bg-[#030303] relative">
-        <div className="container mx-auto px-6 lg:px-16 relative z-10">
-          <SectionHeading subtitle="Strategic Engagement" title="Request an Assessment" />
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.5, ease: LUX_EASE }}
-            className={`max-w-5xl mx-auto ${CARD_BG} p-6 sm:p-10 md:p-16 rounded-[40px] border border-white/10 ${PREMIUM_SHADOW}`}
-          >
-            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                <div>
-                  <label className="block text-[8.5px] md:text-[9px] text-gray-400 mb-2.5 uppercase tracking-[0.25em] font-bold ml-2">Client Full Name</label>
-                  <input required type="text" placeholder="John Doe" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, name: e.target.value})} />
-                </div>
-                <div>
-                  <label className="block text-[8.5px] md:text-[9px] text-gray-400 mb-2.5 uppercase tracking-[0.25em] font-bold ml-2">Confidential Contact</label>
-                  <input required type="tel" placeholder="+91 XXXXX XXXXX" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, phone: e.target.value})} />
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-                <div>
-                  <label className="block text-[8.5px] md:text-[9px] text-gray-400 mb-2.5 uppercase tracking-[0.25em] font-bold ml-2">Requested Service</label>
-                  <div className="relative">
-                    <select required className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 appearance-none font-light text-xs md:text-sm cursor-pointer" onChange={e => setFormData({...formData, service: e.target.value})}>
-                      <option value="" className="text-gray-650">Choose Treatment Method</option>
-                      {SERVICES.map(s => <option key={s.title} value={s.title}>{s.title}</option>)}
-                    </select>
-                    <ChevronDown className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-600 w-5 h-5 pointer-events-none" />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-[8.5px] md:text-[9px] text-gray-400 mb-2.5 uppercase tracking-[0.25em] font-bold ml-2">Estate / Office Location</label>
-                  <input required type="text" placeholder="Terwad / Nearby Area" className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 font-light text-xs md:text-sm" onChange={e => setFormData({...formData, location: e.target.value})} />
-                </div>
-              </div>
-              <div>
-                <label className="block text-[8.5px] md:text-[9px] text-gray-400 mb-2.5 uppercase tracking-[0.25em] font-bold ml-2">Special Site Concerns</label>
-                <textarea rows="4" placeholder="Briefly specify material concerns, pets, or high ceiling areas..." className="w-full bg-[#060606] border border-white/10 rounded-[40px] px-6 py-4 md:py-5 text-white placeholder-gray-700 focus:outline-none focus:border-[#D4AF37] focus:shadow-[0_0_20px_rgba(212,175,55,0.1)] transition-all duration-500 resize-none font-light text-xs md:text-sm" onChange={e => setFormData({...formData, message: e.target.value})}></textarea>
-              </div>
-              
-              <div className="flex justify-center pt-4">
-                <Button type="submit" variant="primary" className="w-full md:w-auto px-16 py-4.5 text-[10px]">
-                  Dispatch Assessment Inquiry
-                </Button>
-              </div>
-            </form>
-          </motion.div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-[#010101] border-t border-white/10 pt-20 md:pt-32 pb-12 relative overflow-hidden">
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-[1px] bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent"></div>
+      {/* Luxury Categories Section */}
+      <section id="categories" className="py-24 px-6 max-w-7xl mx-auto space-y-16">
+        <div className="text-center space-y-4">
+          <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-bold">Uncompromising Craftsmanship</span>
+          <h2 className="text-3xl md:text-5xl font-serif">Luxury Collections</h2>
+          <p className="text-sm text-gray-400 font-light max-w-xl mx-auto">
+            Browse through our premium design systems curated beautifully for elite homes across Vesu, Adajan, and dynamic Surat.
+          </p>
+        </div>
 
-        <div className="container mx-auto px-6 lg:px-16 relative z-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-16 mb-16 md:mb-24">
-            
-            <div className="bg-[#090909] p-6 sm:p-8 rounded-[40px] border border-white/5 shadow-lg flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-4 mb-6">
-                  <Shield className="text-[#D4AF37] w-7 h-7 drop-shadow-md" strokeWidth={1.5} />
-                  <div className="flex flex-col">
-                    <span className="text-sm font-serif tracking-[0.05em] text-white uppercase leading-tight">ADITYA PEST</span>
-                    <span className={`text-[7px] ${GOLD_TEXT} tracking-[0.05em] uppercase mt-1 font-bold`}>CONTROL</span>
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {CATEGORIES.map((cat) => (
+            <div 
+              key={cat.id} 
+              className="group relative h-[450px] rounded-[40px] overflow-hidden bg-black/40 border border-white/10 hover:border-[#D4AF37]/50 shadow-lg hover:shadow-[0_10px_30px_rgba(212,175,55,0.15)] transition-all duration-700 flex flex-col justify-between"
+            >
+              {/* Ultra High Resolution Category Image with Hover Zoom */}
+              <div className="absolute inset-0 z-0">
+                <img 
+                  src={cat.image} 
+                  alt={cat.name} 
+                  className="w-full h-full object-cover transform scale-100 group-hover:scale-110 transition-transform duration-700" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10" />
+              </div>
+
+              <div className="relative z-20 p-8 pt-6 flex justify-between items-start">
+                <span className="text-[10px] uppercase tracking-widest font-bold text-black bg-[#D4AF37] px-3.5 py-1.5 rounded-[40px]">
+                  {cat.count}
+                </span>
+              </div>
+
+              <div className="relative z-20 p-8 space-y-4">
+                <div>
+                  <h3 className="text-2xl font-serif text-white tracking-wide">{cat.name}</h3>
+                  <p className="text-xs text-gray-300 font-light leading-relaxed mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500 line-clamp-3">
+                    {cat.desc}
+                  </p>
                 </div>
-                <p className="text-gray-400 text-xs leading-loose mb-6 font-light">
-                  Setting the executive standard for pest eradication and environmental hygiene for Terwad's premiere properties.
-                </p>
+
+                {/* Ultra Luxury Inner Card Button */}
+                <a 
+                  href={`https://wa.me/918866660748?text=Hello!%20I%20am%20interested%20in%20exploring%20the%20${encodeURIComponent(cat.name)}%20options.`}
+                  target="_blank"
+                  className="relative group/btn overflow-hidden w-full py-3.5 bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] bg-[length:200%_auto] hover:bg-right text-black text-[10px] tracking-[0.2em] font-black uppercase rounded-[40px] text-center shadow-[0_4px_15px_rgba(212,175,55,0.2)] hover:shadow-[0_8px_25px_rgba(212,175,55,0.7)] transition-all duration-500 flex items-center justify-center animate-shine-hover"
+                >
+                  <span className="absolute inset-y-0 left-0 w-12 bg-white/40 transform -skew-x-12 -translate-x-full shine-overlay pointer-events-none" />
+                  <span className="relative z-10">Inquire Fabric & Sizing</span>
+                </a>
               </div>
-              <div className="flex gap-3">
-                <a href="#" className="w-9 h-9 rounded-full bg-[#030303] border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all duration-300 shadow-inner"><Facebook size={14} /></a>
-                <a href="#" className="w-9 h-9 rounded-full bg-[#030303] border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all duration-300 shadow-inner"><Instagram size={14} /></a>
-                <a href="#" className="w-9 h-9 rounded-full bg-[#030303] border border-white/10 flex items-center justify-center text-gray-400 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all duration-300 shadow-inner"><Twitter size={14} /></a>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 3D Customizer Studio */}
+      <section id="customizer" className="py-24 bg-black/20 border-t border-b border-white/5 px-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-bold">Harikrishna 3D Design Lab</span>
+              <h2 className="text-3xl md:text-5xl font-serif">Bespoke Fabric Studio</h2>
+              <p className="text-sm text-gray-400 font-light leading-relaxed">
+                Interact with our flagship modular velvet lounge concept in real-time. Simply drag your cursor or swipe on mobile to rotate, customize color layers, and explore dimensions.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <span className="text-xs uppercase tracking-widest text-[#D4AF37] font-semibold">Select Bespoke Fabrics:</span>
+              <div className="flex flex-wrap gap-4">
+                {[
+                  { color: '#D4AF37', label: 'Gold Suede' },
+                  { color: '#1B4D3E', label: 'Emerald Velvet' },
+                  { color: '#4E3629', label: 'Walnut Chocolate' },
+                  { color: '#121212', label: 'Matte Charcoal' },
+                  { color: '#0F2C59', label: 'Imperial Indigo' }
+                ].map((item, i) => (
+                  <button 
+                    key={i}
+                    onClick={() => setActiveModelColor(item.color)}
+                    style={{ backgroundColor: item.color }}
+                    className={`w-10 h-10 rounded-full border-2 transition-transform transform hover:scale-110 ${
+                      activeModelColor === item.color ? 'border-white ring-2 ring-[#D4AF37]' : 'border-transparent'
+                    }`}
+                    title={item.label}
+                  />
+                ))}
               </div>
             </div>
 
-            <div>
-              <h4 className="text-white font-bold mb-6 md:mb-8 uppercase tracking-[0.3em] text-[10px] ml-2">Services</h4>
-              <ul className="space-y-3.5">
-                {SERVICES.slice(0,5).map(s => (
-                  <li key={s.title}>
-                    <a href="#services" className="text-gray-400 hover:text-[#D4AF37] text-xs transition-colors font-light flex items-center gap-2 group">
-                      <span className="w-1 h-1 rounded-full bg-white/15 group-hover:bg-[#D4AF37] transition-colors"></span>
-                      {s.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+            <div className="p-6 rounded-[40px] bg-white/5 border border-white/5 flex gap-4 items-center">
+              <span className="p-3.5 rounded-full bg-[#D4AF37]/10 text-[#D4AF37]">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </span>
+              <div>
+                <h4 className="text-sm font-semibold tracking-wide text-white">Full-Scale Dimensioning</h4>
+                <p className="text-xs text-gray-400 mt-0.5">Contact our Katargam designers to customize frame width & seat cushions exactly to your layout.</p>
+              </div>
             </div>
 
-            <div>
-              <h4 className="text-white font-bold mb-6 md:mb-8 uppercase tracking-[0.3em] text-[10px] ml-2">Navigation</h4>
-              <ul className="space-y-3.5">
-                {['About Us', 'Process', 'Portfolio', 'Testimonials', 'Contact'].map(l => (
-                  <li key={l}>
-                    <a href={`#${l.toLowerCase().split(' ')[0]}`} className="text-gray-400 hover:text-[#D4AF37] text-xs transition-colors font-light flex items-center gap-2 group">
-                      <span className="w-1 h-1 rounded-full bg-white/15 group-hover:bg-[#D4AF37] transition-colors"></span>
-                      {l}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-white font-bold mb-6 md:mb-8 uppercase tracking-[0.3em] text-[10px] ml-2">Headquarters</h4>
-              <ul className="space-y-4 md:space-y-6">
-                <li className="flex gap-4 items-start text-gray-400 text-xs font-light bg-[#090909] p-4 rounded-[25px] border border-white/5">
-                  <MapPin className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" strokeWidth={1.5} />
-                  <span className="leading-relaxed text-left">Borgaon Road, Terwad, Maharashtra.</span>
-                </li>
-                <li className="flex gap-4 items-center text-gray-400 text-xs font-light bg-[#090909] p-4 rounded-[25px] border border-white/5">
-                  <Phone className="w-4 h-4 text-[#D4AF37] shrink-0" strokeWidth={1.5} />
-                  <span className="leading-relaxed">{DISPLAY_PHONE}</span>
-                </li>
-              </ul>
+            <div className="flex gap-4">
+              {/* Ultra Luxury Button - Customizer Action */}
+              <a 
+                href={`https://wa.me/918866660748?text=Hello%20Harikrishna%20Furnishing%2C%20I%20want%20to%20customize%20the%203D%20sofa%20in%20color%20${encodeURIComponent(activeModelColor)}.`}
+                target="_blank"
+                className="relative group overflow-hidden w-full sm:w-auto px-10 py-5 bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] bg-[length:200%_auto] hover:bg-right text-black text-xs font-black uppercase tracking-[0.2em] rounded-[40px] shadow-[0_4px_15px_rgba(212,175,55,0.3)] hover:shadow-[0_8px_30px_rgba(212,175,55,0.7)] transition-all duration-500 transform hover:-translate-y-0.5 flex items-center justify-center animate-shine-hover"
+              >
+                <span className="absolute inset-y-0 left-0 w-20 bg-white/40 transform -skew-x-12 -translate-x-full shine-overlay pointer-events-none" />
+                <span className="relative z-10">Configure Selection</span>
+              </a>
             </div>
           </div>
 
-          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-500 text-[8.5px] sm:text-[9px] font-bold uppercase tracking-[0.22em] text-center md:text-left">© {new Date().getFullYear()} ADITYA PEST CONTROL. All rights reserved.</p>
-            <div className="text-gray-500 text-[8.5px] sm:text-[9px] flex gap-6 md:gap-8 font-bold uppercase tracking-[0.22em]">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+          {/* Interactive 3D Canvas Box in rounded-[40px] */}
+          <div className="relative h-[480px] lg:h-[550px] w-full rounded-[40px] overflow-hidden border border-white/10 bg-[#121212]/50 shadow-2xl">
+            <div ref={canvasRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
+            
+            <div className="absolute top-6 right-6 flex items-center space-x-2 bg-black/60 backdrop-blur-md px-4 py-2 rounded-[40px] border border-white/10">
+              <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-[10px] tracking-widest font-bold uppercase text-[#D4AF37]">3D Studio Active</span>
             </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Product Showcase */}
+      <section id="showcase" className="py-24 px-6 max-w-7xl mx-auto space-y-16">
+        <div className="text-center space-y-4">
+          <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-bold">Uncompromising Masterpieces</span>
+          <h2 className="text-3xl md:text-5xl font-serif">Curated Showcase</h2>
+        </div>
+
+        {/* Premium Tab Bar in rounded-[40px] */}
+        <div className="flex flex-wrap justify-center gap-4 bg-white/5 border border-white/5 p-3 rounded-[40px] max-w-3xl mx-auto">
+          {['all', 'sofas', 'beds', 'curtains', 'dining'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-6 py-2.5 rounded-[40px] text-xs uppercase tracking-[0.2em] font-bold border transition-all duration-500 transform hover:-translate-y-0.5 ${
+                activeTab === tab 
+                  ? 'bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] text-black border-transparent shadow-[0_4px_15px_rgba(212,175,55,0.4)]' 
+                  : themeMode === 'dark' 
+                    ? 'border-white/10 hover:border-[#D4AF37]/50 hover:bg-white/5 text-white' 
+                    : 'border-black/10 hover:border-[#D4AF37]/50 hover:bg-black/5 text-black'
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* Gallery Grid of rounded-[40px] cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {SHOWCASE_PRODUCTS
+            .filter(p => activeTab === 'all' || p.cat === activeTab)
+            .map((prod) => (
+              <div 
+                key={prod.id} 
+                className="group relative overflow-hidden rounded-[40px] bg-black/30 border border-white/10 p-5 flex flex-col justify-between"
+              >
+                <div className="relative h-64 overflow-hidden rounded-[40px]">
+                  <img 
+                    src={prod.image} 
+                    alt={prod.name} 
+                    className="w-full h-full object-cover transform scale-100 group-hover:scale-105 transition-transform duration-500" 
+                  />
+                  <div className="absolute top-4 right-4">
+                    <span className="px-3 py-1 bg-black/80 text-[#D4AF37] text-[10px] tracking-widest font-bold uppercase rounded-[40px] border border-white/10">
+                      Bespoke
+                    </span>
+                  </div>
+                </div>
+
+                <div className="pt-6 space-y-4">
+                  <div>
+                    <h4 className="text-lg font-serif tracking-wide text-white">{prod.name}</h4>
+                    <p className="text-xs text-gray-400 mt-1">Estimate Frame Cost: {prod.price}</p>
+                  </div>
+
+                  {/* Ultra Luxury Action Button */}
+                  <a 
+                    href={`https://wa.me/918866660748?text=Hello%20Harikrishna%20Furnishing%2C%20I%20am%20interested%20in%20inquiring%20about%20the%20${encodeURIComponent(prod.name)}.`}
+                    target="_blank"
+                    className="relative group overflow-hidden w-full py-3.5 bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] bg-[length:200%_auto] hover:bg-right text-black text-[10px] tracking-[0.2em] font-black uppercase rounded-[40px] text-center shadow-[0_4px_15px_rgba(212,175,55,0.2)] hover:shadow-[0_8px_25px_rgba(212,175,55,0.6)] transition-all duration-500 flex items-center justify-center animate-shine-hover"
+                  >
+                    <span className="absolute inset-y-0 left-0 w-12 bg-white/40 transform -skew-x-12 -translate-x-full shine-overlay pointer-events-none" />
+                    <span className="relative z-10">Send Spec Inquiry</span>
+                  </a>
+                </div>
+              </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Space Transformations */}
+      <section id="transformation" className="py-24 bg-black/10 border-t border-b border-white/5 px-6">
+        <div className="max-w-7xl mx-auto space-y-12">
+          <div className="text-center space-y-4">
+            <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-bold">Unveiling Grandeur</span>
+            <h2 className="text-3xl md:text-5xl font-serif">Space Transformations</h2>
+            <p className="text-sm text-gray-400 font-light max-w-xl mx-auto">
+              Drag the golden central divider to reveal how bare spaces are converted into fully customized, luxurious master sanctuaries.
+            </p>
+          </div>
+
+          {/* Interactive Slider Container with rounded-[40px] */}
+          <div 
+            ref={beforeAfterRef}
+            onMouseMove={(e) => handleBeforeAfterMove(e.clientX)}
+            onTouchMove={onSliderTouchMove}
+            className="relative h-[550px] w-full rounded-[40px] overflow-hidden select-none cursor-ew-resize border border-white/10 shadow-2xl"
+          >
+            {/* Background Empty Room (BEFORE) */}
+            <div className="absolute inset-0 w-full h-full">
+              <img 
+                src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1200&q=80" 
+                alt="Before Bare Space" 
+                className="w-full h-full object-cover brightness-[0.6]" 
+              />
+              <div className="absolute top-6 left-6 bg-black/60 backdrop-blur-md px-4 py-2 rounded-[40px] border border-white/10">
+                <span className="text-xs font-bold uppercase tracking-widest text-[#D4AF37]">Before • Bare Canvas</span>
+              </div>
+            </div>
+
+            {/* Foreground Luxury Living Room (AFTER) */}
+            <div 
+              className="absolute inset-y-0 left-0 h-full overflow-hidden transition-all duration-75"
+              style={{ width: `${beforeAfterProgress}%` }}
+            >
+              <div className="absolute inset-0 w-full h-full" style={{ width: beforeAfterRef.current?.clientWidth || '100%' }}>
+                <img 
+                  src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80" 
+                  alt="After Furnished Living Room" 
+                  className="w-full h-full object-cover brightness-[0.8]" 
+                />
+                <div className="absolute top-6 left-6 bg-[#D4AF37] text-black px-4 py-2 rounded-[40px] shadow-lg">
+                  <span className="text-xs font-bold uppercase tracking-widest">After • Harikrishna Furnishing</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Slider Bar & Controller */}
+            <div 
+              className="absolute inset-y-0 w-1.5 bg-gradient-to-b from-[#BF953F] via-[#FCF6BA] to-[#B38728] z-30 flex items-center justify-center cursor-ew-resize"
+              style={{ left: `${beforeAfterProgress}%` }}
+            >
+              <div className="w-10 h-10 rounded-full bg-black border-2 border-[#D4AF37] text-[#D4AF37] shadow-xl flex items-center justify-center text-xs font-black">
+                ↔
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us */}
+      <section id="why-us" className="py-24 px-6 max-w-7xl mx-auto space-y-16">
+        <div className="text-center space-y-4">
+          <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-bold">Unmatched Sophistication</span>
+          <h2 className="text-3xl md:text-5xl font-serif">Why Harikrishna Furnishing</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { title: "Custom Furniture Design", text: "Every sofa, dining system, and drapery set is custom-dimensioned to fit your residence precisely." },
+            { title: "Premium Quality Materials", text: "We import finest quality Belgian silks, Italian velvets, and solid wood frames to ensure generations of comfort." },
+            { title: "Expert Craftsmanship", text: "Our team consists of master craftsmen who apply meticulous traditional techniques with contemporary modern design aesthetics." }
+          ].map((item, idx) => (
+            <div key={idx} className="p-8 rounded-[40px] bg-white/5 border border-white/5 hover:border-[#D4AF37]/50 shadow-lg transition-all duration-500 space-y-4">
+              <span className="inline-block p-4 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] text-xl font-bold font-serif">
+                0{idx + 1}
+              </span>
+              <h4 className="text-xl font-serif text-white">{item.title}</h4>
+              <p className="text-sm text-gray-400 font-light leading-relaxed">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section id="reviews" className="py-24 bg-black/20 border-t border-b border-white/5 px-6">
+        <div className="max-w-4xl mx-auto text-center space-y-10">
+          <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-bold">Our Illustrious Clientele</span>
+          <h2 className="text-3xl md:text-5xl font-serif">Client Testimonials</h2>
+          
+          <div className="p-8 md:p-12 rounded-[40px] bg-white/5 border border-white/5 relative shadow-xl">
+            <p className="text-lg md:text-2xl font-serif italic text-gray-200 leading-relaxed">
+              "{REVIEWS[activeReview].text}"
+            </p>
+
+            <div className="flex justify-center space-x-1.5 text-yellow-500 py-6">
+              {[...Array(REVIEWS[activeReview].rating)].map((_, i) => (
+                <span key={i} className="text-lg">★</span>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-center space-x-4">
+              <img 
+                src={REVIEWS[activeReview].avatar} 
+                alt={REVIEWS[activeReview].name} 
+                className="w-14 h-14 rounded-full object-cover border-2 border-[#D4AF37]" 
+              />
+              <div className="text-left">
+                <h5 className="font-serif font-bold text-white">{REVIEWS[activeReview].name}</h5>
+                <p className="text-xs text-gray-400">{REVIEWS[activeReview].role}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-center space-x-3">
+            {REVIEWS.map((_, i) => (
+              <button 
+                key={i}
+                onClick={() => setActiveReview(i)}
+                className={`w-3.5 h-3.5 rounded-full border transition-all ${
+                  activeReview === i ? 'bg-[#D4AF37] border-transparent scale-125' : 'bg-transparent border-white/30'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* VIP Design Bookings */}
+      <section className="py-24 px-6 bg-gradient-to-r from-[#121212] via-[#1E1E1E] to-[#121212] border-t border-b border-[#D4AF37]/30 text-center relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#D4AF37]/5 rounded-full filter blur-3xl pointer-events-none" />
+        <div className="relative z-10 max-w-4xl mx-auto space-y-8">
+          <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-bold">VIP Private Design Bookings</span>
+          <h2 className="text-4xl md:text-6xl font-serif">Design Your Dream Mansion Today</h2>
+          <p className="text-sm md:text-base text-gray-300 font-light max-w-xl mx-auto">
+            Book an absolute private styling session with our lead architects and engineers in Surat. Walk away with exact structural drafts and velvet fabric templates.
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-6 pt-4">
+            {/* Ultra Luxury Button - CTA Book Booking */}
+            <a 
+              href="https://wa.me/918866660748?text=Hello!%20I%20would%20love%20to%20arrange%20a%20site%20visit%20or%20luxury%20design%20consultation."
+              target="_blank"
+              className="relative group overflow-hidden px-10 py-5 bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] bg-[length:200%_auto] hover:bg-right text-black text-xs font-black uppercase tracking-[0.2em] rounded-[40px] shadow-[0_4px_20px_rgba(212,175,55,0.4)] hover:shadow-[0_8px_35px_rgba(212,175,55,0.8)] transition-all duration-500 transform hover:-translate-y-0.5 flex items-center justify-center animate-shine-hover"
+            >
+              <span className="absolute inset-y-0 left-0 w-20 bg-white/40 transform -skew-x-12 -translate-x-full shine-overlay pointer-events-none" />
+              <span className="relative z-10">WhatsApp Studio Booking</span>
+            </a>
+
+            {/* Ultra Luxury Button - Call CTA */}
+            <a 
+              href="tel:+918866660748" 
+              className="relative group overflow-hidden px-10 py-5 border border-white/20 hover:border-transparent bg-black/40 backdrop-blur-md text-white hover:text-black text-xs font-bold uppercase tracking-[0.2em] rounded-[40px] shadow-[0_4px_25px_rgba(212,175,55,0.15)] hover:shadow-[0_8px_35px_rgba(212,175,55,0.5)] bg-gradient-to-r hover:from-[#BF953F] hover:via-[#FCF6BA] hover:to-[#B38728] transition-all duration-500 transform hover:-translate-y-0.5 flex items-center justify-center animate-shine-hover"
+            >
+              <span className="absolute inset-y-0 left-0 w-20 bg-white/40 transform -skew-x-12 -translate-x-full shine-overlay pointer-events-none" />
+              <span className="relative z-10">Call Live Concierge</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Showroom & Maps */}
+      <section id="contact" className="py-24 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
+        
+        {/* Contact Form Box in rounded-[40px] */}
+        <div className="space-y-8 bg-white/5 border border-white/10 p-8 md:p-12 rounded-[40px] shadow-2xl">
+          <div className="space-y-4">
+            <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-bold">Premium Inquiries</span>
+            <h2 className="text-3xl md:text-5xl font-serif">Submit Design Customization</h2>
+          </div>
+
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            const fullMsg = `Hello Harikrishna Furnishing. My Name is: ${inquiryName}, Phone: ${inquiryPhone}. I want to inquire about: ${inquiryMsg}`;
+            window.open(`https://wa.me/918866660748?text=${encodeURIComponent(fullMsg)}`, '_blank');
+          }} className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-xs uppercase tracking-widest text-gray-400 font-semibold">Your Full Name</label>
+                <input 
+                  type="text" 
+                  value={inquiryName}
+                  onChange={(e) => setInquiryName(e.target.value)}
+                  placeholder="e.g. Amit Patel" 
+                  required
+                  className="w-full p-4 rounded-2xl bg-[#121212] border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37]" 
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs uppercase tracking-widest text-gray-400 font-semibold">Phone Number</label>
+                <input 
+                  type="tel" 
+                  value={inquiryPhone}
+                  onChange={(e) => setInquiryPhone(e.target.value)}
+                  placeholder="e.g. +91 99999 99999" 
+                  required
+                  className="w-full p-4 rounded-2xl bg-[#121212] border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37]" 
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs uppercase tracking-widest text-gray-400 font-semibold">Dimensions & Preferred Sizing Specifications</label>
+              <textarea 
+                value={inquiryMsg}
+                onChange={(e) => setInquiryMsg(e.target.value)}
+                placeholder="Describe your dining room space, Italian velvet choices, or custom silk curtain layout configurations..." 
+                rows={5}
+                required
+                className="w-full p-4 rounded-2xl bg-[#121212] border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#D4AF37]" 
+              />
+            </div>
+
+            {/* Ultra Luxury Form Button */}
+            <button 
+              type="submit" 
+              className="relative group overflow-hidden w-full py-5 bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] bg-[length:200%_auto] hover:bg-right text-black font-black uppercase text-xs tracking-[0.25em] rounded-[40px] shadow-[0_4px_15px_rgba(212,175,55,0.3)] hover:shadow-[0_8px_30px_rgba(212,175,55,0.8)] transition-all duration-500 transform hover:-translate-y-0.5 animate-shine-hover"
+            >
+              <span className="absolute inset-y-0 left-0 w-24 bg-white/40 transform -skew-x-12 -translate-x-full shine-overlay pointer-events-none" />
+              <span className="relative z-10">Send Spec via WhatsApp</span>
+            </button>
+          </form>
+        </div>
+
+        {/* Location & Contact Information Column */}
+        <div className="flex flex-col justify-between space-y-8">
+          <div className="space-y-6">
+            <span className="text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-bold">Physical Gallery</span>
+            <h2 className="text-3xl md:text-5xl font-serif">Visit Our Showroom</h2>
+            <p className="text-sm text-gray-400 font-light leading-relaxed">
+              We warmly welcome you to witness real-life leather, velvet texture rolls and majestic furniture mockups first hand.
+            </p>
+
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3 text-sm">
+                <span className="text-[#D4AF37] text-lg">📍</span>
+                <div>
+                  <p className="font-semibold text-white">Harikrishna Furnishing Studio</p>
+                  <p className="text-xs text-gray-400">Purshotam Park Society, Lalita Chowk Road, Opp. Kantareshvar Mahadev Temple, Katargam, Surat, Gujarat, India</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-3 text-sm">
+                <span className="text-[#D4AF37] text-lg">📞</span>
+                <p className="text-xs text-gray-400">Call Us Direct: +91 88666 60748</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Interactive Google Maps Frame in rounded-[40px] */}
+          <div className="relative h-80 rounded-[40px] overflow-hidden border border-white/10 shadow-xl">
+            <iframe 
+              title="Harikrishna Furnishing Location Map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3719.167812975877!2d72.825225!3d21.22524!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04f26b5aa619d%3A0xe7261d71bcbbd5ab!2sHarikrishna%20Furnishing!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
+              className="w-full h-full border-0 brightness-75 contrast-125"
+              allowFullScreen="" 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </div>
+
+      </section>
+
+      {/* Floating Chat Concierge */}
+      <div className="fixed bottom-6 right-6 z-50">
+        
+        <button 
+          onClick={() => setChatbotOpen(!chatbotOpen)}
+          className="relative group overflow-hidden p-4 rounded-full bg-gradient-to-r from-[#BF953F] via-[#FCF6BA] to-[#B38728] bg-[length:200%_auto] hover:bg-right text-black shadow-2xl hover:scale-110 transition-transform duration-500 animate-shine-hover"
+        >
+          <span className="absolute inset-y-0 left-0 w-12 bg-white/40 transform -skew-x-12 -translate-x-full shine-overlay pointer-events-none" />
+          {chatbotOpen ? (
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] uppercase tracking-widest font-black hidden md:inline-block pl-2">AI Interior Concierge</span>
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+            </div>
+          )}
+        </button>
+
+        {chatbotOpen && (
+          <div className="absolute bottom-20 right-0 w-[350px] md:w-[420px] rounded-[40px] overflow-hidden shadow-2xl bg-[#1E1E1E] border border-[#D4AF37]/30 flex flex-col z-50 animate-fade-in">
+            {/* Header */}
+            <div className="p-6 bg-gradient-to-r from-[#121212] to-[#1e1e1e] border-b border-[#D4AF37]/20 flex justify-between items-center">
+              <div>
+                <h4 className="text-sm font-serif text-[#D4AF37] font-semibold tracking-wide">Aria • Design Concierge</h4>
+                <p className="text-[10px] text-gray-400 tracking-widest uppercase">Harikrishna Bespoke Services</p>
+              </div>
+              <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-ping" />
+            </div>
+
+            {/* Message Box */}
+            <div className="p-6 h-80 overflow-y-auto space-y-4 bg-[#121212]">
+              {chatMessages.map((msg, idx) => (
+                <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`p-4 rounded-3xl text-xs max-w-[85%] leading-relaxed ${
+                    msg.role === 'user' 
+                      ? 'bg-[#D4AF37] text-black font-semibold rounded-tr-none' 
+                      : 'bg-white/5 border border-white/10 text-gray-200 rounded-tl-none'
+                  }`}>
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="p-3 bg-white/5 rounded-xl text-xs text-gray-400 animate-pulse">
+                    Aria is configuring a personalized design draft...
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Input Panel */}
+            <div className="p-4 border-t border-[#D4AF37]/20 bg-[#1E1E1E] flex gap-2">
+              <input 
+                type="text"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' ? handleSendMessage() : null}
+                placeholder="Ask about fabrics, sizes, or showroom..."
+                className="flex-1 p-3 rounded-2xl bg-black text-white text-xs border border-white/10 focus:outline-none focus:border-[#D4AF37]"
+              />
+              <button 
+                onClick={handleSendMessage}
+                className="p-3 bg-[#D4AF37] hover:bg-[#D4AF37]/80 text-black rounded-xl transition"
+              >
+                <svg className="w-4 h-4 transform rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <footer className="border-t border-white/10 bg-black py-20 px-6 text-gray-400">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+          
+          <div className="space-y-4">
+            <h3 className="text-lg font-serif text-white tracking-widest uppercase">HARIKRISHNA</h3>
+            <p className="text-xs font-light leading-relaxed">
+              Surat's leading ultra-luxury home furnishing brand. We design and deliver custom architectural furniture that stands the test of time.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-xs uppercase tracking-widest text-white font-bold">Collections</h4>
+            <ul className="space-y-2 text-xs">
+              <li><a href="#categories" className="hover:text-white transition">Italian Velvet Sofas</a></li>
+              <li><a href="#categories" className="hover:text-white transition">Royal Bed Sanctuary</a></li>
+              <li><a href="#categories" className="hover:text-white transition">Silk Drapery & Curtains</a></li>
+              <li><a href="#categories" className="hover:text-white transition">Bespoke Living Rooms</a></li>
+            </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-xs uppercase tracking-widest text-white font-bold">Contact Studio</h4>
+            <p className="text-xs font-light">
+              📍 Katargam, Surat, Gujarat, India <br/>
+              📞 +91 88666 60748 <br/>
+              📧 concierge@harikrishnafurnishings.com
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-xs uppercase tracking-widest text-white font-bold">Elite Experiences</h4>
+            <p className="text-xs font-light leading-relaxed">
+              Reach out via our WhatsApp integration for premium catalog selections and priority dimensioning appointments.
+            </p>
+            <div className="pt-2">
+              <a 
+                href="https://wa.me/918866660748" 
+                target="_blank"
+                className="inline-block text-xs font-bold text-[#D4AF37] hover:underline uppercase tracking-widest"
+              >
+                Access Catalog Files →
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="max-w-7xl mx-auto border-t border-white/5 mt-16 pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-500 gap-4">
+          <p>© 2026 Harikrishna Furnishing. Crafted to World-Class Luxury Standards.</p>
+          <div className="flex gap-6">
+            <a href="#hero" className="hover:text-white transition">Back to Top</a>
+            <span>•</span>
+            <a href="https://wa.me/918866660748" className="hover:text-white transition">WhatsApp Admin Support</a>
           </div>
         </div>
       </footer>
 
-      {/* Modern Capsule WhatsApp Button (Always visible on mobile bottom, perfectly scaled) */}
-      <a 
-        href={WHATSAPP_LINK} 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-[60] bg-[#25D366] text-black px-5 py-3 sm:px-7 sm:py-4 rounded-[40px] flex items-center gap-2 md:gap-3 shadow-[0_12px_35px_rgba(37,211,102,0.4)] hover:shadow-[0_18px_45px_rgba(37,211,102,0.6)] hover:-translate-y-1 transition-all duration-500 font-bold text-[10px] sm:text-xs uppercase tracking-[0.18em]"
-      >
-        <MessageCircle className="w-4.5 h-4.5 sm:w-5 sm:h-5" strokeWidth={2.2} />
-        <span>Contact Office</span>
-      </a>
-    </>
-  );
-};
-
-export default function App() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    document.documentElement.style.scrollBehavior = 'smooth';
-    return () => { document.documentElement.style.scrollBehavior = 'auto'; };
-  }, []);
-
-  return (
-    <>
-      <AnimatePresence>
-        {loading && <Preloader onComplete={() => setLoading(false)} />}
-      </AnimatePresence>
-
-      {!loading && (
-        <div className="bg-[#030303] min-h-screen text-white font-sans selection:bg-[#D4AF37]/35 selection:text-white cursor-none overflow-x-hidden">
-          {/* Global cinema grain overlay */}
-          <div className="pointer-events-none fixed inset-0 z-[999] h-full w-full opacity-[0.012] mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")'}}></div>
-
-          <CustomCursor />
-          
-          {/* Elegant Top Progress Bar */}
-          <motion.div 
-            className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#AA771C] via-[#E8C872] to-[#8A5A19] origin-left z-[70] shadow-[0_0_15px_rgba(212,175,55,0.85)]"
-            style={{ scaleX }}
-          />
-          
-          <Navbar />
-          <main className="overflow-x-hidden">
-            <Hero />
-            <Services />
-            <About />
-            <BeforeAfter />
-            <Process />
-            <Gallery />
-            <Testimonials />
-            <FAQAndCTA />
-            <ContactAndFooter />
-          </main>
-        </div>
-      )}
-    </>
+    </div>
   );
 }
